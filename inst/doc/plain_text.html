@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Thierry Onkelinx" />
+
+
+<title>Getting Started Storing Dataframes as Plain Text</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Getting Started Storing Dataframes as Plain Text</h1>
+<h4 class="author">Thierry Onkelinx</h4>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This vignette motivates why we wrote <code>git2rdata</code> and illustrates how you can use it to store dataframes as plain text files.</p>
+<div id="maintaining-variable-classes" class="section level3">
+<h3>Maintaining variable classes</h3>
+<p>R has several options to store dataframes as plain text files from R. Base R has <code>write.table()</code> and its companions like <code>write.csv()</code>. Some other options are <code>data.table::fwrite()</code>, <code>readr::write_delim()</code>, <code>readr::write_csv()</code> and <code>readr::write_tsv()</code>. Each of them writes a dataframe as a plain text file by converting all variables into characters. After reading the file, the conversion is reversed. However, the distinction between <code>character</code> and <code>factor</code> is lost in translation. <code>read.table()</code> converts by default all strings to factors, <code>readr::read_csv()</code> keeps by default all strings as character. The factor levels are another thing which is lost. These functions determine factor levels based on the observed levels in the plain text file. Hence factor levels without observations will disappear. The order of the factor levels is also determined by the available levels in the plain text file, which can be different from the original order.</p>
+<p>The <code>write_vc()</code> and <code>read_vc()</code> functions from <code>git2rdata</code> keep track of the class of each variable and, in case of a factor, also of the factor levels and their order. Hence this function pair preserves the information content of the dataframe. The <code>vc</code> suffix stands for <strong>v</strong>ersion <strong>c</strong>ontrol as these functions use their full capacity in combination with a version control system. Efficiency in terms of storage and time ### Optimizing file storage</p>
+<p>Plain text files require more disk space than binary files. This is the price we have to pay for a readable file format. The default option of <code>write_vc()</code> is to minimize file size as much as possible prior to writing. Since we use a tab delimited file format, we can omit quotes around character variables. This saves 2 bytes per row for each character variable. Quotes are added automatically in the exceptional cases when they are needed, e.g. to store a string that contains tab or newline characters. In such cases, quotes are only used in row-variable combinations where the exception occurs.</p>
+<p>Since we store the class of each variable, further file size reductions can be achieved by following rules:</p>
+<ul>
+<li><code>logical</code> is written as 0 (FALSE), 1 (TRUE) or NA to the data</li>
+<li><code>factor</code> is stored as its indices in the data. The index and labels of levels and their order are stored in the metadata.</li>
+<li><code>POSIXct</code> is written as a numeric to the data. The class and the origin are stored in the metadata. Timestamps are always stored and returned as UTC.</li>
+<li><code>Date</code> is written as an integer to the data. The class and the origin are stored in the metadata.</li>
+</ul>
+<p>Storing the factors, POSIXct and Date as their index, makes them less user readable. The user can turn off this optimization when user readability is more important than file size.</p>
+</div>
+<div id="optimized-for-version-control" class="section level3">
+<h3>Optimized for version control</h3>
+<p>Another main goal of <code>git2rdata</code> is to optimise the storage of the plain text files under version control. <code>write_vc()</code> and <code>read_vc()</code> has methods for interacting with <a href="https://git-scm.com/">git</a> repositories using the <code>git2r</code> framework. Users who want to use git without <code>git2r</code> or use a different version control system (e.g. <a href="https://subversion.apache.org/">Subversion</a>, <a href="https://www.mercurial-scm.org/">Mercurial</a>), still can use <code>git2rdata</code> to write the files to disk and uses their preferred workflow on version control.</p>
+<p>Hence, <code>write_vc()</code> will always perform checks to look for changes which potentially lead to large diffs. More details on this in <code>vignette(&quot;version_control&quot;, package = &quot;git2rdata&quot;)</code>. Some problems will always yield a warning. Other problems will yield an error by default. The user can turn these errors into warnings by setting the <code>strict = FALSE</code> argument.</p>
+<p>As this vignette ignores the part on version control, we will always use <code>write_vc(strict = FALSE)</code> and hide the warnings to improve the readability.</p>
+</div>
+</div>
+<div id="basic-usage" class="section level2">
+<h2>Basic Usage</h2>
+<p>Let’s start by setting up the environment. We need a directory to store the data and a dataframe to store.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Create a directory in tempdir</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">path &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="dt">pattern =</span> <span class="st">&quot;git2r-&quot;</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">dir.create</span>(path)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># Create dummy data</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">set.seed</span>(<span class="dv">20190222</span>)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">x &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">  <span class="dt">x =</span> <span class="kw">sample</span>(LETTERS),</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">  <span class="dt">y =</span> <span class="kw">factor</span>(</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">    <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="ot">NA</span>), <span class="dv">26</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">    <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>)</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">  ),</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">  <span class="dt">z =</span> <span class="kw">c</span>(<span class="ot">NA</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">25</span>),</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">  <span class="dt">abc =</span> <span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">25</span>), <span class="ot">NA</span>),</a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">  <span class="dt">def =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">FALSE</span>, <span class="ot">NA</span>), <span class="dv">26</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">  <span class="dt">timestamp =</span> <span class="kw">seq</span>(</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">    <span class="kw">as.POSIXct</span>(<span class="st">&quot;2018-01-01&quot;</span>),</a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">    <span class="kw">as.POSIXct</span>(<span class="st">&quot;2019-01-01&quot;</span>),</a>
+<a class="sourceLine" id="cb1-18" data-line-number="18">    <span class="dt">length =</span> <span class="dv">26</span></a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">  ),</a>
+<a class="sourceLine" id="cb1-20" data-line-number="20">  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb1-21" data-line-number="21">)</a>
+<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="kw">str</span>(x)</a>
+<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co">#&gt; 'data.frame':    26 obs. of  6 variables:</span></a>
+<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="co">#&gt;  $ x        : chr  &quot;V&quot; &quot;U&quot; &quot;Z&quot; &quot;W&quot; ...</span></a>
+<a class="sourceLine" id="cb1-25" data-line-number="25"><span class="co">#&gt;  $ y        : Factor w/ 3 levels &quot;a&quot;,&quot;b&quot;,&quot;c&quot;: 1 2 NA NA 1 NA 2 1 NA 1 ...</span></a>
+<a class="sourceLine" id="cb1-26" data-line-number="26"><span class="co">#&gt;  $ z        : int  NA 1 2 3 4 5 6 7 8 9 ...</span></a>
+<a class="sourceLine" id="cb1-27" data-line-number="27"><span class="co">#&gt;  $ abc      : num  -0.382 -0.42 -0.917 0.387 -0.992 ...</span></a>
+<a class="sourceLine" id="cb1-28" data-line-number="28"><span class="co">#&gt;  $ def      : logi  TRUE FALSE NA FALSE NA NA ...</span></a>
+<a class="sourceLine" id="cb1-29" data-line-number="29"><span class="co">#&gt;  $ timestamp: POSIXct, format: &quot;2018-01-01 00:00:00&quot; &quot;2018-01-15 14:24:00&quot; ...</span></a></code></pre></div>
+</div>
+<div id="storing-optimized" class="section level2">
+<h2>Storing Optimized</h2>
+<p>Use <code>write_vc()</code> to store the dataframe. The <code>root</code> argument refers to the base directory where the data is stored. The <code>file</code> argument is used as the base name of the files. The data file gets a <code>.tsv</code> extension, the metadata file a <code>.yml</code> extension. <code>file</code> can include a relative path starting from <code>root</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(git2rdata)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">write_vc</span>(<span class="dt">x =</span> x, <span class="dt">file =</span> <span class="st">&quot;first_test&quot;</span>, <span class="dt">root =</span> path, <span class="dt">strict =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; 03d6faf2209eb466cc12c9bf6d274a3ee2c7f0db f621ac5ac48f6c7c7671c71538470c31a03ef9df </span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;                         &quot;first_test.tsv&quot;                         &quot;first_test.yml&quot;</span></a></code></pre></div>
+<p><code>write_vc()</code> returns a vector of relative paths to the raw data and metadata files. The hashes of these files are used as names of the vector. We can have a look at both files. We’ll only display the first 10 rows of the raw data. Notice that the YAML format of the metadata has the benefit of being both human and machine readable.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">print_file &lt;-<span class="st"> </span><span class="cf">function</span>(file, root, <span class="dt">n =</span> <span class="dv">-1</span>) {</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  fn &lt;-<span class="st"> </span><span class="kw">file.path</span>(root, file)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  data &lt;-<span class="st"> </span><span class="kw">readLines</span>(fn, <span class="dt">n =</span> n)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="kw">cat</span>(data, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">}</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="kw">print_file</span>(<span class="st">&quot;first_test.tsv&quot;</span>, path, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; x    y   z   abc def timestamp</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; V    1   NA  -0.382010380419258  1   1514761200</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; U    2   1   -0.420347607856041  0   1516022640</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; Z    NA  2   -0.916731402237418  NA  1517284080</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; W    NA  3   0.387455128525654   0   1518545520</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; L    1   4   -0.992354993526956  NA  1519806960</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; C    NA  5   0.0228713954429028  NA  1521068400</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; R    2   6   -0.947557467717088  1   1522329840</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; S    1   7   -0.16302914628615   NA  1523591280</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; O    NA  8   0.523643352634392   1   1524852720</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="kw">print_file</span>(<span class="st">&quot;first_test.yml&quot;</span>, path)</a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; ..generic:</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt;   git2rdata: '0.1'</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt;   optimize: yes</span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt;   NA string: NA</span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt;   hash: f8350dc218051af4bafcd8872d92b1a29cbb4f31</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt;   data_hash: 03d6faf2209eb466cc12c9bf6d274a3ee2c7f0db</span></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt; x:</span></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt;   class: character</span></a>
+<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt; 'y':</span></a>
+<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt;   class: factor</span></a>
+<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">#&gt;   labels:</span></a>
+<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">#&gt;   - a</span></a>
+<a class="sourceLine" id="cb3-30" data-line-number="30"><span class="co">#&gt;   - b</span></a>
+<a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">#&gt;   - c</span></a>
+<a class="sourceLine" id="cb3-32" data-line-number="32"><span class="co">#&gt;   index:</span></a>
+<a class="sourceLine" id="cb3-33" data-line-number="33"><span class="co">#&gt;   - 1</span></a>
+<a class="sourceLine" id="cb3-34" data-line-number="34"><span class="co">#&gt;   - 2</span></a>
+<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="co">#&gt;   - 3</span></a>
+<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt;   ordered: no</span></a>
+<a class="sourceLine" id="cb3-37" data-line-number="37"><span class="co">#&gt; z:</span></a>
+<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="co">#&gt;   class: integer</span></a>
+<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="co">#&gt; abc:</span></a>
+<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="co">#&gt;   class: numeric</span></a>
+<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt; def:</span></a>
+<a class="sourceLine" id="cb3-42" data-line-number="42"><span class="co">#&gt;   class: logical</span></a>
+<a class="sourceLine" id="cb3-43" data-line-number="43"><span class="co">#&gt; timestamp:</span></a>
+<a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">#&gt;   class: POSIXct</span></a>
+<a class="sourceLine" id="cb3-45" data-line-number="45"><span class="co">#&gt;   origin: 1970-01-01 00:00:00</span></a>
+<a class="sourceLine" id="cb3-46" data-line-number="46"><span class="co">#&gt;   timezone: UTC</span></a></code></pre></div>
+</div>
+<div id="storing-verbose" class="section level2">
+<h2>Storing Verbose</h2>
+<p>Adding <code>optimize = FALSE</code> to <code>write_vc()</code> will keep the raw data in a human readable format. The metadata file is slightly different. The most obvious is the <code>optimize: no</code> tag and the different hash. Another difference is the metadata for POSIXct and Date classes. They will no longer have an origin tag but a format tag.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">write_vc</span>(<span class="dt">x =</span> x, <span class="dt">file =</span> <span class="st">&quot;verbose&quot;</span>, <span class="dt">root =</span> path, <span class="dt">optimize =</span> <span class="ot">FALSE</span>, <span class="dt">strict =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; e5e46ab76d1c3cee960006cb68a45444578e9892 388f82222f5b161af4b1eb895be684227f4f8f0d </span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;                            &quot;verbose.tsv&quot;                            &quot;verbose.yml&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">print_file</span>(<span class="st">&quot;verbose.tsv&quot;</span>, path, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; x    y   z   abc def timestamp</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; V    a   NA  -0.382010380419258  TRUE    2017-12-31T23:00:00Z</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; U    b   1   -0.420347607856041  FALSE   2018-01-15T13:24:00Z</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; Z    NA  2   -0.916731402237418  NA  2018-01-30T03:48:00Z</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; W    NA  3   0.387455128525654   FALSE   2018-02-13T18:12:00Z</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; L    a   4   -0.992354993526956  NA  2018-02-28T08:36:00Z</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; C    NA  5   0.0228713954429028  NA  2018-03-14T23:00:00Z</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; R    b   6   -0.947557467717088  TRUE    2018-03-29T13:24:00Z</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; S    a   7   -0.16302914628615   NA  2018-04-13T03:48:00Z</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; O    NA  8   0.523643352634392   TRUE    2018-04-27T18:12:00Z</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="kw">print_file</span>(<span class="st">&quot;verbose.yml&quot;</span>, path)</a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; ..generic:</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;   git2rdata: '0.1'</span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;   optimize: no</span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt;   NA string: NA</span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt;   hash: 9fc40476f0ba0c4cb4225d5313d56760a6d3b065</span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt;   data_hash: e5e46ab76d1c3cee960006cb68a45444578e9892</span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; x:</span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt;   class: character</span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; 'y':</span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt;   class: factor</span></a>
+<a class="sourceLine" id="cb5-23" data-line-number="23"><span class="co">#&gt;   labels:</span></a>
+<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="co">#&gt;   - a</span></a>
+<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="co">#&gt;   - b</span></a>
+<a class="sourceLine" id="cb5-26" data-line-number="26"><span class="co">#&gt;   - c</span></a>
+<a class="sourceLine" id="cb5-27" data-line-number="27"><span class="co">#&gt;   index:</span></a>
+<a class="sourceLine" id="cb5-28" data-line-number="28"><span class="co">#&gt;   - 1</span></a>
+<a class="sourceLine" id="cb5-29" data-line-number="29"><span class="co">#&gt;   - 2</span></a>
+<a class="sourceLine" id="cb5-30" data-line-number="30"><span class="co">#&gt;   - 3</span></a>
+<a class="sourceLine" id="cb5-31" data-line-number="31"><span class="co">#&gt;   ordered: no</span></a>
+<a class="sourceLine" id="cb5-32" data-line-number="32"><span class="co">#&gt; z:</span></a>
+<a class="sourceLine" id="cb5-33" data-line-number="33"><span class="co">#&gt;   class: integer</span></a>
+<a class="sourceLine" id="cb5-34" data-line-number="34"><span class="co">#&gt; abc:</span></a>
+<a class="sourceLine" id="cb5-35" data-line-number="35"><span class="co">#&gt;   class: numeric</span></a>
+<a class="sourceLine" id="cb5-36" data-line-number="36"><span class="co">#&gt; def:</span></a>
+<a class="sourceLine" id="cb5-37" data-line-number="37"><span class="co">#&gt;   class: logical</span></a>
+<a class="sourceLine" id="cb5-38" data-line-number="38"><span class="co">#&gt; timestamp:</span></a>
+<a class="sourceLine" id="cb5-39" data-line-number="39"><span class="co">#&gt;   class: POSIXct</span></a>
+<a class="sourceLine" id="cb5-40" data-line-number="40"><span class="co">#&gt;   format: '%Y-%m-%dT%H:%M:%SZ'</span></a>
+<a class="sourceLine" id="cb5-41" data-line-number="41"><span class="co">#&gt;   timezone: UTC</span></a></code></pre></div>
+</div>
+<div id="efficiency-in-terms-of-file-storage" class="section level2">
+<h2>Efficiency in Terms of File Storage</h2>
+<p>Storing dataframes optimized or verbose has an impact on the required file size. A comparison can be found in the <a href="efficiency.html#on-a-file-system">efficiency</a> vignette.</p>
+</div>
+<div id="reading-data" class="section level2">
+<h2>Reading Data</h2>
+<p>The data can be retrieved with <code>read_vc()</code>. This function will reinstate the variables to their original state.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">y &lt;-<span class="st"> </span><span class="kw">read_vc</span>(<span class="dt">file =</span> <span class="st">&quot;first_test&quot;</span>, <span class="dt">root =</span> path)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">all.equal</span>(x, y, <span class="dt">check.attributes =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">y2 &lt;-<span class="st"> </span><span class="kw">read_vc</span>(<span class="dt">file =</span> <span class="st">&quot;verbose&quot;</span>, <span class="dt">root =</span> path)</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="kw">all.equal</span>(x, y2, <span class="dt">check.attributes =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<p>As <code>read_vc()</code> requires the meta data, it can only read dataframes which were stored by <code>write_vc()</code>.</p>
+</div>
+<div id="missing-values" class="section level2">
+<h2>Missing Values</h2>
+<p><code>write_vc()</code> has an <code>na</code> argument which specifies the string which is used to indicate missing values. Because we avoid using quotes, this string must be different from any character value in the data. This includes factor labels when the data is stored verbose. This is checked and will always return an error, even with <code>strict = FALSE</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="dt">strict =</span> <span class="ot">FALSE</span>, <span class="dt">na =</span> <span class="st">&quot;X&quot;</span>, <span class="dt">optimize =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; Error: one of the strings matches the NA string ('X')</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; Please use a different NA string or consider using a factor.</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="dt">strict =</span> <span class="ot">FALSE</span>, <span class="dt">na =</span> <span class="st">&quot;b&quot;</span>, <span class="dt">optimize =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; Error: one of the levels matches the NA string ('b').</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; Please use a different NA string or use optimize = TRUE</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="kw">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="dt">strict =</span> <span class="ot">FALSE</span>, <span class="dt">na =</span> <span class="st">&quot;X&quot;</span>)</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; Error: one of the strings matches the NA string ('X')</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; Please use a different NA string or consider using a factor.</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="kw">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="dt">strict =</span> <span class="ot">FALSE</span>, <span class="dt">na =</span> <span class="st">&quot;b&quot;</span>)</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; 32060b4a940acd1e209ae3ec2c473f06278d0337 c2ee83e76ba71fa316b6284639db1c0a4af55654 </span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;                          &quot;custom_na.tsv&quot;                          &quot;custom_na.yml&quot;</span></a></code></pre></div>
+<p>Please note that a single NA string is used for the entire dataset, thus for every variable.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">print_file</span>(<span class="st">&quot;custom_na.tsv&quot;</span>, path, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; x    y   z   abc def timestamp</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; V    1   b   -0.382010380419258  1   1514761200</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; U    2   1   -0.420347607856041  0   1516022640</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; Z    b   2   -0.916731402237418  b   1517284080</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; W    b   3   0.387455128525654   0   1518545520</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; L    1   4   -0.992354993526956  b   1519806960</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; C    b   5   0.0228713954429028  b   1521068400</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; R    2   6   -0.947557467717088  1   1522329840</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; S    1   7   -0.16302914628615   b   1523591280</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; O    b   8   0.523643352634392   1   1524852720</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="kw">print_file</span>(<span class="st">&quot;custom_na.yml&quot;</span>, path, <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt; ..generic:</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt;   git2rdata: '0.1'</span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt;   optimize: yes</span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt;   NA string: b</span></a></code></pre></div>
+<p>The default string for missing values is <code>&quot;NA&quot;</code>. We recommend to keep this default, as long as the dataset permits it. A first good alternative is an empty string (<code>&quot;&quot;</code>). If that won’t work either, you’ll have to use your imagination. Try to keep it short, clear and robust<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="dt">strict =</span> <span class="ot">FALSE</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; 171c8f9d6d8d8913346f45e789f6b71b23b458ee d294a904cbac237b91d0b3b8f267f6ee4d783ac8 </span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt;                          &quot;custom_na.tsv&quot;                          &quot;custom_na.yml&quot;</span></a></code></pre></div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>robust in the sense that you won’t need to change it later<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
