@@ -1,6 +1,9 @@
 test_n <- 100
 test_data <- data.frame(
-  test_character = sample(LETTERS, size = test_n, replace = TRUE),
+  test_character = c(
+    sample(LETTERS, size = test_n - 10, replace = TRUE),
+    c("é", "&", "à", "µ", "ç", "€", "|", "#", "@", "$")
+  ),
   test_factor = sample(
     factor(c("a", "b"), levels = c("a", "b", "c")),
     size = test_n, replace = TRUE
@@ -23,7 +26,10 @@ test_data <- data.frame(
   stringsAsFactors = FALSE
 )
 
+old_locale <- git2rdata:::set_c_locale()
 sorted_test_data <- test_data[order(test_data$test_Date), ]
+git2rdata:::set_local_locale(old_locale)
+sorted_test_data$test_character <- enc2utf8(sorted_test_data$test_character)
 rownames(sorted_test_data) <- NULL
 attr(sorted_test_data$test_POSIXct, "tzone") <- "UTC"
 
@@ -37,8 +43,10 @@ test_na <- test_data
 for (i in seq_along(test_na)) {
   test_na[sample(test_n, size = ceiling(0.1 * test_n)), i] <- NA
 }
+old_locale <- git2rdata:::set_c_locale()
 sorted_test_na <- test_na[
   order(test_na$test_Date, test_na$test_integer, test_na$test_numeric),
 ]
+git2rdata:::set_local_locale(old_locale)
 rownames(sorted_test_na) <- NULL
 attr(sorted_test_na$test_POSIXct, "tzone") <- "UTC"

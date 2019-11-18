@@ -72,8 +72,8 @@ upgrade_data.character <- function(
     msg = paste(target, "has corrupt metadata, no hash found.")
   )
   if (has_name(meta_data[["..generic"]], "git2rdata")) {
-    if (package_version(meta_data[["..generic"]][["git2rdata"]]) ==
-        packageVersion("git2rdata")
+    if (package_version(meta_data[["..generic"]][["git2rdata"]]) >=
+        package_version("0.1.0.9001")
         ) {
       if (verbose) {
         message(target, " already up to date")
@@ -81,17 +81,15 @@ upgrade_data.character <- function(
       return(target)
     }
     meta_data[["..generic"]][["git2rdata"]] <- NULL
+    meta_data[["..generic"]][["data_hash"]] <- NULL
   }
-  assert_that(
-    meta_data[["..generic"]][["hash"]] == metadata_hash(meta_data),
-    msg = paste(target, "has corrupt metadata: mismatching hash.")
-  )
   meta_data[["..generic"]] <- c(
     git2rdata = as.character(packageVersion("git2rdata")),
     meta_data[["..generic"]]
   )
   if (!has_name(meta_data[["..generic"]], "data_hash")) {
-    meta_data[["..generic"]][["data_hash"]] <- hashfile(file["raw_file"])
+    # recalculate the data hash
+    meta_data[["..generic"]][["data_hash"]] <- datahash(file["raw_file"])
   }
   write_yaml(meta_data, file["meta_file"], fileEncoding = "UTF-8")
   if (verbose) {

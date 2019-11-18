@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -95,7 +96,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -309,21 +310,27 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h2>Introduction</h2>
 <p>This vignette motivates why we wrote <code>git2rdata</code> and illustrates how you can use it to store dataframes as plain text files.</p>
 <div id="maintaining-variable-classes" class="section level3">
-<h3>Maintaining variable classes</h3>
-<p>R has several options to store dataframes as plain text files from R. Base R has <code>write.table()</code> and its companions like <code>write.csv()</code>. Some other options are <code>data.table::fwrite()</code>, <code>readr::write_delim()</code>, <code>readr::write_csv()</code> and <code>readr::write_tsv()</code>. Each of them writes a dataframe as a plain text file by converting all variables into characters. After reading the file, the conversion is reversed. However, the distinction between <code>character</code> and <code>factor</code> is lost in translation. <code>read.table()</code> converts by default all strings to factors, <code>readr::read_csv()</code> keeps by default all strings as character. The factor levels are another thing which is lost. These functions determine factor levels based on the observed levels in the plain text file. Hence factor levels without observations will disappear. The order of the factor levels is also determined by the available levels in the plain text file, which can be different from the original order.</p>
-<p>The <code>write_vc()</code> and <code>read_vc()</code> functions from <code>git2rdata</code> keep track of the class of each variable and, in case of a factor, also of the factor levels and their order. Hence this function pair preserves the information content of the dataframe. The <code>vc</code> suffix stands for <strong>v</strong>ersion <strong>c</strong>ontrol as these functions use their full capacity in combination with a version control system. Efficiency in terms of storage and time ### Optimizing file storage</p>
-<p>Plain text files require more disk space than binary files. This is the price we have to pay for a readable file format. The default option of <code>write_vc()</code> is to minimize file size as much as possible prior to writing. Since we use a tab delimited file format, we can omit quotes around character variables. This saves 2 bytes per row for each character variable. Quotes are added automatically in the exceptional cases when they are needed, e.g. to store a string that contains tab or newline characters. In such cases, quotes are only used in row-variable combinations where the exception occurs.</p>
-<p>Since we store the class of each variable, further file size reductions can be achieved by following rules:</p>
+<h3>Maintaining Variable Classes</h3>
+<p>R has different options to store dataframes as plain text files from R. Base R has <code>write.table()</code> and its companions like <code>write.csv()</code>. Some other options are <code>data.table::fwrite()</code>, <code>readr::write_delim()</code>, <code>readr::write_csv()</code> and <code>readr::write_tsv()</code>. Each of them writes a dataframe as a plain text file by converting all variables into characters. After reading the file, they revert this conversion. The distinction between <code>character</code> and <code>factor</code> gets lost in translation. <code>read.table()</code> converts by default all strings to factors, <code>readr::read_csv()</code> keeps by default all strings as character. These functions cannot recover the factor levels. These functions determine factor levels based on the observed levels in the plain text file. Hence factor levels without observations will disappear. The order of the factor levels is also determined by the available levels in the plain text file, which can be different from the original order.</p>
+<p>The <code>write_vc()</code> and <code>read_vc()</code> functions from <code>git2rdata</code> keep track of the class of each variable and, in case of a factor, also of the factor levels and their order. Hence this function pair preserves the information content of the dataframe. The <code>vc</code> suffix stands for <strong>v</strong>ersion <strong>c</strong>ontrol as these functions use their full capacity in combination with a version control system.</p>
+</div>
+</div>
+<div id="efficiency-relative-to-storage-and-time" class="section level2">
+<h2>Efficiency Relative to Storage and Time</h2>
+<div id="optimizing-file-storage" class="section level3">
+<h3>Optimizing File Storage</h3>
+<p>Plain text files require more disk space than binary files. This is the price we have to pay for a readable file format. The default option of <code>write_vc()</code> is to create file as compact as possible. Since we use a tab delimited file format, we can omit quotes around character variables. This saves 2 bytes per row for each character variable. <code>write_vc</code> add quotes automatically in the exceptional cases when we needed them, e.g. to store a string that contains tab or newline characters. We don’t add quotes to row-variable combinations where we don’t need them.</p>
+<p>Since we store the class of each variable, we can further reduce the file size by following rules:</p>
 <ul>
-<li><code>logical</code> is written as 0 (FALSE), 1 (TRUE) or NA to the data</li>
-<li><code>factor</code> is stored as its indices in the data. The index and labels of levels and their order are stored in the metadata.</li>
-<li><code>POSIXct</code> is written as a numeric to the data. The class and the origin are stored in the metadata. Timestamps are always stored and returned as UTC.</li>
-<li><code>Date</code> is written as an integer to the data. The class and the origin are stored in the metadata.</li>
+<li>Store a <code>logical</code> as 0 (FALSE), 1 (TRUE) or NA to the data.</li>
+<li>Store a <code>factor</code> as its indices in the data. Store the index, labels of levels and their order in the metadata.</li>
+<li>Store a <code>POSIXct</code> as a numeric to the data. Store the class and the origin in the metadata. Store and return timestamps as UTC.</li>
+<li>Store a <code>Date</code> as an integer to the data. Store the class and the origin in the metadata.</li>
 </ul>
 <p>Storing the factors, POSIXct and Date as their index, makes them less user readable. The user can turn off this optimization when user readability is more important than file size.</p>
 </div>
 <div id="optimized-for-version-control" class="section level3">
-<h3>Optimized for version control</h3>
+<h3>Optimized for Version Control</h3>
 <p>Another main goal of <code>git2rdata</code> is to optimise the storage of the plain text files under version control. <code>write_vc()</code> and <code>read_vc()</code> has methods for interacting with <a href="https://git-scm.com/">git</a> repositories using the <code>git2r</code> framework. Users who want to use git without <code>git2r</code> or use a different version control system (e.g. <a href="https://subversion.apache.org/">Subversion</a>, <a href="https://www.mercurial-scm.org/">Mercurial</a>), still can use <code>git2rdata</code> to write the files to disk and uses their preferred workflow on version control.</p>
 <p>Hence, <code>write_vc()</code> will always perform checks to look for changes which potentially lead to large diffs. More details on this in <code>vignette(&quot;version_control&quot;, package = &quot;git2rdata&quot;)</code>. Some problems will always yield a warning. Other problems will yield an error by default. The user can turn these errors into warnings by setting the <code>strict = FALSE</code> argument.</p>
 <p>As this vignette ignores the part on version control, we will always use <code>write_vc(strict = FALSE)</code> and hide the warnings to improve the readability.</p>
@@ -364,12 +371,12 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 <div id="storing-optimized" class="section level2">
 <h2>Storing Optimized</h2>
-<p>Use <code>write_vc()</code> to store the dataframe. The <code>root</code> argument refers to the base directory where the data is stored. The <code>file</code> argument is used as the base name of the files. The data file gets a <code>.tsv</code> extension, the metadata file a <code>.yml</code> extension. <code>file</code> can include a relative path starting from <code>root</code>.</p>
+<p>Use <code>write_vc()</code> to store the dataframe. The <code>root</code> argument refers to the base directory where we store the data. The <code>file</code> argument becomes the base name of the files. The data file gets a <code>.tsv</code> extension, the metadata file a <code>.yml</code> extension. <code>file</code> can include a relative path starting from <code>root</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(git2rdata)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">write_vc</span>(<span class="dt">x =</span> x, <span class="dt">file =</span> <span class="st">&quot;first_test&quot;</span>, <span class="dt">root =</span> path, <span class="dt">strict =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; 03d6faf2209eb466cc12c9bf6d274a3ee2c7f0db f621ac5ac48f6c7c7671c71538470c31a03ef9df </span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; ad3f06d9d795493d89dc9dd2c804d7a99af3e10e f8350dc218051af4bafcd8872d92b1a29cbb4f31 </span></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;                         &quot;first_test.tsv&quot;                         &quot;first_test.yml&quot;</span></a></code></pre></div>
-<p><code>write_vc()</code> returns a vector of relative paths to the raw data and metadata files. The hashes of these files are used as names of the vector. We can have a look at both files. We’ll only display the first 10 rows of the raw data. Notice that the YAML format of the metadata has the benefit of being both human and machine readable.</p>
+<p><code>write_vc()</code> returns a vector of relative paths to the raw data and metadata files. The names of this vector contains the hashes of these files. We can have a look at both files. We’ll display the first 10 rows of the raw data. Notice that the YAML format of the metadata has the benefit of being both human and machine readable.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">print_file &lt;-<span class="st"> </span><span class="cf">function</span>(file, root, <span class="dt">n =</span> <span class="dv">-1</span>) {</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">  fn &lt;-<span class="st"> </span><span class="kw">file.path</span>(root, file)</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">  data &lt;-<span class="st"> </span><span class="kw">readLines</span>(fn, <span class="dt">n =</span> n)</a>
@@ -388,11 +395,11 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; O    NA  8   0.523643352634392   1   1524852720</span></a>
 <a class="sourceLine" id="cb3-17" data-line-number="17"><span class="kw">print_file</span>(<span class="st">&quot;first_test.yml&quot;</span>, path)</a>
 <a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; ..generic:</span></a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt;   git2rdata: '0.1'</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt;   git2rdata: 0.2.0</span></a>
 <a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt;   optimize: yes</span></a>
 <a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt;   NA string: NA</span></a>
 <a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt;   hash: f8350dc218051af4bafcd8872d92b1a29cbb4f31</span></a>
-<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt;   data_hash: 03d6faf2209eb466cc12c9bf6d274a3ee2c7f0db</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt;   data_hash: ad3f06d9d795493d89dc9dd2c804d7a99af3e10e</span></a>
 <a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt; x:</span></a>
 <a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt;   class: character</span></a>
 <a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt; 'y':</span></a>
@@ -421,7 +428,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h2>Storing Verbose</h2>
 <p>Adding <code>optimize = FALSE</code> to <code>write_vc()</code> will keep the raw data in a human readable format. The metadata file is slightly different. The most obvious is the <code>optimize: no</code> tag and the different hash. Another difference is the metadata for POSIXct and Date classes. They will no longer have an origin tag but a format tag.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">write_vc</span>(<span class="dt">x =</span> x, <span class="dt">file =</span> <span class="st">&quot;verbose&quot;</span>, <span class="dt">root =</span> path, <span class="dt">optimize =</span> <span class="ot">FALSE</span>, <span class="dt">strict =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; e5e46ab76d1c3cee960006cb68a45444578e9892 388f82222f5b161af4b1eb895be684227f4f8f0d </span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; c356207f451b5869ccd1eb7c7ac7d33ba898018b 9fc40476f0ba0c4cb4225d5313d56760a6d3b065 </span></a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;                            &quot;verbose.tsv&quot;                            &quot;verbose.yml&quot;</span></a></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">print_file</span>(<span class="st">&quot;verbose.tsv&quot;</span>, path, <span class="dv">10</span>)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; x    y   z   abc def timestamp</span></a>
@@ -436,11 +443,11 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; O    NA  8   0.523643352634392   TRUE    2018-04-27T18:12:00Z</span></a>
 <a class="sourceLine" id="cb5-12" data-line-number="12"><span class="kw">print_file</span>(<span class="st">&quot;verbose.yml&quot;</span>, path)</a>
 <a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; ..generic:</span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;   git2rdata: '0.1'</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;   git2rdata: 0.2.0</span></a>
 <a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;   optimize: no</span></a>
 <a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt;   NA string: NA</span></a>
 <a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt;   hash: 9fc40476f0ba0c4cb4225d5313d56760a6d3b065</span></a>
-<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt;   data_hash: e5e46ab76d1c3cee960006cb68a45444578e9892</span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt;   data_hash: c356207f451b5869ccd1eb7c7ac7d33ba898018b</span></a>
 <a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; x:</span></a>
 <a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt;   class: character</span></a>
 <a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; 'y':</span></a>
@@ -465,24 +472,24 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb5-40" data-line-number="40"><span class="co">#&gt;   format: '%Y-%m-%dT%H:%M:%SZ'</span></a>
 <a class="sourceLine" id="cb5-41" data-line-number="41"><span class="co">#&gt;   timezone: UTC</span></a></code></pre></div>
 </div>
-<div id="efficiency-in-terms-of-file-storage" class="section level2">
-<h2>Efficiency in Terms of File Storage</h2>
-<p>Storing dataframes optimized or verbose has an impact on the required file size. A comparison can be found in the <a href="efficiency.html#on-a-file-system">efficiency</a> vignette.</p>
+<div id="efficiency-relative-to-file-storage" class="section level2">
+<h2>Efficiency Relative to File Storage</h2>
+<p>Storing dataframes optimized or verbose has an impact on the required file size. The <a href="efficiency.html#on-a-file-system">efficiency</a> vignette give a comparison.</p>
 </div>
 <div id="reading-data" class="section level2">
 <h2>Reading Data</h2>
-<p>The data can be retrieved with <code>read_vc()</code>. This function will reinstate the variables to their original state.</p>
+<p>You retrieve the data with <code>read_vc()</code>. This function will reinstate the variables to their original state.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">y &lt;-<span class="st"> </span><span class="kw">read_vc</span>(<span class="dt">file =</span> <span class="st">&quot;first_test&quot;</span>, <span class="dt">root =</span> path)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">all.equal</span>(x, y, <span class="dt">check.attributes =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">y2 &lt;-<span class="st"> </span><span class="kw">read_vc</span>(<span class="dt">file =</span> <span class="st">&quot;verbose&quot;</span>, <span class="dt">root =</span> path)</a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="kw">all.equal</span>(x, y2, <span class="dt">check.attributes =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
-<p>As <code>read_vc()</code> requires the meta data, it can only read dataframes which were stored by <code>write_vc()</code>.</p>
+<p><code>read_vc()</code> requires the meta data. It cannot handle dataframe not stored by <code>write_vc()</code>.</p>
 </div>
 <div id="missing-values" class="section level2">
 <h2>Missing Values</h2>
-<p><code>write_vc()</code> has an <code>na</code> argument which specifies the string which is used to indicate missing values. Because we avoid using quotes, this string must be different from any character value in the data. This includes factor labels when the data is stored verbose. This is checked and will always return an error, even with <code>strict = FALSE</code>.</p>
+<p><code>write_vc()</code> has an <code>na</code> argument which specifies the string which to use for missing values. Because we avoid using quotes, this string must be different from any character value in the data. This includes factor labels with verbose data storage. <code>write_vc()</code> checks this and will always return an error, even with <code>strict = FALSE</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="dt">strict =</span> <span class="ot">FALSE</span>, <span class="dt">na =</span> <span class="st">&quot;X&quot;</span>, <span class="dt">optimize =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; Error: one of the strings matches the NA string ('X')</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; Please use a different NA string or consider using a factor.</span></a>
@@ -493,9 +500,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; Error: one of the strings matches the NA string ('X')</span></a>
 <a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; Please use a different NA string or consider using a factor.</span></a>
 <a class="sourceLine" id="cb7-10" data-line-number="10"><span class="kw">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="dt">strict =</span> <span class="ot">FALSE</span>, <span class="dt">na =</span> <span class="st">&quot;b&quot;</span>)</a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; 32060b4a940acd1e209ae3ec2c473f06278d0337 c2ee83e76ba71fa316b6284639db1c0a4af55654 </span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; 5d5ffeef75834a9765c325edbb5b699f904ba857 3c028ddbb9efabc8c85a396b2db1f4f1c8d9461d </span></a>
 <a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;                          &quot;custom_na.tsv&quot;                          &quot;custom_na.yml&quot;</span></a></code></pre></div>
-<p>Please note that a single NA string is used for the entire dataset, thus for every variable.</p>
+<p>Please note that <code>write_vc()</code> uses the same NA string for the entire dataset, thus for every variable.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">print_file</span>(<span class="st">&quot;custom_na.tsv&quot;</span>, path, <span class="dv">10</span>)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; x    y   z   abc def timestamp</span></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; V    1   b   -0.382010380419258  1   1514761200</span></a>
@@ -509,12 +516,12 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; O    b   8   0.523643352634392   1   1524852720</span></a>
 <a class="sourceLine" id="cb8-12" data-line-number="12"><span class="kw">print_file</span>(<span class="st">&quot;custom_na.yml&quot;</span>, path, <span class="dv">4</span>)</a>
 <a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt; ..generic:</span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt;   git2rdata: '0.1'</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt;   git2rdata: 0.2.0</span></a>
 <a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt;   optimize: yes</span></a>
 <a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt;   NA string: b</span></a></code></pre></div>
 <p>The default string for missing values is <code>&quot;NA&quot;</code>. We recommend to keep this default, as long as the dataset permits it. A first good alternative is an empty string (<code>&quot;&quot;</code>). If that won’t work either, you’ll have to use your imagination. Try to keep it short, clear and robust<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="dt">strict =</span> <span class="ot">FALSE</span>, <span class="dt">na =</span> <span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; 171c8f9d6d8d8913346f45e789f6b71b23b458ee d294a904cbac237b91d0b3b8f267f6ee4d783ac8 </span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; 5a64a85e2a137d0558da164131b5586f4523f6bd d2b145b74dbe6bd1d7883a62f2549c124988ec63 </span></a>
 <a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt;                          &quot;custom_na.tsv&quot;                          &quot;custom_na.yml&quot;</span></a></code></pre></div>
 </div>
 <div class="footnotes">
@@ -524,6 +531,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </ol>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

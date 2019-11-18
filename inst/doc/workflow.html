@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -95,7 +96,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -313,17 +314,17 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <li>One repository holding the data and a second repository holding the code. The data and the code have an independent history under a two repository set-up. Documenting the analysis requires one reference to each repository. Such a set-up is useful for repeating the same analysis (stable code) on updated data.</li>
 </ol>
 <p>In this vignette we use a <code>git2r::repository()</code> object as the root. This adds git functionality to <code>write_vc()</code> and <code>read_vc()</code>, provided by the <a href="https://cran.r-project.org/package=git2r"><code>git2r</code></a> package. This allows to pull, stage, commit and push from within R.</p>
-<p>Each commit in the data git repository describes a complete snapshot of the data at the time of the commit. The difference between two commits can consist of changes in existing git2rdata object (updated observations, new observations, deleted observations or updated metadata). Besides updating the existing git2rdata objects, we can also add new git2rdata objects or remove existing ones. Such higher level addition and deletions need to be tracked as well.</p>
+<p>Each commit in the data git repository describes a complete snapshot of the data at the time of the commit. The difference between two commits can consist of changes in existing git2rdata object (updated observations, new observations, deleted observations or updated metadata). Besides updating the existing git2rdata objects, we can also add new git2rdata objects or remove existing ones. We need to track such higher level addition and deletions as well.</p>
 <p>We illustrate the workflow with a mock analysis on the <code>datasets::beaver1</code> and <code>datasets::beaver2</code> datasets.</p>
 </div>
 <div id="setup" class="section level2">
 <h2>Setup</h2>
-<p>We start by initializing a git repository. <code>git2rdata</code> assumes that is already done. Therefore we’ll use the <code>git2r</code> functions to do so. We start by creating a local bare repository. In practice we will use a remote on an external server (GitHub, Gitlab, Bitbucket, …). The example below creates a local git repository with an upstream git repository. Any other workflow to create a similar structure is fine.</p>
+<p>We start by initializing a git repository. <code>git2rdata</code> assumes that is already done. We’ll use the <code>git2r</code> functions to do so. We start by creating a local bare repository. In practice we will use a remote on an external server (GitHub, Gitlab, Bitbucket, …). The example below creates a local git repository with an upstream git repository. Any other workflow to create a similar structure is fine.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># initialize a bare git repo to be used as remote</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">remote &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="st">&quot;git2rdata-workflow-remote&quot;</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">remote &lt;-<span class="st"> </span><span class="kw">normalizePath</span>(remote, <span class="dt">winslash =</span> <span class="st">&quot;/&quot;</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt; Warning in normalizePath(remote, winslash = &quot;/&quot;): path[1]=&quot;/tmp/Rtmpg5Go2g/</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#&gt; git2rdata-workflow-remote2a86684d8b0c&quot;: Bestand of map bestaat niet</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt; Warning in normalizePath(remote, winslash = &quot;/&quot;): path[1]=&quot;/tmp/RtmpIVE5zA/</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#&gt; git2rdata-workflow-remote701129371f3b&quot;: Bestand of map bestaat niet</span></a>
 <a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">dir.create</span>(remote)</a>
 <a class="sourceLine" id="cb1-7" data-line-number="7">git2r<span class="op">::</span><span class="kw">init</span>(remote, <span class="dt">bare =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt; Head:     nothing commited (yet)</span></a>
@@ -331,8 +332,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co"># initialize a local git repo</span></a>
 <a class="sourceLine" id="cb1-11" data-line-number="11">path &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="st">&quot;git2rdata-workflow&quot;</span>)</a>
 <a class="sourceLine" id="cb1-12" data-line-number="12">path &lt;-<span class="st"> </span><span class="kw">normalizePath</span>(path, <span class="dt">winslash =</span> <span class="st">&quot;/&quot;</span>)</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co">#&gt; Warning in normalizePath(path, winslash = &quot;/&quot;): path[1]=&quot;/tmp/Rtmpg5Go2g/</span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co">#&gt; git2rdata-workflow2a8676357d0c&quot;: Bestand of map bestaat niet</span></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co">#&gt; Warning in normalizePath(path, winslash = &quot;/&quot;): path[1]=&quot;/tmp/RtmpIVE5zA/</span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co">#&gt; git2rdata-workflow70114984dffe&quot;: Bestand of map bestaat niet</span></a>
 <a class="sourceLine" id="cb1-15" data-line-number="15"><span class="kw">dir.create</span>(path)</a>
 <a class="sourceLine" id="cb1-16" data-line-number="16">init_repo &lt;-<span class="st"> </span>git2r<span class="op">::</span><span class="kw">clone</span>(remote, path, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb1-17" data-line-number="17">git2r<span class="op">::</span><span class="kw">config</span>(init_repo, <span class="dt">user.name =</span> <span class="st">&quot;me&quot;</span>, <span class="dt">user.email =</span> <span class="st">&quot;me@me.com&quot;</span>)</a>
@@ -340,26 +341,26 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb1-19" data-line-number="19"><span class="kw">writeLines</span>(<span class="st">&quot;*extra*&quot;</span>, <span class="kw">file.path</span>(path, <span class="st">&quot;.gitignore&quot;</span>))</a>
 <a class="sourceLine" id="cb1-20" data-line-number="20">git2r<span class="op">::</span><span class="kw">add</span>(init_repo, <span class="st">&quot;.gitignore&quot;</span>, <span class="dt">force =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb1-21" data-line-number="21">git2r<span class="op">::</span><span class="kw">commit</span>(init_repo, <span class="dt">message =</span> <span class="st">&quot;Initial commit&quot;</span>)</a>
-<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co">#&gt; [3aef1f5] 2019-06-15: Initial commit</span></a>
+<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co">#&gt; [de0e32a] 2019-11-18: Initial commit</span></a>
 <a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co"># push initial commit to remote</span></a>
 <a class="sourceLine" id="cb1-24" data-line-number="24">git2r<span class="op">::</span><span class="kw">push</span>(init_repo, <span class="st">&quot;origin&quot;</span>, <span class="st">&quot;refs/heads/master&quot;</span>)</a>
 <a class="sourceLine" id="cb1-25" data-line-number="25"><span class="kw">rm</span>(init_repo)</a></code></pre></div>
 </div>
 <div id="structuring-git2rdata-objects-within-a-project" class="section level2">
 <h2>Structuring Git2rdata Objects Within a Project</h2>
-<p><code>git2rdata</code> imposes very little structure. Both the <code>.tsv</code> and the <code>.yml</code> file need to be in the same folder. That’s it. For the sake of simplicity, in this vignette we dump all git2rdata objects at the root of the repository.</p>
-<p>However, this might not be good idea for real project. We recommend to use at least a different directory tree for each import script. This directory can go into the root of a data only repository. It goes in the <code>data</code> directory in case of a data and code repository. Or the <code>inst</code> directory is case of an R package.</p>
-<p>Your project might need a different directory structure. Feel free to implement the most relevant data structure for your project.</p>
+<p><code>git2rdata</code> imposes a minimal structure. Both the <code>.tsv</code> and the <code>.yml</code> file need to be in the same folder. That’s it. For the sake of simplicity, in this vignette we dump all git2rdata objects at the root of the repository.</p>
+<p>This might not be good idea for real project. We recommend to use at least a different directory tree for each import script. This directory can go into the root of a data repository. It goes in the <code>data</code> directory in case of a data and code repository. Or the <code>inst</code> directory in case of an R package.</p>
+<p>Your project might need a different directory structure. Feel free to choose the most relevant data structure for your project.</p>
 </div>
 <div id="storing-dataframes-ad-hoc-into-a-git-repository" class="section level2">
 <h2>Storing Dataframes <em>ad Hoc</em> into a Git Repository</h2>
 <div id="first-commit" class="section level3">
 <h3>First Commit</h3>
-<p>In the first commit we use <code>datasets::beaver1</code>. We connect to the git repository using <code>repository()</code>. Note that this assumes that <code>path</code> is an existing git repository. Now we can write the dataset as a git2rdata object in the repository. If the <code>root</code> argument of <code>write_vc()</code> is a <code>git_repository</code>, it gains two additional arguments: <code>stage</code> and <code>force</code>. Setting <code>stage = TRUE</code>, will automatically stage the files written by <code>write_vc()</code>.</p>
+<p>In the first commit we use <code>datasets::beaver1</code>. We connect to the git repository using <code>repository()</code>. Note that this assumes that <code>path</code> is an existing git repository. Now we can write the dataset as a git2rdata object in the repository. If the <code>root</code> argument of <code>write_vc()</code> is a <code>git_repository</code>, it gains two extra arguments: <code>stage</code> and <code>force</code>. Setting <code>stage = TRUE</code>, will automatically stage the files written by <code>write_vc()</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(git2rdata)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">repo &lt;-<span class="st"> </span><span class="kw">repository</span>(path)</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3">fn &lt;-<span class="st"> </span><span class="kw">write_vc</span>(beaver1, <span class="st">&quot;beaver&quot;</span>, repo, <span class="dt">sorting =</span> <span class="st">&quot;time&quot;</span>, <span class="dt">stage =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<p>We can use <code>status()</code> to check that the required files are written and staged. Then we <code>commit()</code> the changes.</p>
+<p>We can use <code>status()</code> to check that <code>write_vc()</code> wrote and staged the required files. Then we <code>commit()</code> the changes.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">status</span>(repo)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; Staged changes:</span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt;  New:        beaver.tsv</span></a>
@@ -374,7 +375,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">fn &lt;-<span class="st"> </span><span class="kw">write_vc</span>(beaver2, <span class="st">&quot;extra_beaver&quot;</span>, repo, <span class="dt">sorting =</span> <span class="st">&quot;time&quot;</span>, <span class="dt">stage =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">status</span>(repo)</a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; working directory clean</span></a></code></pre></div>
-<p>Notice that <code>extra_beaver</code> is not listed in the <code>status()</code>, although it was written to the repository. The reason is that we set a <code>.gitignore</code> which contains <code>&quot;*extra*</code>, so any git2rdata object with a name containing “extra” is ignored. We can force it to be staged by setting <code>force = TRUE</code>.</p>
+<p>Notice that <code>extra_beaver</code> is not listed in the <code>status()</code>, although <code>write_vc()</code> wrote it to the repository. The reason is that we set a <code>.gitignore</code> which contains <code>&quot;*extra*</code>, so git ignores any git2rdata object with a name containing “extra”. We force git to stage it by setting <code>force = TRUE</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">status</span>(repo, <span class="dt">ignored =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; Ignored files:</span></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt;  Ignored:    extra_beaver.tsv</span></a>
@@ -389,37 +390,40 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 <div id="third-commit" class="section level3">
 <h3>Third Commit</h3>
-<p>At this point in time we decide that a single git2rdata object containing the data of both beavers is more relevant. We add an ID variable for each of the animals. This requires updating the <code>sorting</code> to eliminate ties. And <code>strict = FALSE</code> to update the metadata. The “extra_beaver” git2rdata object is no longer needed so we remove it. We use <code>all = TRUE</code> to stage the removal of “extra_beaver” while committing the changes.</p>
+<p>Now we decide that a single git2rdata object containing the data of both beavers is more relevant. We add an ID variable for each of the animals. This requires updating the <code>sorting</code> to avoid ties. And <code>strict = FALSE</code> to update the metadata. The “extra_beaver” git2rdata object is no longer needed so we remove it. We use <code>all = TRUE</code> to stage the removal of “extra_beaver” while committing the changes.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">beaver1<span class="op">$</span>beaver &lt;-<span class="st"> </span><span class="dv">1</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">beaver2<span class="op">$</span>beaver &lt;-<span class="st"> </span><span class="dv">2</span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3">beaver &lt;-<span class="st"> </span><span class="kw">rbind</span>(beaver1, beaver2)</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">fn &lt;-<span class="st"> </span><span class="kw">write_vc</span>(beaver, <span class="st">&quot;beaver&quot;</span>, repo, <span class="dt">sorting =</span> <span class="kw">c</span>(<span class="st">&quot;beaver&quot;</span>, <span class="st">&quot;time&quot;</span>), </a>
 <a class="sourceLine" id="cb6-5" data-line-number="5">               <span class="dt">strict =</span> <span class="ot">FALSE</span>, <span class="dt">stage =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Warning in write_vc.character(x = x, file = file, root = workdir(root), : - The sorting variables changed.</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;     - Sorting for the new data: 'beaver', 'time'.</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;     - Sorting for the old data: 'time'.</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; - New data has a different number of variables.</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; - New variables: beaver.</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="kw">file.remove</span>(<span class="kw">list.files</span>(path, <span class="st">&quot;extra&quot;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; [1] TRUE TRUE</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="kw">status</span>(repo)</a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; Unstaged changes:</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt;  Deleted:    extra_beaver.tsv</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt;  Deleted:    extra_beaver.yml</span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; Staged changes:</span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt;  Modified:   beaver.tsv</span></a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt;  Modified:   beaver.yml</span></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21">cm3 &lt;-<span class="st"> </span><span class="kw">commit</span>(repo, <span class="dt">message =</span> <span class="st">&quot;Third commit&quot;</span>, <span class="dt">all =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="kw">status</span>(repo)</a>
-<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; working directory clean</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Warning: Changes in the metadata may lead to unnecessarily large diffs.</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; See vignette('version_control', package = 'git2rdata') for more information.</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; - The sorting variables changed.</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;     - Sorting for the new data: 'beaver', 'time'.</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;     - Sorting for the old data: 'time'.</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; - New data has a different number of variables.</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; - New variables: beaver.</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="kw">file.remove</span>(<span class="kw">list.files</span>(path, <span class="st">&quot;extra&quot;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; [1] TRUE TRUE</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="kw">status</span>(repo)</a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; Unstaged changes:</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt;  Deleted:    extra_beaver.tsv</span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt;  Deleted:    extra_beaver.yml</span></a>
+<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt; Staged changes:</span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt;  Modified:   beaver.tsv</span></a>
+<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt;  Modified:   beaver.yml</span></a>
+<a class="sourceLine" id="cb6-24" data-line-number="24">cm3 &lt;-<span class="st"> </span><span class="kw">commit</span>(repo, <span class="dt">message =</span> <span class="st">&quot;Third commit&quot;</span>, <span class="dt">all =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="kw">status</span>(repo)</a>
+<a class="sourceLine" id="cb6-26" data-line-number="26"><span class="co">#&gt; working directory clean</span></a></code></pre></div>
 </div>
 </div>
 <div id="scripted-workflow-for-storing-dataframes" class="section level2">
 <h2>Scripted Workflow for Storing Dataframes</h2>
 <p>We strongly recommend to add git2rdata object through an import script instead of adding them <a href="#storing-dataframes-ad-hoc-into-a-git-repository"><em>ad hoc</em></a>. Store this script in the (analysis) repository. It documents the creation of the git2rdata objects. Rerun this script whenever updated data becomes available.</p>
 <p>Old versions of the import script and the associated git2rdata remain available through the version control history. Remove obsolete git2rdata objects from the import script. This keeps both the import script and the working directory tidy and minimal.</p>
-<p>Basically, the import script should create all git2rdata objects within a given directory tree. This gives the advantage that we start the import script by clearing any existing git2rdata object in this directory. Any git2rdata object which no longer is created by the import script gets removed without the need to track what git2rdata objects existed in the previous version.</p>
+<p>Basically, the import script should create all git2rdata objects within a given directory tree. This gives the advantage that we start the import script by clearing any existing git2rdata object in this directory. If the import script no longer creates a git2rdata object, it gets removed without the need to track what git2rdata objects existed in the previous version.</p>
 <p>The brute force method of removing all files or all <code>.tsv</code> / <code>.yml</code> pairs is not a good idea. This removes the existing metadata which we need for efficient storage (see <code>vignette(&quot;efficiency&quot;, package = &quot;git2rdata&quot;)</code>). A better solution is to use <code>rm_data()</code> on the directory at the start of the import script. This removes all <code>.tsv</code> files which have valid metadata. The existing metadata remains untouched at this point.</p>
 <p>Then write all git2rdata objects and stage them. Unchanged objects will not lead to a diff, even if we first deleted and then recreated them. The script won’t recreate the <code>.tsv</code> file of obsolete git2rdata objects. Use <code>prune_meta()</code> to remove any leftover metadata files.</p>
 <p>Commit and push the changes at the end of the script.</p>
@@ -451,8 +455,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 <div id="r-package-workflow-for-storing-dataframes" class="section level2">
 <h2>R Package Workflow for Storing Dataframes</h2>
-<p>We recommend a two repository set-up in case of recurring analyses. These are relative stable analyses which have to run with some frequency on updated data (e.g. once a month). Then it is worthwhile to convert the analyses into an R package. Long scripts can be converted into a set of shorter functions which are much easier to document and maintain. An R package offers lots of <a href="http://r-pkgs.had.co.nz/check.html">functionality</a> out of the box to check the quality of your code.</p>
-<p>The example below converts the import script above into a function. We illustrate how you can use Roxygen2 (see <code>vignette(&quot;roxygen2&quot;, package = &quot;roxygen2&quot;)</code>) tags to document the function and to list its dependencies. Note that we added <code>session = TRUE</code> to <code>commit()</code>. This will append the <code>sessionInfo()</code> at the time of the commit to the commit message. Thus documenting all loaded R packages and their version. This documents to code used to create the git2rdata object since your analysis code resides in a dedicated package with its own version number. We strongly recommend to run the import from a fresh R session. Then the <code>sessionInfo()</code> at commit time is limited to those packages with are strictly required for the import. Consider running the import from the command line. e.g. <code>Rscript -e 'mypackage::import_body_temp(&quot;path/to/root&quot;)'</code>.</p>
+<p>We recommend a two repository set-up in case of recurring analyses. These are relative stable analyses which have to run with some frequency on updated data (e.g. once a month). That makes it worthwhile to convert the analyses into an R package. Split long scripts into a set of shorter functions which are much easier to document and maintain. An R package offers lots of <a href="http://r-pkgs.had.co.nz/check.html">functionality</a> out of the box to check the quality of your code.</p>
+<p>The example below converts the import script above into a function. We illustrate how you can use Roxygen2 (see <code>vignette(&quot;roxygen2&quot;, package = &quot;roxygen2&quot;)</code>) tags to document the function and to list its dependencies. Note that we added <code>session = TRUE</code> to <code>commit()</code>. This will append the <code>sessionInfo()</code> at the time of the commit to the commit message. Thus documenting all loaded R packages and their version. This documents to code used to create the git2rdata object since your analysis code resides in a dedicated package with its own version number. We strongly recommend to run the import from a fresh R session. Then the <code>sessionInfo()</code> at commit time contains those packages with are strictly required for the import. Consider running the import from the command line. e.g. <code>Rscript -e 'mypackage::import_body_temp(&quot;path/to/root&quot;)'</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#' Import the beaver body temperature data</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#' @param path the root of the git repository</span></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#' @importFrom git2rdata repository pull rm_data write_vc prune_meta commit push</span></a>
@@ -484,7 +488,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 <div id="analysis-workflow-with-reproducible-data" class="section level2">
 <h2>Analysis Workflow with Reproducible Data</h2>
-<p>The example below is a small trivial example of a standardized analysis in which the source of the data is documented by describing the name of the data, the repository URL and the commit. We can use this information when reporting the results. This makes the data underlying the results traceable.</p>
+<p>The example below is a small trivial example of a standardized analysis in which documents the source of the data by describing the name of the data, the repository URL and the commit. We can use this information when reporting the results. This makes the data underlying the results traceable.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">analysis &lt;-<span class="st"> </span><span class="cf">function</span>(ds_name, repo) {</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">  ds &lt;-<span class="st"> </span><span class="kw">read_vc</span>(ds_name, repo)</a>
 <a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="kw">list</span>(</a>
@@ -509,8 +513,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb10-5" data-line-number="5">junk &lt;-<span class="st"> </span><span class="kw">lapply</span>(result, print)</a></code></pre></div>
 <table>
 <caption><strong>dataset:</strong> beaver<br />
-<strong>commit:</strong> f430385023280f3a3aa05a2f88580ee77f69e1c7<br />
-<strong>repository:</strong> /tmp/Rtmpg5Go2g/git2rdata-workflow-remote2a86684d8b0c</caption>
+<strong>commit:</strong> 1b91961b7aa1c86b82668eacd3953ed6070cf9ca<br />
+<strong>repository:</strong> /tmp/RtmpIVE5zA/git2rdata-workflow-remote701129371f3b</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -537,7 +541,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 </tbody>
 </table>
-<p>The example below does exactly the same thing for the first and second commit.</p>
+<p>The example below does the same thing for the first and second commit.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># checkout first commit</span></a>
 <a class="sourceLine" id="cb11-2" data-line-number="2">git2r<span class="op">::</span><span class="kw">checkout</span>(cm1)</a>
 <a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co"># do analysis</span></a>
@@ -547,8 +551,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb11-7" data-line-number="7">junk &lt;-<span class="st"> </span><span class="kw">lapply</span>(result, print)</a></code></pre></div>
 <table>
 <caption><strong>dataset:</strong> beaver<br />
-<strong>commit:</strong> 6cfe00ebc0508ef7118801284b0a4a471c2efcac<br />
-<strong>repository:</strong> /tmp/Rtmpg5Go2g/git2rdata-workflow-remote2a86684d8b0c</caption>
+<strong>commit:</strong> fa844e7fe29ccf46abccd4e86898b984d5f7d810<br />
+<strong>repository:</strong> /tmp/RtmpIVE5zA/git2rdata-workflow-remote701129371f3b</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -584,8 +588,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb12-7" data-line-number="7">junk &lt;-<span class="st"> </span><span class="kw">lapply</span>(result, print)</a></code></pre></div>
 <table>
 <caption><strong>dataset:</strong> beaver<br />
-<strong>commit:</strong> 6cfe00ebc0508ef7118801284b0a4a471c2efcac<br />
-<strong>repository:</strong> /tmp/Rtmpg5Go2g/git2rdata-workflow-remote2a86684d8b0c</caption>
+<strong>commit:</strong> fa844e7fe29ccf46abccd4e86898b984d5f7d810<br />
+<strong>repository:</strong> /tmp/RtmpIVE5zA/git2rdata-workflow-remote701129371f3b</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -614,8 +618,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </table>
 <table>
 <caption><strong>dataset:</strong> extra_beaver<br />
-<strong>commit:</strong> 75c16a7998e5049e3c8c700db10207ea764e7a1b<br />
-<strong>repository:</strong> /tmp/Rtmpg5Go2g/git2rdata-workflow-remote2a86684d8b0c</caption>
+<strong>commit:</strong> f08ff6b2ece8b6141d7984c16c485ea436be8cbd<br />
+<strong>repository:</strong> /tmp/RtmpIVE5zA/git2rdata-workflow-remote701129371f3b</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -642,10 +646,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tr>
 </tbody>
 </table>
-<p>If you inspect the reported results carefully you’ll notice that all the output (coefficients and commit hash) for “beaver” object is identical for the first and second commit. This makes sense since the “beaver” object didn’t change during the second commit. The output for the current (third) commit is different because the dataset changed.</p>
+<p>If you inspect the reported results you’ll notice that all the output (coefficients and commit hash) for “beaver” object is identical for the first and second commit. This makes sense since the “beaver” object didn’t change during the second commit. The output for the current (third) commit is different because the dataset changed.</p>
 <div id="long-running-analysis" class="section level3">
 <h3>Long running analysis</h3>
-<p>Imagine the case where an individual analysis takes quite a while to run. We store the most recent version of each analysis and add the information from <code>recent_commit()</code>. When preparing the analysis, you can run <code>recent_commit()</code> again on the dataset and compare the commit hash with that one of the currently available analysis. If the commit hashes match, then the data hasn’t changed. So there is no need to rerun the analysis<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, saving valuable computing resources and time.</p>
+<p>Imagine the case where an individual analysis takes a while to run. We store the most recent version of each analysis and add the information from <code>recent_commit()</code>. When preparing the analysis, you can run <code>recent_commit()</code> again on the dataset and compare the commit hash with that one of the available analysis. If the commit hashes match, then the data hasn’t changed. Then there is no need to rerun the analysis<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, saving valuable computing resources and time.</p>
 </div>
 </div>
 <div class="footnotes">
@@ -655,6 +659,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </ol>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

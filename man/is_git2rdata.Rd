@@ -9,7 +9,8 @@ is_git2rdata(file, root = ".", message = c("none", "warning", "error"))
 \arguments{
 \item{file}{the name of the git2rdata object. Git2rdata objects cannot
 have dots in their name. The name may include a relative path. \code{file} is a
-path relative to the \code{root}.}
+path relative to the \code{root}.
+Note that \code{file} must point to a location within \code{root}.}
 
 \item{root}{The root of a project. Can be a file path or a \code{git-repository}.
 Defaults to the current working directory (\code{"."}).}
@@ -24,8 +25,7 @@ A logical value. \code{TRUE} in case of a valid git2rdata object.
 Otherwise \code{FALSE}.
 }
 \description{
-A valid git2rdata object has valid metadata. The data hash must match the
-data hash stored in the metadata.
+A valid git2rdata object has valid metadata.
 }
 \examples{
 # create a directory

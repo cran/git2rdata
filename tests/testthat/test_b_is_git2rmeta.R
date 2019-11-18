@@ -121,22 +121,8 @@ test_that("is_git2rdata checks data", {
   file <- basename(tempfile(tmpdir = root))
   junk <- write_vc(test_data, file = file, root = root, sorting = "test_Date")
   correct_yaml <- yaml::read_yaml(file.path(root, junk[2]))
-  junk_yaml <- correct_yaml
-  junk_yaml[["..generic"]][["data_hash"]] <- "zzz"
-  yaml::write_yaml(junk_yaml, file.path(root, junk[2]))
-  expect_false(is_git2rdata(file = file, root = root))
-  expect_error(is_git2rdata(file = file, root = root, message = "error"),
-               "Corrupt data, mismatching data hash")
-  expect_warning(is_git2rdata(file = file, root = root, message = "warning"),
-                 "Corrupt data, mismatching data hash")
-  expect_false(
-    suppressWarnings(
-      is_git2rdata(file = file, root = root, message = "warning")
-    )
-  )
-
   yaml::write_yaml(correct_yaml, file.path(root, junk[2]))
-  correct_data <- readLines(file.path(root, junk[1]))
+  correct_data <- readLines(file.path(root, junk[1]), encoding = "UTF-8")
   junk_header <- correct_data
   junk_header[1] <- "junk"
   writeLines(junk_header, file.path(root, junk[1]))

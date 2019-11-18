@@ -22,7 +22,7 @@ read_vc <- function(file, root = ".") {
 
 #' @export
 read_vc.default <- function(file, root) {
-  stop("a 'root' of class ", class(root), " is not supported")
+  stop("a 'root' of class ", class(root), " is not supported", call. = FALSE)
 }
 
 #' @export
@@ -40,11 +40,7 @@ read_vc.character <- function(file, root = ".") {
     is_git2rdata(file = remove_root(file = file["meta_file"], root = root),
                  root = root, message = "error"),
     error = function(e) {
-      if (e$message == "Corrupt data, mismatching data hash.") {
-        warning("Mismatching data hash. Data altered outside of git2rdata.")
-      } else {
-        stop(e$message)
-      }
+      stop(e$message, call. = FALSE)
     }
   )
   assert_that(
@@ -55,25 +51,24 @@ read_vc.character <- function(file, root = ".") {
   # read the metadata
   meta_data <- read_yaml(file["meta_file"])
   optimize <- meta_data[["..generic"]][["optimize"]]
-  if (optimize) {
-    col_type <- c(
+  col_type <- list(
+    c(
+      character = "character", factor = "character", integer = "integer",
+      numeric = "numeric", logical = "logical", Date = "Date",
+      POSIXct = "character", complex = "complex"
+    ),
+    c(
       character = "character", factor = "integer", integer = "integer",
       numeric = "numeric", logical = "integer", Date = "integer",
       POSIXct = "numeric", complex = "complex"
     )
-  } else {
-    col_type <- c(
-      character = "character", factor = "character", integer = "integer",
-      numeric = "numeric", logical = "logical", Date = "Date",
-      POSIXct = "character", complex = "complex"
-    )
-  }
+  )[[optimize + 1]]
   na_string <- meta_data[["..generic"]][["NA string"]]
   details <- meta_data[names(meta_data) != "..generic"]
   col_names <- names(details)
   col_classes <- vapply(details, "[[", character(1), "class")
 
-  # read the raw data
+  # read the raw data and check the data hash
   raw_data <- read.table(
     file = file["raw_file"], header = TRUE, sep = "\t", quote = "\"",
     dec = ".", numerals = "warn.loss", na.strings = na_string,
@@ -81,6 +76,28 @@ read_vc.character <- function(file, root = ".") {
     stringsAsFactors = FALSE, fileEncoding = "UTF-8"
   )
 
+  dh <- datahash(file["raw_file"])
+  if (meta_data[["..generic"]][["data_hash"]] != dh) {
+    meta_data[["..generic"]][["data_hash"]] <- dh
+    warning("Mismatching data hash. Data altered outside of git2rdata.",
+            call. = FALSE)
+  }
+
+  raw_data <- reinstate(
+    raw_data = raw_data, col_names = col_names, col_classes = col_classes,
+    details = details, optimize = optimize
+  )
+
+  names(file) <-
+    c(
+      meta_data[["..generic"]][["data_hash"]],
+      meta_data[["..generic"]][["hash"]]
+    )
+  attr(raw_data, "source") <- file
+  return(raw_data)
+}
+
+reinstate <- function(raw_data, col_names, col_classes, details, optimize) {
   # reinstate factors
   for (id in col_names[col_classes == "factor"]) {
     if (optimize) {
@@ -117,21 +134,19 @@ read_vc.character <- function(file, root = ".") {
     }
   }
 
-  if (optimize) {
-    # reinstate logical
-    for (id in col_names[col_classes == "logical"]) {
-      raw_data[[id]] <- as.logical(raw_data[[id]])
-    }
-
-    # reinstage Date
-    for (id in col_names[col_classes == "Date"]) {
-      raw_data[[id]] <- as.Date(raw_data[[id]],
-                                origin = details[[id]][["origin"]])
-    }
+  if (!optimize) {
+    return(raw_data)
+  }
+  # reinstate logical
+  for (id in col_names[col_classes == "logical"]) {
+    raw_data[[id]] <- as.logical(raw_data[[id]])
   }
 
-  names(file) <- hashfile(file)
-  attr(raw_data, "source") <- file
+  # reinstage Date
+  for (id in col_names[col_classes == "Date"]) {
+    raw_data[[id]] <- as.Date(raw_data[[id]],
+                              origin = details[[id]][["origin"]])
+  }
   return(raw_data)
 }
 

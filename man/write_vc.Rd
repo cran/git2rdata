@@ -16,7 +16,8 @@ write_vc(x, file, root = ".", sorting, strict = TRUE,
 
 \item{file}{the name of the git2rdata object. Git2rdata objects cannot
 have dots in their name. The name may include a relative path. \code{file} is a
-path relative to the \code{root}.}
+path relative to the \code{root}.
+Note that \code{file} must point to a location within \code{root}.}
 
 \item{root}{The root of a project. Can be a file path or a \code{git-repository}.
 Defaults to the current working directory (\code{"."}).}
@@ -33,8 +34,9 @@ overwrites the data and the metadata with a warning listing the changes,
 \code{strict = TRUE} returns an error and leaves the data and metadata as is.
 Defaults to \code{TRUE}.}
 
-\item{optimize}{If \code{TRUE}, recode the data to get smaller text files. If
-\code{FALSE}, \code{meta()} converts the data to character. Defaults to \code{TRUE}.}
+\item{optimize}{If \code{TRUE}, recode the data to get smaller text files.
+If \code{FALSE}, \code{meta()} converts the data to character.
+Defaults to \code{TRUE}.}
 
 \item{na}{the string to use for missing values in the data.}
 
@@ -50,12 +52,14 @@ a named vector with the file paths relative to \code{root}. The names
 contain the hashes of the files.
 }
 \description{
-A git2rdata object consists of two files. The \code{".tsv"} file contains the raw
-data as a plain text tab separated file. The \code{".yml"} contains the metadata
-on the columns in plain text YAML format. See \code{vignette("plain text", package = "git2rdata")} for more details on the implementation.
+A git2rdata object consists of two files.
+The \code{".tsv"} file contains the raw data as a plain text tab separated file.
+The \code{".yml"} contains the metadata on the columns in plain text YAML format.
+See \code{vignette("plain text", package = "git2rdata")} for more details on the
+implementation.
 }
 \note{
-\code{..generic} is a reserved name for the metadata and cannot be used as
+\code{..generic} is a reserved name for the metadata and is a forbidden
 column name in a \code{data.frame}.
 }
 \examples{

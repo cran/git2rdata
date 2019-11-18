@@ -12,6 +12,14 @@ expect_error(read_vc(root = 1), "a 'root' of class numeric is not supported")
 root <- tempfile(pattern = "git2rdata-basic")
 dir.create(root)
 expect_false(any(file.exists(git2rdata:::clean_data_path(root, "test"))))
+expect_error(
+  git2rdata:::clean_data_path(root, "../wrong_location"),
+  "file should not contain '..'"
+)
+expect_error(
+  git2rdata:::clean_data_path(root, "./../wrong_location"),
+  "file should not contain '..'"
+)
 expect_is(
   output <- write_vc(
     x = test_data, file = "test.txt", root = root, sorting = "test_Date"
@@ -239,13 +247,15 @@ test_that("user specified na strings work", {
     ),
     "character"
   )
+  old_locale <- git2rdata:::set_c_locale()
   expect_equal(
     read_vc(fn[1], root),
     x[order(x$a), ],
     check.attributes = FALSE
   )
+  git2rdata:::set_local_locale(old_locale)
   expect_identical(
-    grep("junk", readLines(file.path(root, fn[1]))),
+    grep("junk", readLines(file.path(root, fn[1]), encoding = "UTF-8")),
     2:4
   )
   expect_error(
@@ -261,13 +271,15 @@ test_that("user specified na strings work", {
     ),
     "character"
   )
+  old_locale <- git2rdata:::set_c_locale()
   expect_equal(
     read_vc(fn[1], root),
     x[order(x$a), ],
     check.attributes = FALSE
   )
+  git2rdata:::set_local_locale(old_locale)
   expect_identical(
-    grep("junk", readLines(file.path(root, fn[1]))),
+    grep("junk", readLines(file.path(root, fn[1]), encoding = "UTF-8")),
     2:4
   )
   file.remove(list.files(root, recursive = TRUE, full.names = TRUE))
@@ -283,6 +295,15 @@ test_that("write_vc() allows changes in factor levels", {
   expect_is(
     fn <- write_vc(x, "factor_levels", root, sorting = "test_factor"),
     "character"
+  )
+  x$test_factor <- factor(x$test_factor, levels = c("b", "a"))
+  expect_warning(
+    write_vc(x, "factor_levels", root),
+    "Same levels with a different order detected"
+  )
+  expect_warning(
+    write_vc(x, "factor_levels", root, strict = FALSE),
+    " New factor labels"
   )
   x$test_factor <- factor(x$test_factor, levels = c("a", "b", "c"))
   expect_error(

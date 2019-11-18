@@ -1,7 +1,6 @@
 #' Check Whether a Git2rdata Object is Valid.
 #'
-#' A valid git2rdata object has valid metadata. The data hash must match the
-#' data hash stored in the metadata.
+#' A valid git2rdata object has valid metadata.
 #' @inheritParams write_vc
 #' @inheritParams is_git2rmeta
 #' @return A logical value. `TRUE` in case of a valid git2rdata object.
@@ -17,14 +16,13 @@ is_git2rdata <- function(file, root = ".",
 
 #' @export
 is_git2rdata.default <- function(file, root, message) {
-  stop("a 'root' of class ", class(root), " is not supported")
+  stop("a 'root' of class ", class(root), " is not supported", call. = FALSE)
 }
 
 #' @export
 #' @importFrom assertthat assert_that is.string
 #' @importFrom yaml read_yaml as.yaml
 #' @importFrom utils packageVersion
-#' @importFrom git2r hash
 is_git2rdata.character <- function(file, root = ".",
                                    message = c("none", "warning", "error")) {
   assert_that(is.string(file), is.string(root))
@@ -38,7 +36,8 @@ is_git2rdata.character <- function(file, root = ".",
 
   if (!file.exists(file["raw_file"])) {
     msg <- "Data file missing."
-    switch(message, error = stop(msg), warning = warning(msg))
+    switch(message, error = stop(msg, call. = FALSE),
+           warning = warning(msg, call. = FALSE))
     return(FALSE)
   }
 
@@ -50,13 +49,8 @@ is_git2rdata.character <- function(file, root = ".",
   header <- readLines(file["raw_file"], n = 1, encoding = "UTF-8")
   if (correct != header) {
     msg <- paste("Corrupt data, incorrect header. Expecting:", correct)
-    switch(message, error = stop(msg), warning = warning(msg))
-    return(FALSE)
-  }
-
-  if (meta_data[["..generic"]][["data_hash"]] != hashfile(file[["raw_file"]])) {
-    msg <- "Corrupt data, mismatching data hash."
-    switch(message, error = stop(msg), warning = warning(msg))
+    switch(message, error = stop(msg, call. = FALSE),
+           warning = warning(msg, call. = FALSE))
     return(FALSE)
   }
 

@@ -1,12 +1,15 @@
 #' Store a Data.Frame as a Git2rdata Object on Disk
 #'
-#' A git2rdata object consists of two files. The `".tsv"` file contains the raw
-#' data as a plain text tab separated file. The `".yml"` contains the metadata
-#' on the columns in plain text YAML format. See `vignette("plain text", package = "git2rdata")` for more details on the implementation.
+#' A git2rdata object consists of two files.
+#' The `".tsv"` file contains the raw data as a plain text tab separated file.
+#' The `".yml"` contains the metadata on the columns in plain text YAML format.
+#' See `vignette("plain text", package = "git2rdata")` for more details on the
+#' implementation.
 #' @param x the `data.frame`.
 #' @param file the name of the git2rdata object. Git2rdata objects cannot
 #' have dots in their name. The name may include a relative path. `file` is a
 #' path relative to the `root`.
+#' Note that `file` must point to a location within `root`.
 #' @param root The root of a project. Can be a file path or a `git-repository`.
 #' Defaults to the current working directory (`"."`).
 #' @param sorting an optional vector of column names defining which columns to
@@ -27,7 +30,7 @@
 #' @export
 #' @family storage
 #' @template example-io
-#' @note `..generic` is a reserved name for the metadata and cannot be used as
+#' @note `..generic` is a reserved name for the metadata and is a forbidden
 #' column name in a `data.frame`.
 write_vc <- function(
   x, file, root = ".", sorting, strict = TRUE, optimize = TRUE, na = "NA",
@@ -51,7 +54,7 @@ write_vc.default <- function(
 write_vc.character <- function(
   x, file, root = ".", sorting, strict = TRUE, optimize = TRUE, na = "NA",
   ...
-){
+) {
   assert_that(
     inherits(x, "data.frame"), is.string(file), is.string(root),  is.string(na),
     noNA(na), no_whitespace(na), is.flag(strict), is.flag(optimize)
@@ -62,34 +65,39 @@ write_vc.character <- function(
     dir.create(dirname(file["raw_file"]), recursive = TRUE)
   }
 
-  if (file.exists(file["meta_file"])) {
+  if (!file.exists(file["meta_file"])) {
+    raw_data <- meta(x, optimize = optimize, na = na, sorting = sorting)
+  } else {
     tryCatch(
       is_git2rmeta(file = remove_root(file = file["meta_file"], root = root),
                    root = root, message = "error"),
       error = function(e) {
-        stop(paste("Existing metadata file is invalid.", e$message, sep = "\n"))
+        stop(paste("Existing metadata file is invalid.", e$message, sep = "\n"),
+             call. = FALSE)
       }
     )
     old <- read_yaml(file["meta_file"])
     class(old) <- "meta_list"
     raw_data <- meta(x, optimize = optimize, na = na, sorting = sorting,
-                     old = old)
+                     old = old, strict = strict)
     problems <- compare_meta(attr(raw_data, "meta"), old)
     if (length(problems)) {
-      if (strict) {
-        problems <- c(
-          "The data was not overwritten because of the issues below.",
+      problems <- c(
 "See vignette('version_control', package = 'git2rdata') for more information.",
           "", problems)
+      if (strict) {
+        problems <- c(
+          "The data was not overwritten because of the issues below.", problems)
         stop(paste(problems, collapse = "\n"), call. = FALSE)
       }
-      warning(paste(problems, collapse = "\n"))
+      problems <- c(
+        "Changes in the metadata may lead to unnecessarily large diffs.",
+        problems)
+      warning(paste(problems, collapse = "\n"), call. = FALSE)
       if (missing(sorting) && !is.null(old[["..generic"]][["sorting"]])) {
         sorting <- old[["..generic"]][["sorting"]]
       }
     }
-  } else {
-    raw_data <- meta(x, optimize = optimize, na = na, sorting = sorting)
   }
   write.table(
     x = raw_data, file = file["raw_file"], append = FALSE, quote = FALSE,
@@ -97,12 +105,19 @@ write_vc.character <- function(
     col.names = TRUE, fileEncoding = "UTF-8"
   )
   meta_data <- attr(raw_data, "meta")
-  meta_data[["..generic"]][["data_hash"]] <- hashfile(file["raw_file"])
+  meta_data[["..generic"]][["git2rdata"]] <- as.character(
+    packageVersion("git2rdata")
+  )
+  meta_data[["..generic"]][["data_hash"]] <- datahash(file["raw_file"])
   write_yaml(meta_data, file["meta_file"],
              fileEncoding = "UTF-8")
 
   hashes <- remove_root(file = file, root = root)
-  names(hashes) <- hashfile(file)
+  names(hashes) <-
+    c(
+      meta_data[["..generic"]][["data_hash"]],
+      meta_data[["..generic"]][["hash"]]
+    )
 
   return(hashes)
 }
@@ -120,7 +135,7 @@ setOldClass("git_repository")
 write_vc.git_repository <- function(
   x, file, root, sorting, strict = TRUE, optimize = TRUE, na = "NA", ...,
   stage = FALSE, force = FALSE
-){
+) {
   assert_that(is.flag(stage), is.flag(force))
   hashes <- write_vc(
     x = x, file = file, root = workdir(root), sorting = sorting,
@@ -209,8 +224,18 @@ compare_meta <- function(new, old) {
     )
   }
 
-  common_variables <- common_variables[old_class == new_class]
-  old_class <- old_class[old_class == new_class]
+  problems <- compare_factors(
+    problems = problems,
+    common_variables = common_variables[old_class == new_class],
+    old_class = old_class[old_class == new_class],
+    old = old,
+    new = new
+  )
+
+  return(problems)
+}
+
+compare_factors <- function(problems, common_variables, old_class, old, new) {
   for (id in common_variables[old_class == "factor"]) {
     if (old[[id]]$ordered != new[[id]]$ordered) {
       problems <- c(
@@ -229,10 +254,8 @@ compare_meta <- function(new, old) {
       problems <- c(problems, sprintf("- New indices for '%s'.", id))
     }
   }
-
   return(problems)
 }
-
 #' @noRd
 #' @param file the file including the path
 #' @param root the path of the root
