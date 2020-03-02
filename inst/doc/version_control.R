@@ -60,12 +60,15 @@ write_vc(x[sample(nrow(x)), sample(ncol(x))], "column_order", root)
 print_file("column_order.tsv", root, n = 5)
 
 ## ----factor----------------------------------------------------------------------
-old <- data.frame(color = c("red", "blue"))
+old <- data.frame(color = c("red", "blue"), stringsAsFactors = TRUE)
 write_vc(old, "factor", root, sorting = "color")
 print_file("factor.yml", root)
 
 ## ----factor2---------------------------------------------------------------------
-updated <- data.frame(color = c("red", "green", "blue"))
+updated <- data.frame(
+  color = c("red", "green", "blue"), 
+  stringsAsFactors = TRUE
+)
 write_vc(updated, "factor2", root, sorting = "color")
 print_file("factor2.yml", root)
 
@@ -76,13 +79,15 @@ print_file("factor.yml", root)
 
 ## ----factor_deleted--------------------------------------------------------------
 deleted <- data.frame(
-  color = factor(c("red", "green"), levels = c("red", "green")))
+  color = factor(c("red", "green"), levels = c("red", "green"))
+)
 write_vc(deleted, "factor", root, sorting = "color", strict = FALSE)
 print_file("factor.yml", root)
 
 ## ----factor_ordered--------------------------------------------------------------
 ordered <- data.frame(
-  color = factor(c("red", "green"), levels = c("red", "green"), ordered = TRUE))
+  color = factor(c("red", "green"), levels = c("red", "green"), ordered = TRUE)
+)
 write_vc(ordered, "factor", root, sorting = "color", strict = FALSE)
 print_file("factor.yml", root)
 
@@ -99,7 +104,11 @@ print_file("write_vc.yml", root)
 write_vc(old, "relabel", root, sorting = "color")
 relabel("relabel", root, change = list(color = c(red = "rood", blue = "blauw")))
 print_file("relabel.yml", root)
-relabel("relabel", root, 
-        change = data.frame(factor = "color", old = "blauw", new = "blue"))
+relabel(
+  "relabel", root, 
+  change = data.frame(
+    factor = "color", old = "blauw", new = "blue", stringsAsFactors = TRUE
+  )
+)
 print_file("relabel.yml", root)
 

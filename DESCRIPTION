@@ -1,6 +1,6 @@
 Package: git2rdata
 Title: Store and Retrieve Data.frames in a Git Repository
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(
   person(
     "Thierry", "Onkelinx", role = c("aut", "cre"), 
@@ -39,7 +39,7 @@ Collate: 'clean_data_path.R' 'datahash.R' 'git2rdata-package.R'
 VignetteBuilder: knitr
 Language: en-GB
 NeedsCompilation: no
-Packaged: 2019-11-18 11:36:08 UTC; thierry
+Packaged: 2020-03-02 15:03:00 UTC; thierry
 Author: Thierry Onkelinx [aut, cre] (<https://orcid.org/0000-0001-8804-4216>),
   Floris Vanderhaeghe [ctb] (<https://orcid.org/0000-0002-6378-6229>),
   Peter Desmet [ctb] (<https://orcid.org/0000-0002-8442-8025>),
@@ -47,4 +47,4 @@ Author: Thierry Onkelinx [aut, cre] (<https://orcid.org/0000-0001-8804-4216>),
   Research Institute for Nature and Forest [cph, fnd]
 Maintainer: Thierry Onkelinx <thierry.onkelinx@inbo.be>
 Repository: CRAN
-Date/Publication: 2019-11-18 11:50:03 UTC
+Date/Publication: 2020-03-02 15:30:02 UTC

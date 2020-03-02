@@ -323,8 +323,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># initialize a bare git repo to be used as remote</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">remote &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="st">&quot;git2rdata-workflow-remote&quot;</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">remote &lt;-<span class="st"> </span><span class="kw">normalizePath</span>(remote, <span class="dt">winslash =</span> <span class="st">&quot;/&quot;</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt; Warning in normalizePath(remote, winslash = &quot;/&quot;): path[1]=&quot;/tmp/RtmpIVE5zA/</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#&gt; git2rdata-workflow-remote701129371f3b&quot;: Bestand of map bestaat niet</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt; Warning in normalizePath(remote, winslash = &quot;/&quot;): path[1]=&quot;/tmp/Rtmpv0LJli/</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#&gt; git2rdata-workflow-remote1c0b24f71392&quot;: Bestand of map bestaat niet</span></a>
 <a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">dir.create</span>(remote)</a>
 <a class="sourceLine" id="cb1-7" data-line-number="7">git2r<span class="op">::</span><span class="kw">init</span>(remote, <span class="dt">bare =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt; Head:     nothing commited (yet)</span></a>
@@ -332,8 +332,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co"># initialize a local git repo</span></a>
 <a class="sourceLine" id="cb1-11" data-line-number="11">path &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="st">&quot;git2rdata-workflow&quot;</span>)</a>
 <a class="sourceLine" id="cb1-12" data-line-number="12">path &lt;-<span class="st"> </span><span class="kw">normalizePath</span>(path, <span class="dt">winslash =</span> <span class="st">&quot;/&quot;</span>)</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co">#&gt; Warning in normalizePath(path, winslash = &quot;/&quot;): path[1]=&quot;/tmp/RtmpIVE5zA/</span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co">#&gt; git2rdata-workflow70114984dffe&quot;: Bestand of map bestaat niet</span></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co">#&gt; Warning in normalizePath(path, winslash = &quot;/&quot;): path[1]=&quot;/tmp/Rtmpv0LJli/</span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co">#&gt; git2rdata-workflow1c0b1b99853d&quot;: Bestand of map bestaat niet</span></a>
 <a class="sourceLine" id="cb1-15" data-line-number="15"><span class="kw">dir.create</span>(path)</a>
 <a class="sourceLine" id="cb1-16" data-line-number="16">init_repo &lt;-<span class="st"> </span>git2r<span class="op">::</span><span class="kw">clone</span>(remote, path, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb1-17" data-line-number="17">git2r<span class="op">::</span><span class="kw">config</span>(init_repo, <span class="dt">user.name =</span> <span class="st">&quot;me&quot;</span>, <span class="dt">user.email =</span> <span class="st">&quot;me@me.com&quot;</span>)</a>
@@ -341,7 +341,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb1-19" data-line-number="19"><span class="kw">writeLines</span>(<span class="st">&quot;*extra*&quot;</span>, <span class="kw">file.path</span>(path, <span class="st">&quot;.gitignore&quot;</span>))</a>
 <a class="sourceLine" id="cb1-20" data-line-number="20">git2r<span class="op">::</span><span class="kw">add</span>(init_repo, <span class="st">&quot;.gitignore&quot;</span>, <span class="dt">force =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb1-21" data-line-number="21">git2r<span class="op">::</span><span class="kw">commit</span>(init_repo, <span class="dt">message =</span> <span class="st">&quot;Initial commit&quot;</span>)</a>
-<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co">#&gt; [de0e32a] 2019-11-18: Initial commit</span></a>
+<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co">#&gt; [c515283] 2020-03-02: Initial commit</span></a>
 <a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co"># push initial commit to remote</span></a>
 <a class="sourceLine" id="cb1-24" data-line-number="24">git2r<span class="op">::</span><span class="kw">push</span>(init_repo, <span class="st">&quot;origin&quot;</span>, <span class="st">&quot;refs/heads/master&quot;</span>)</a>
 <a class="sourceLine" id="cb1-25" data-line-number="25"><span class="kw">rm</span>(init_repo)</a></code></pre></div>
@@ -513,8 +513,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb10-5" data-line-number="5">junk &lt;-<span class="st"> </span><span class="kw">lapply</span>(result, print)</a></code></pre></div>
 <table>
 <caption><strong>dataset:</strong> beaver<br />
-<strong>commit:</strong> 1b91961b7aa1c86b82668eacd3953ed6070cf9ca<br />
-<strong>repository:</strong> /tmp/RtmpIVE5zA/git2rdata-workflow-remote701129371f3b</caption>
+<strong>commit:</strong> 970f2e9582c87c4a9b599dbad5a621fb343b694a<br />
+<strong>repository:</strong> /tmp/Rtmpv0LJli/git2rdata-workflow-remote1c0b24f71392</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -551,8 +551,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb11-7" data-line-number="7">junk &lt;-<span class="st"> </span><span class="kw">lapply</span>(result, print)</a></code></pre></div>
 <table>
 <caption><strong>dataset:</strong> beaver<br />
-<strong>commit:</strong> fa844e7fe29ccf46abccd4e86898b984d5f7d810<br />
-<strong>repository:</strong> /tmp/RtmpIVE5zA/git2rdata-workflow-remote701129371f3b</caption>
+<strong>commit:</strong> 2751fe25c082a9e337e6e7733a4b805bdf972044<br />
+<strong>repository:</strong> /tmp/Rtmpv0LJli/git2rdata-workflow-remote1c0b24f71392</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -588,8 +588,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb12-7" data-line-number="7">junk &lt;-<span class="st"> </span><span class="kw">lapply</span>(result, print)</a></code></pre></div>
 <table>
 <caption><strong>dataset:</strong> beaver<br />
-<strong>commit:</strong> fa844e7fe29ccf46abccd4e86898b984d5f7d810<br />
-<strong>repository:</strong> /tmp/RtmpIVE5zA/git2rdata-workflow-remote701129371f3b</caption>
+<strong>commit:</strong> 2751fe25c082a9e337e6e7733a4b805bdf972044<br />
+<strong>repository:</strong> /tmp/Rtmpv0LJli/git2rdata-workflow-remote1c0b24f71392</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -618,8 +618,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </table>
 <table>
 <caption><strong>dataset:</strong> extra_beaver<br />
-<strong>commit:</strong> f08ff6b2ece8b6141d7984c16c485ea436be8cbd<br />
-<strong>repository:</strong> /tmp/RtmpIVE5zA/git2rdata-workflow-remote701129371f3b</caption>
+<strong>commit:</strong> d885ff8ff1ab42269896c5c604cef5ab4c9d14ef<br />
+<strong>repository:</strong> /tmp/Rtmpv0LJli/git2rdata-workflow-remote1c0b24f71392</caption>
 <thead>
 <tr class="header">
 <th></th>
