@@ -8,29 +8,39 @@
 #' @family internal
 #' @importFrom assertthat assert_that
 #' @importFrom git2r hash
+#' @importFrom utils file_test
 datahash <- function(file) {
-  chunk_size <- 1e4
-  hashes <- character(chunk_size + 1)
-  i <- 0
-  rawdata <- scan(
-    file = file, what = character(), nmax = -1, sep = "\n", quote = "",
-    skip = i * chunk_size, nlines = chunk_size, na.strings = "",
-    flush = FALSE, fill = FALSE, strip.white = FALSE, quiet = TRUE,
-    blank.lines.skip = FALSE, comment.char = "", allowEscapes = FALSE,
-    encoding = "UTF-8", skipNul = FALSE
-  )
-  while (length(rawdata)) {
-    hashes[1 + i %% chunk_size] <- hash(paste(hash(rawdata), collapse = "\n"))
-    i <- i + 1
-    if (i  %% chunk_size == 0) {
-      hashes[chunk_size + 1] <- hash(paste(hashes, collapse = "")) # nocov
-    }
+  if (file_test("-f", file)) {
+    chunk_size <- 1e4
+    hashes <- character(chunk_size + 1)
+    i <- 0
     rawdata <- scan(
       file = file, what = character(), nmax = -1, sep = "\n", quote = "",
       skip = i * chunk_size, nlines = chunk_size, na.strings = "",
       flush = FALSE, fill = FALSE, strip.white = FALSE, quiet = TRUE,
       blank.lines.skip = FALSE, comment.char = "", allowEscapes = FALSE,
       encoding = "UTF-8", skipNul = FALSE
+    )
+    while (length(rawdata)) {
+      hashes[1 + i %% chunk_size] <- hash(paste(hash(rawdata), collapse = "\n"))
+      i <- i + 1
+      if (i  %% chunk_size == 0) {
+        hashes[chunk_size + 1] <- hash(paste(hashes, collapse = "")) # nocov
+      }
+      rawdata <- scan(
+        file = file, what = character(), nmax = -1, sep = "\n", quote = "",
+        skip = i * chunk_size, nlines = chunk_size, na.strings = "",
+        flush = FALSE, fill = FALSE, strip.white = FALSE, quiet = TRUE,
+        blank.lines.skip = FALSE, comment.char = "", allowEscapes = FALSE,
+        encoding = "UTF-8", skipNul = FALSE
+      )
+    }
+  } else {
+    hashes <- sapply(
+      list.files(
+        file, pattern = "(index|[[:xdigit:]]{20}\\.tsv$)", full.names = TRUE
+      ),
+      datahash
     )
   }
   hash(paste(hashes, collapse = ""))
@@ -40,13 +50,11 @@ datahash <- function(file) {
 #' @noRd
 #' @return a named vector with the old locale
 set_c_locale <- function() {
-  old_ctype <- Sys.getlocale(category = "LC_CTYPE")
-  old_collate <- Sys.getlocale(category = "LC_COLLATE")
-  old_time <- Sys.getlocale(category = "LC_TIME")
-  Sys.setlocale(category = "LC_CTYPE", locale = "C")
-  Sys.setlocale(category = "LC_COLLATE", locale = "C")
-  Sys.setlocale(category = "LC_TIME", locale = "C")
-  return(c(ctype = old_ctype, collate = old_collate, time = old_time))
+  icuSetCollate(
+    locale = "en_GB", case_first = "lower", normalization = "on",
+    case_level = "on"
+  )
+  return(c())
 }
 
 #' Reset the old locale
@@ -54,8 +62,6 @@ set_c_locale <- function() {
 #' @return invisible `NULL`
 #' @noRd
 set_local_locale <- function(locale) {
-  Sys.setlocale(category = "LC_CTYPE", locale = locale["ctype"])
-  Sys.setlocale(category = "LC_COLLATE", locale = locale["collate"])
-  Sys.setlocale(category = "LC_TIME", locale = locale["time"])
+  icuSetCollate(locale = "default")
   return(invisible(NULL))
 }

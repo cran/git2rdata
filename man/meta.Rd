@@ -15,8 +15,7 @@ meta(x, ...)
 
 \method{meta}{character}(x, na = "NA", ...)
 
-\method{meta}{factor}(x, optimize = TRUE, na = "NA", index,
-  strict = TRUE, ...)
+\method{meta}{factor}(x, optimize = TRUE, na = "NA", index, strict = TRUE, ...)
 
 \method{meta}{logical}(x, optimize = TRUE, ...)
 
@@ -24,8 +23,15 @@ meta(x, ...)
 
 \method{meta}{Date}(x, optimize = TRUE, ...)
 
-\method{meta}{data.frame}(x, optimize = TRUE, na = "NA", sorting,
-  strict = TRUE, ...)
+\method{meta}{data.frame}(
+  x,
+  optimize = TRUE,
+  na = "NA",
+  sorting,
+  strict = TRUE,
+  split_by = character(0),
+  ...
+)
 }
 \arguments{
 \item{x}{the vector.}
@@ -48,11 +54,16 @@ overwrites the data and the metadata with a warning listing the changes,
 Defaults to \code{TRUE}.}
 
 \item{sorting}{an optional vector of column names defining which columns to
-use for sorting \code{x} and in what order to use them. Omitting \code{sorting} yields
-a warning. Add \code{sorting} to avoid this warning. Strongly recommended
-in combination with version control. See
-\code{vignette("efficiency", package = "git2rdata")} for an illustration of the
-importance of sorting.}
+use for sorting \code{x} and in what order to use them.
+The default empty \code{sorting} yields a warning.
+Add \code{sorting} to avoid this warning.
+Strongly recommended in combination with version control.
+See \code{vignette("efficiency", package = "git2rdata")} for an illustration of
+the importance of sorting.}
+
+\item{split_by}{An optional vector of variables name to split the text files.
+This creates a separate file for every combination.
+We prepend these variables to the vector of \code{sorting} variables.}
 }
 \value{
 the optimized vector \code{x} with \code{meta} attribute.
@@ -80,7 +91,7 @@ The same code on a different locale might result in a different sorting.
 Add \code{strict = FALSE} to enforce the new order of factor levels.
 }
 \examples{
-meta(c(NA, "'NA'", '"NA"', "abc\\tdef", "abc\\ndef"))
+meta(c(NA, "'NA'", '"NA"', "abc\tdef", "abc\ndef"))
 meta(1:3)
 meta(seq(1, 3, length = 4))
 meta(factor(c("b", NA, "NA"), levels = c("NA", "b", "c")))
@@ -99,7 +110,9 @@ meta(as.Date("2019-02-01"))
 meta(as.Date("2019-02-01"), optimize = FALSE)
 }
 \seealso{
-Other internal: \code{\link{is_git2rdata}},
-  \code{\link{is_git2rmeta}}, \code{\link{upgrade_data}}
+Other internal: 
+\code{\link{is_git2rdata}()},
+\code{\link{is_git2rmeta}()},
+\code{\link{upgrade_data}()}
 }
 \concept{internal}

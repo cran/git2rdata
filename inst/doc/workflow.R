@@ -1,4 +1,4 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE------------------------------------------------------
 library(knitr)
 opts_chunk$set(
   collapse = TRUE,
@@ -6,7 +6,7 @@ opts_chunk$set(
 )
 set.seed(20120225)
 
-## ----initialize----------------------------------------------------------
+## ----initialize------------------------------------------------------------------
 # initialize a bare git repo to be used as remote
 remote <- tempfile("git2rdata-workflow-remote")
 remote <- normalizePath(remote, winslash = "/")
@@ -27,37 +27,37 @@ git2r::commit(init_repo, message = "Initial commit")
 git2r::push(init_repo, "origin", "refs/heads/master")
 rm(init_repo)
 
-## ----store_data_1--------------------------------------------------------
+## ----store_data_1----------------------------------------------------------------
 library(git2rdata)
 repo <- repository(path)
 fn <- write_vc(beaver1, "beaver", repo, sorting = "time", stage = TRUE)
 
-## ----avoid_subsecond_commit, echo = FALSE--------------------------------
+## ----avoid_subsecond_commit, echo = FALSE----------------------------------------
 Sys.sleep(1.2)
 
-## ----commit_data_1-------------------------------------------------------
+## ----commit_data_1---------------------------------------------------------------
 status(repo)
 cm1 <- commit(repo, message = "First commit")
 cat(cm1$message)
 
-## ----store_data_2--------------------------------------------------------
+## ----store_data_2----------------------------------------------------------------
 fn <- write_vc(beaver2, "extra_beaver", repo, sorting = "time", stage = TRUE)
 status(repo)
 
-## ----avoid_subsecond_commit2, echo = FALSE-------------------------------
+## ----avoid_subsecond_commit2, echo = FALSE---------------------------------------
 Sys.sleep(1.2)
 
-## ------------------------------------------------------------------------
+## --------------------------------------------------------------------------------
 status(repo, ignored = TRUE)
 fn <- write_vc(beaver2, "extra_beaver", repo, sorting = "time", stage = TRUE, 
                force = TRUE)
 status(repo)
 cm2 <- commit(repo, message = "Second commit")
 
-## ----avoid_subsecond_commit3, echo = FALSE-------------------------------
+## ----avoid_subsecond_commit3, echo = FALSE---------------------------------------
 Sys.sleep(1.2)
 
-## ----store_data_3--------------------------------------------------------
+## ----store_data_3----------------------------------------------------------------
 beaver1$beaver <- 1
 beaver2$beaver <- 2
 beaver <- rbind(beaver1, beaver2)
@@ -68,7 +68,7 @@ status(repo)
 cm3 <- commit(repo, message = "Third commit", all = TRUE)
 status(repo)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE----------------------------------------------------------------
 #  # load package
 #  library(git2rdata)
 #  # step 1: setup the repository and data path
@@ -94,7 +94,7 @@ status(repo)
 #  # step 5b: sync the repository with the remote
 #  push(repo = repo)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE----------------------------------------------------------------
 #  #' Import the beaver body temperature data
 #  #' @param path the root of the git repository
 #  #' @importFrom git2rdata repository pull rm_data write_vc prune_meta commit push
@@ -124,7 +124,7 @@ status(repo)
 #    push(repo = repo)
 #  }
 
-## ----standardized_analysis-----------------------------------------------
+## ----standardized_analysis-------------------------------------------------------
 analysis <- function(ds_name, repo) {
   ds <- read_vc(ds_name, repo)
   list(
@@ -142,14 +142,14 @@ report <- function(x) {
   )
 }
 
-## ----run_current_analyses, results = "asis"------------------------------
+## ----run_current_analyses, results = "asis"--------------------------------------
 repo <- repository(path)
 current <- lapply(list_data(repo), analysis, repo = repo)
 names(current) <- list_data(repo)
 result <- lapply(current, report)
 junk <- lapply(result, print)
 
-## ----run_previous_analyses, results = "asis"-----------------------------
+## ----run_previous_analyses, results = "asis"-------------------------------------
 # checkout first commit
 git2r::checkout(cm1)
 # do analysis

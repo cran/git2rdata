@@ -1,4 +1,4 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 library(knitr)
 opts_chunk$set(
   fig.height = 4, fig.width = 6,
@@ -112,7 +112,7 @@ update_geom_defaults("boxplot", list(colour = "#356196"))
 #  airbag$seatbelt <- airbag$seatbelt == "belted"
 #  airbag$dvcat <- as.ordered(airbag$dvcat)
 
-## ----load_data, echo = FALSE---------------------------------------------
+## ----load_data, echo = FALSE--------------------------------------------------
 if (system.file("efficiency", "airbag.rds", package = "git2rdata") == "") {
   saveRDS(airbag, file.path("..", "inst", "efficiency", "airbag.rds"))
 } else {
@@ -121,15 +121,15 @@ if (system.file("efficiency", "airbag.rds", package = "git2rdata") == "") {
   )
 }
 
-## ----data_structure------------------------------------------------------
+## ----data_structure-----------------------------------------------------------
 str(airbag)
 
-## ----set_tmp_dir---------------------------------------------------------
+## ----set_tmp_dir--------------------------------------------------------------
 library(git2rdata)
 root <- tempfile("git2rdata-efficient")
 dir.create(root)
 
-## ----file_size-----------------------------------------------------------
+## ----file_size----------------------------------------------------------------
 write.table(airbag, file.path(root, "base_R.tsv"), sep = "\t")
 base_size <- file.size(file.path(root, "base_R.tsv"))
 
@@ -142,7 +142,7 @@ optim_size <- sum(file.size(file.path(root, fn)))
 fn <- write_vc(airbag, "airbag_verbose", root, sorting = "X", optimize = FALSE)
 verbose_size <- sum(file.size(file.path(root, fn)))
 
-## ----table_file_size, echo = FALSE---------------------------------------
+## ----table_file_size, echo = FALSE--------------------------------------------
 kable(
   data.frame(
     method = c("saveRDS()", "write_vc(), optimized", "write_vc(), verbose", 
@@ -283,7 +283,7 @@ ggplot(f_ratio, aes(x = observations, y = ratio, colour = levels)) +
 #      )
 #  })
 
-## ----store_git_size, echo = FALSE----------------------------------------
+## ----store_git_size, echo = FALSE---------------------------------------------
 if (system.file("efficiency", "git_size.rds", package = "git2rdata") == "") {
   saveRDS(repo_size, file.path("..", "inst", "efficiency", "git_size.rds"))
 } else {
@@ -341,7 +341,7 @@ ggplot(rs, aes(x = commit, y = rel_size, colour = fun, linetype = optimized)) +
 #  )
 #  mb$time <- mb$time / 1e6
 
-## ----store_file_timings, echo = FALSE------------------------------------
+## ----store_file_timings, echo = FALSE-----------------------------------------
 if (system.file("efficiency", "file_timings.rds", package = "git2rdata") == "") {
   saveRDS(mb, file.path("..", "inst", "efficiency", "file_timings.rds"))
 } else {
@@ -350,7 +350,7 @@ if (system.file("efficiency", "file_timings.rds", package = "git2rdata") == "") 
   )
 }
 
-## ----median_write, echo = FALSE------------------------------------------
+## ----median_write, echo = FALSE-----------------------------------------------
 median_time <- aggregate(time ~ expr, data = mb, FUN = median)
 write_ratio <- 100 * median_time$time / 
   median_time$time[median_time$expr == "write.table"]
@@ -374,7 +374,7 @@ ggplot(mb, aes(x = expr, y = time)) +
 #  )
 #  mb$time <- mb$time / 1e6
 
-## ----store_read_timings, echo = FALSE------------------------------------
+## ----store_read_timings, echo = FALSE-----------------------------------------
 if (system.file("efficiency", "read_timings.rds", package = "git2rdata") == "") {
   saveRDS(mb, file.path("..", "inst", "efficiency", "read_timings.rds"))
 } else {
@@ -383,7 +383,7 @@ if (system.file("efficiency", "read_timings.rds", package = "git2rdata") == "") 
   )
 }
 
-## ----median_read, echo = FALSE-------------------------------------------
+## ----median_read, echo = FALSE------------------------------------------------
 median_time <- aggregate(time ~ expr, data = mb, FUN = median)
 read_ratio <- 100 * median_time$time / 
   median_time$time[median_time$expr == "read.table"]

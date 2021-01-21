@@ -9,8 +9,6 @@
 [![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![minimal R version](https://img.shields.io/badge/R%3E%3D-3.5.0-6666ff.svg)](https://cran.r-project.org/)
 [![DOI](https://zenodo.org/badge/147685405.svg)](https://zenodo.org/badge/latestdoi/147685405)
-[![Travis-CI Build Status](https://travis-ci.org/ropensci/git2rdata.svg?branch=master)](https://travis-ci.org/ropensci/git2rdata)
-[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/cfbjb835fqb3dc7m/branch/master?svg=true)](https://ci.appveyor.com/project/ThierryO/git2rdata-n60yg/branch/master)
 [![codecov](https://codecov.io/gh/ropensci/git2rdata/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/git2rdata)
 ![GitHub forks](https://img.shields.io/github/forks/ropensci/git2rdata.svg?style=social)
 ![GitHub stars](https://img.shields.io/github/stars/ropensci/git2rdata.svg?style=social)
@@ -140,10 +138,10 @@ Please use the output of `citation("git2rdata")`
 
 ## Folder Structure
 
-- `R`: The source scripts of the [R](https://cran.r-project.org/) functions with documentation in [Roxygen](https://github.com/klutometis/roxygen) format
+- `R`: The source scripts of the [R](https://cran.r-project.org/) functions with documentation in [Roxygen](https://CRAN.R-project.org/package=roxygen2) format
 - `man`: The help files in [Rd](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Rd-format) format
 - `inst/efficiency`: pre-calculated data to speed up `vignette("efficiency", package = "git2rdata")`
-- `testthat`: R scripts with unit tests using the [testthat](http://testthat.r-lib.org/) framework
+- `testthat`: R scripts with unit tests using the [testthat](https://CRAN.R-project.org/package=testthat) framework
 - `vignettes`: source code for the vignettes describing the package
 - `man-roxygen`: templates for documentation in Roxygen format
 - `pkgdown`: source files for the `git2rdata` [website](https://ropensci.github.io/git2rdata/)
