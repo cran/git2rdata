@@ -6,94 +6,111 @@ opts_chunk$set(
   comment = "#>"
 )
 library(ggplot2)
-inbo_colours <- c("#959B38", "#729BB7", "#E87837", "#BDDDD7", "#E4E517", 
+inbo_colours <- c("#959B38", "#729BB7", "#E87837", "#BDDDD7", "#E4E517",
                   "#843860", "#C04384", "#C2C444", "#685457")
 theme_inbo <- function(base_size = 12, base_family = "") {
-  rect.bg <- "white"
-  legend.bg <- "white"
-  panel.bg <- "#F3F3F3"
-  panel.grid <- "white"
-  plot.bg <- "white"
+  rect_bg <- "white"
+  legend_bg <- "white"
+  panel_bg <- "#F3F3F3"
+  panel_grid <- "white"
+  plot_bg <- "white"
   half_line <- base_size / 2
-  theme(
-    line = element_line(colour = "black", size = 0.5, linetype = 1, 
+  ggplot2::theme(
+    line = ggplot2::element_line(colour = "black", size = 0.5, linetype = 1,
                         lineend = "butt"),
-    rect = element_rect(fill = rect.bg, colour = "black", size = 0.5, 
+    rect = ggplot2::element_rect(fill = rect_bg, colour = "black", size = 0.5,
                         linetype = 1),
-    text = element_text(family = base_family, face = "plain", 
-                        colour = "#843860", size = base_size, hjust = 0.5, 
-                        vjust = 0.5, angle = 0, lineheight = 0.9, 
-                        margin = margin(), debug = FALSE),
-    axis.line = element_blank(),
-    axis.line.x = element_blank(),
-    axis.line.y = element_blank(),
-    axis.text = element_text(size = rel(0.8)),
-    axis.text.x = element_text(margin = margin(t = 0.8 * half_line / 2), 
-                               vjust = 1),
+    text = ggplot2::element_text(family = base_family, face = "plain",
+                        colour = "#843860", size = base_size, hjust = 0.5,
+                        vjust = 0.5, angle = 0, lineheight = 0.9,
+                        margin = ggplot2::margin(), debug = FALSE),
+    axis.line = ggplot2::element_blank(),
+    axis.line.x = ggplot2::element_blank(),
+    axis.line.y = ggplot2::element_blank(),
+    axis.text = ggplot2::element_text(size = ggplot2::rel(0.8)),
+    axis.text.x = ggplot2::element_text(
+      margin = ggplot2::margin(t = 0.8 * half_line / 2), vjust = 1
+    ),
     axis.text.x.top = NULL,
-    axis.text.y = element_text(margin = margin(r = 0.8 * half_line / 2), 
-                               hjust = 1),
+    axis.text.y = ggplot2::element_text(
+      margin = ggplot2::margin(r = 0.8 * half_line / 2), hjust = 1
+    ),
     axis.text.y.right = NULL,
-    axis.ticks = element_line(),
-    axis.ticks.length = unit(0.15, "cm"),
-    axis.title = element_text(colour = "black"),
-    axis.title.x = element_text(
-      margin = margin(t = 0.8 * half_line, b = 0.8 * half_line / 2)
+    axis.ticks = ggplot2::element_line(),
+    axis.ticks.length = ggplot2::unit(0.15, "cm"),
+    axis.title = ggplot2::element_text(colour = "black"),
+    axis.title.x = ggplot2::element_text(
+      margin = ggplot2::margin(t = 0.8 * half_line, b = 0.8 * half_line / 2)
     ),
     axis.title.x.top = NULL,
-    axis.title.y = element_text(
-      margin = margin(r = 0.8 * half_line, l = 0.8 * half_line / 2),
+    axis.title.y = ggplot2::element_text(
+      margin = ggplot2::margin(r = 0.8 * half_line, l = 0.8 * half_line / 2),
       angle = 90
     ),
     axis.title.y.right = NULL,
-    legend.background = element_rect(colour = NA, fill = legend.bg),
-    legend.key = element_rect(fill = panel.bg, colour = NA),
-    legend.key.size = unit(1.2, "lines"),
+    legend.background = ggplot2::element_rect(colour = NA, fill = legend_bg),
+    legend.key = ggplot2::element_rect(fill = panel_bg, colour = NA),
+    legend.key.size = ggplot2::unit(1.2, "lines"),
     legend.key.height = NULL,
     legend.key.width = NULL,
     legend.margin = NULL,
-    legend.spacing = unit(0.2, "cm"),
+    legend.spacing = ggplot2::unit(0.2, "cm"),
     legend.spacing.x = NULL,
     legend.spacing.y = NULL,
-    legend.text = element_text(size = rel(0.8)),
+    legend.text = ggplot2::element_text(size = ggplot2::rel(0.8)),
     legend.text.align = NULL,
-    legend.title = element_text(size = rel(0.8), face = "bold", hjust = 0, 
-                                colour = "black"),
+    legend.title = ggplot2::element_text(
+      size = ggplot2::rel(0.8), face = "bold", hjust = 0, colour = "black"
+    ),
     legend.title.align = NULL,
     legend.position = "right",
     legend.direction = NULL,
     legend.justification = "center",
     legend.box = NULL,
-    legend.box.margin = margin(t = half_line, r = half_line, b = half_line, 
-                               l = half_line),
-    legend.box.background = element_rect(colour = NA, fill = legend.bg),
-    legend.box.spacing = unit(0.2, "cm"),
-    panel.background = element_rect(fill = panel.bg, colour = NA),
-    panel.border = element_blank(),
-    panel.grid = element_line(colour = panel.grid),
-    panel.grid.minor = element_line(colour = panel.grid, size = 0.25),
-    panel.spacing = unit(half_line, "pt"),
+    legend.box.margin = ggplot2::margin(
+      t = half_line, r = half_line, b = half_line, l = half_line
+    ),
+    legend.box.background = ggplot2::element_rect(
+      colour = NA, fill = legend_bg
+    ),
+    legend.box.spacing = ggplot2::unit(0.2, "cm"),
+    panel.background = ggplot2::element_rect(fill = panel_bg, colour = NA),
+    panel.border = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_line(colour = panel_grid),
+    panel.grid.minor = ggplot2::element_line(colour = panel_grid, size = 0.25),
+    panel.spacing = ggplot2::unit(half_line, "pt"),
     panel.spacing.x = NULL,
     panel.spacing.y = NULL,
     panel.ontop = FALSE,
-    strip.background = element_rect(fill = "#8E9DA7", colour = NA),
-    strip.text = element_text(size = rel(0.8), colour = "#F3F3F3"),
-    strip.text.x = element_text(margin = margin(t = half_line, b = half_line)),
-    strip.text.y = element_text(margin = margin(r = half_line, l = half_line),
-                                angle = -90),
-    strip.switch.pad.grid = unit(0.1, "cm"),
-    strip.switch.pad.wrap = unit(0.1, "cm"),
+    strip.background = ggplot2::element_rect(fill = "#8E9DA7", colour = NA),
+    strip.text = ggplot2::element_text(
+      size = ggplot2::rel(0.8), colour = "#F3F3F3"
+    ),
+    strip.text.x = ggplot2::element_text(
+      margin = ggplot2::margin(t = half_line, b = half_line)
+    ),
+    strip.text.y = ggplot2::element_text(
+      margin = ggplot2::margin(r = half_line, l = half_line), angle = -90
+    ),
+    strip.switch.pad.grid = ggplot2::unit(0.1, "cm"),
+    strip.switch.pad.wrap = ggplot2::unit(0.1, "cm"),
     strip.placement = "outside",
-    plot.background = element_rect(colour = NA, fill = plot.bg),
-    plot.title = element_text(size = rel(1.2), 
-                              margin = margin(0, 0, half_line, 0)),
-    plot.subtitle = element_text(size = rel(1),
-                                 margin = margin(0, 0, half_line, 0)),
-    plot.caption = element_text(size = rel(0.6),
-                                margin = margin(0, 0, half_line, 0)),
-    plot.margin = margin(t = half_line, r = half_line, b = half_line, 
-                         l = half_line),
-    plot.tag = element_text(size = rel(1.2), hjust = 0.5, vjust = 0.5),
+    plot.background = ggplot2::element_rect(colour = NA, fill = plot_bg),
+    plot.title = ggplot2::element_text(
+      size = ggplot2::rel(1.2), margin = ggplot2::margin(0, 0, half_line, 0)
+    ),
+    plot.subtitle = ggplot2::element_text(
+      size = ggplot2::rel(1), margin = ggplot2::margin(0, 0, half_line, 0)
+    ),
+    plot.caption = ggplot2::element_text(
+      size = ggplot2::rel(0.6), margin = ggplot2::margin(0, 0, half_line, 0)
+    ),
+    plot.margin = ggplot2::margin(
+      t = half_line, r = half_line, b = half_line, l = half_line
+    ),
+    plot.tag = ggplot2::element_text(
+      size = ggplot2::rel(1.2), hjust = 0.5, vjust = 0.5
+    ),
     plot.tag.position = "topleft",
     complete = TRUE
   )
@@ -145,12 +162,13 @@ verbose_size <- sum(file.size(file.path(root, fn)))
 ## ----table_file_size, echo = FALSE--------------------------------------------
 kable(
   data.frame(
-    method = c("saveRDS()", "write_vc(), optimized", "write_vc(), verbose", 
+    method = c("saveRDS()", "write_vc(), optimized", "write_vc(), verbose",
                "write.table()"),
     file_size = c(rds_size, optim_size, verbose_size, base_size) / 2 ^ 10,
     relative = c(rds_size, optim_size, verbose_size, base_size) / base_size
   ),
-  caption = "Resulting file sizes (in kB) and file sizes relative to the size of write.table().",
+  caption = "Resulting file sizes (in kB) and file sizes relative to the size of
+  write.table().",
   digits = 2
 )
 
@@ -193,7 +211,7 @@ ggplot(f_ratio, aes(x = label_length, y = ratio, colour = levels)) +
   geom_hline(yintercept = 1, linetype = 2) +
   geom_line() +
   scale_x_continuous("label length (characters)") +
-  scale_y_continuous("optimized bytes / verbose bytes", 
+  scale_y_continuous(paste("optimized bytes", "verbose bytes", sep = " / "),
                      breaks = seq(0, 1.25, by = 0.25)) +
   scale_colour_manual("number of \nlevels", values = inbo_colours)
 
@@ -226,7 +244,7 @@ ggplot(f_ratio, aes(x = observations, y = ratio, colour = levels)) +
   geom_hline(yintercept = 1, linetype = 2) +
   geom_line() +
   scale_x_log10() +
-  scale_y_continuous("optimized bytes / verbose bytes", 
+  scale_y_continuous(paste("optimized bytes", "verbose bytes", sep = " / "),
                      breaks = seq(0, 1.25, by = 0.25)) +
   scale_colour_manual("number of \nlevels", values = inbo_colours)
 
@@ -235,8 +253,8 @@ ggplot(f_ratio, aes(x = observations, y = ratio, colour = levels)) +
 #  tmp_repo <- function() {
 #    root <- tempfile("git2rdata-efficient-git")
 #    dir.create(root)
-#    repo <- init(root)
-#    config(repo, user.name = "me", user.email = "me@me.com")
+#    repo <- git2r::init(root)
+#    git2r::config(repo, user.name = "me", user.email = "me@me.com")
 #    return(repo)
 #  }
 #  commit_and_size <- function(repo, filename) {
@@ -298,28 +316,30 @@ rs <- lapply(
   function(x) {
     if (x == "saveRDS") {
       fun <- "saveRDS"
-      optimized = "yes"
+      optimized <- "yes"
     } else if (x == "write_vc.optimized") {
       fun <- "write_vc"
-      optimized = "yes"
+      optimized <- "yes"
     } else if (x == "write_vc.verbose") {
       fun <- "write_vc"
-      optimized = "no"
+      optimized <- "no"
     } else if (x == "write.table") {
       fun <- "write.table"
-      optimized = "no"
+      optimized <- "no"
     } else if (x == "write.table.sorted") {
       fun <- "write.table"
-      optimized = "yes"
+      optimized <- "yes"
     }
-    data.frame(commit = seq_along(repo_size[x, ]), size = repo_size[x, ], 
+    data.frame(commit = seq_along(repo_size[x, ]), size = repo_size[x, ],
                rel_size = repo_size[x, ] / repo_size["write.table.sorted", ],
                fun = fun, optimized = optimized, stringsAsFactors = FALSE)
   }
 )
 rs <- do.call(rbind, rs)
 rs$optimized <- factor(rs$optimized, levels = c("yes", "no"))
-ggplot(rs, aes(x = commit, y = size / 2^10, colour = fun, linetype = optimized)) +
+ggplot(
+  rs, aes(x = commit, y = size / 2^10, colour = fun, linetype = optimized)
+) +
   geom_line() +
   scale_y_continuous("repo size (in MiB)") +
   scale_colour_manual("function", values = inbo_colours)
@@ -327,7 +347,7 @@ ggplot(rs, aes(x = commit, y = size / 2^10, colour = fun, linetype = optimized))
 ## ----plot_rel_git_size, echo = FALSE, fig.cap = "Relative size of the git repository when compared to write.table()."----
 ggplot(rs, aes(x = commit, y = rel_size, colour = fun, linetype = optimized)) +
   geom_line() +
-  scale_y_continuous("size relative to sorted write.table()", breaks = 0:10) + 
+  scale_y_continuous("size relative to sorted write.table()", breaks = 0:10) +
   scale_colour_manual("function", values = inbo_colours)
 
 ## ----get_file_timings, eval = system.file("efficiency", "file_timings.rds", package = "git2rdata") == ""----
@@ -342,7 +362,9 @@ ggplot(rs, aes(x = commit, y = rel_size, colour = fun, linetype = optimized)) +
 #  mb$time <- mb$time / 1e6
 
 ## ----store_file_timings, echo = FALSE-----------------------------------------
-if (system.file("efficiency", "file_timings.rds", package = "git2rdata") == "") {
+if (
+  system.file("efficiency", "file_timings.rds", package = "git2rdata") == ""
+) {
   saveRDS(mb, file.path("..", "inst", "efficiency", "file_timings.rds"))
 } else {
   mb <- readRDS(
@@ -352,7 +374,7 @@ if (system.file("efficiency", "file_timings.rds", package = "git2rdata") == "") 
 
 ## ----median_write, echo = FALSE-----------------------------------------------
 median_time <- aggregate(time ~ expr, data = mb, FUN = median)
-write_ratio <- 100 * median_time$time / 
+write_ratio <- 100 * median_time$time /
   median_time$time[median_time$expr == "write.table"]
 names(write_ratio) <- median_time$expr
 
@@ -362,7 +384,7 @@ levels(mb$expr) <- gsub("write_vc\\.", "write_vc\n", levels(mb$expr))
 ggplot(mb, aes(x = expr, y = time)) +
   geom_boxplot() +
   scale_y_continuous("Time (in milliseconds)", limits = c(0, NA)) +
-  theme(axis.title.x = element_blank())
+  theme(axis.title.x = ggplot2::element_blank())
 
 ## ----get_read_timings, eval = system.file("efficiency", "read_timings.rds", package = "git2rdata") == ""----
 #  mb <- microbenchmark(
@@ -375,7 +397,9 @@ ggplot(mb, aes(x = expr, y = time)) +
 #  mb$time <- mb$time / 1e6
 
 ## ----store_read_timings, echo = FALSE-----------------------------------------
-if (system.file("efficiency", "read_timings.rds", package = "git2rdata") == "") {
+if (
+  system.file("efficiency", "read_timings.rds", package = "git2rdata") == ""
+) {
   saveRDS(mb, file.path("..", "inst", "efficiency", "read_timings.rds"))
 } else {
   mb <- readRDS(
@@ -385,18 +409,18 @@ if (system.file("efficiency", "read_timings.rds", package = "git2rdata") == "") 
 
 ## ----median_read, echo = FALSE------------------------------------------------
 median_time <- aggregate(time ~ expr, data = mb, FUN = median)
-read_ratio <- 100 * median_time$time / 
+read_ratio <- 100 * median_time$time /
   median_time$time[median_time$expr == "read.table"]
 names(read_ratio) <- median_time$expr
 
 ## ----plot_read_timings, echo = FALSE, fig.cap = "Boxplots for the read timings for the different methods."----
 mb$expr <- factor(
-  mb$expr, 
+  mb$expr,
   levels = c("readRDS", "read.table", "read_vc.optim", "read_vc.verbose")
 )
 levels(mb$expr) <- gsub("read_vc\\.", "read_vc\n", levels(mb$expr))
 ggplot(mb, aes(x = expr, y = time)) +
   geom_boxplot() +
   scale_y_continuous("Time (in milliseconds)", limits = c(0, NA)) +
-  theme(axis.title.x = element_blank())
+  theme(axis.title.x = ggplot2::element_blank())
 

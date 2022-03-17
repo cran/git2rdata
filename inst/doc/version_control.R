@@ -66,7 +66,7 @@ print_file("factor.yml", root)
 
 ## ----factor2---------------------------------------------------------------------
 updated <- data.frame(
-  color = c("red", "green", "blue"), 
+  color = c("red", "green", "blue"),
   stringsAsFactors = TRUE
 )
 write_vc(updated, "factor2", root, sorting = "color")
@@ -105,7 +105,7 @@ write_vc(old, "relabel", root, sorting = "color")
 relabel("relabel", root, change = list(color = c(red = "rood", blue = "blauw")))
 print_file("relabel.yml", root)
 relabel(
-  "relabel", root, 
+  "relabel", root,
   change = data.frame(
     factor = "color", old = "blauw", new = "blue", stringsAsFactors = TRUE
   )

@@ -24,7 +24,10 @@ writeLines("*extra*", file.path(path, ".gitignore"))
 git2r::add(init_repo, ".gitignore", force = TRUE)
 git2r::commit(init_repo, message = "Initial commit")
 # push initial commit to remote
-git2r::push(init_repo, "origin", "refs/heads/master")
+branch_name <- git2r::branches(init_repo)[[1]]$name
+git2r::push(
+  init_repo, "origin", file.path("refs", "heads", branch_name, fsep = "/")
+)
 rm(init_repo)
 
 ## ----store_data_1----------------------------------------------------------------
@@ -49,7 +52,7 @@ Sys.sleep(1.2)
 
 ## --------------------------------------------------------------------------------
 status(repo, ignored = TRUE)
-fn <- write_vc(beaver2, "extra_beaver", repo, sorting = "time", stage = TRUE, 
+fn <- write_vc(beaver2, "extra_beaver", repo, sorting = "time", stage = TRUE,
                force = TRUE)
 status(repo)
 cm2 <- commit(repo, message = "Second commit")
@@ -61,7 +64,7 @@ Sys.sleep(1.2)
 beaver1$beaver <- 1
 beaver2$beaver <- 2
 beaver <- rbind(beaver1, beaver2)
-fn <- write_vc(beaver, "beaver", repo, sorting = c("beaver", "time"), 
+fn <- write_vc(beaver, "beaver", repo, sorting = c("beaver", "time"),
                strict = FALSE, stage = TRUE)
 file.remove(list.files(path, "extra", full.names = TRUE))
 status(repo)
@@ -73,7 +76,7 @@ status(repo)
 #  library(git2rdata)
 #  # step 1: setup the repository and data path
 #  repo <- repository(".")
-#  data_path <- "data/beaver"
+#  data_path <- file.path("data", "beaver")
 #  # step 1b: sync the repository with the remote
 #  pull(repo = repo)
 #  # step 2: remove all existing data files
@@ -102,7 +105,7 @@ status(repo)
 #  import_body_temp <- function(path) {
 #    # step 1: setup the repository and data path
 #    repo <- repository(path)
-#    data_path <- "data/beaver"
+#    data_path <- file.path("data", "beaver")
 #    # step 1b: sync the repository with the remote
 #    pull(repo = repo)
 #    # step 2: remove all existing data files
@@ -112,16 +115,16 @@ status(repo)
 #    beaver1$beaver <- 1
 #    beaver2$beaver <- 2
 #    body_temp <- rbind(beaver1, beaver2)
-#    fn <- write_vc(x = body_temp, file = file.path(data_path, "body_temperature"),
+#    write_vc(x = body_temp, file = file.path(data_path, "body_temperature"),
 #                   root = repo, sorting = c("beaver", "time"), stage = TRUE)
 #  
 #    # step 4: remove any dangling metadata files
 #    prune_meta(root = repo, path = data_path, stage = TRUE)
 #  
 #    # step 5: commit the changes
-#    cm <- commit(repo = repo, message = "import", session = TRUE)
+#    commit(repo = repo, message = "import", session = TRUE)
 #    # step 5b: sync the repository with the remote
-#    push(repo = repo)
+#    push(object = repo)
 #  }
 
 ## ----standardized_analysis-------------------------------------------------------
@@ -137,7 +140,7 @@ analysis <- function(ds_name, repo) {
 report <- function(x) {
   knitr::kable(
     coef(summary(x$model)),
-    caption = sprintf("**dataset:** %s  \n**commit:** %s  \n**repository:** %s", 
+    caption = sprintf("**dataset:** %s  \n**commit:** %s  \n**repository:** %s",
                       x$dataset, x$commit$commit, x$repository)
   )
 }

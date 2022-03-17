@@ -48,7 +48,7 @@ print_file("first_test.yml", path)
 write_vc(x = x, file = "verbose", root = path, optimize = FALSE, strict = FALSE)
 
 ## ----manual_verbose_data---------------------------------------------------------
-print_file("verbose.tsv", path, 10)
+print_file("verbose.csv", path, 10)
 print_file("verbose.yml", path)
 
 ## ----first_read------------------------------------------------------------------

@@ -15,7 +15,19 @@
 
 <title>Optimizing Storage for Version Control</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -27,11 +39,20 @@
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -118,7 +139,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -137,8 +338,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>This vignette focuses on what <code>git2rdata</code> does to make storing dataframes under version control more efficient and convenient. <code>vignette(&quot;plain_text&quot;, package = &quot;git2rdata&quot;)</code> describes all details on the actual file format. Hence we will not discuss the <code>optimize</code> and <code>na</code> arguments to the <code>write_vc()</code> function.</p>
-<p>We will not illustrate the efficiency of <code>write_vc()</code> and <code>read_vc()</code>. <code>vignette(&quot;efficiency&quot;, package = &quot;git2rdata&quot;)</code> covers those topics.</p>
+<p>This vignette focuses on what <code>git2rdata</code> does to make
+storing dataframes under version control more efficient and convenient.
+<code>vignette(&quot;plain_text&quot;, package = &quot;git2rdata&quot;)</code> describes all
+details on the actual file format. Hence we will not discuss the
+<code>optimize</code> and <code>na</code> arguments to the
+<code>write_vc()</code> function.</p>
+<p>We will not illustrate the efficiency of <code>write_vc()</code> and
+<code>read_vc()</code>.
+<code>vignette(&quot;efficiency&quot;, package = &quot;git2rdata&quot;)</code> covers those
+topics.</p>
 </div>
 <div id="setup" class="section level2">
 <h2>Setup</h2>
@@ -174,41 +383,73 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="assumptions" class="section level2">
 <h2>Assumptions</h2>
-<p>A critical assumption made by <code>git2rdata</code> is that the dataframe itself contains all information. Each row is an observation, each column is a variable. The dataframe has <code>colnames</code> but no <code>rownames</code>. This implies that two observations switching place does not alter the information content. Nor does switching two variables.</p>
-<p>Version control systems like <a href="https://git-scm.com/">git</a>, <a href="https://subversion.apache.org/">subversion</a> or <a href="https://www.mercurial-scm.org/">mercurial</a> focus on accurately keeping track of <em>any</em> change in the files. Two observations switching place in a plain text file <em>is</em> a change, although the information content<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> doesn’t change. <code>git2rdata</code> helps the user to prepare the plain text files in such a way that any change in the version history is an actual change in the information content.</p>
+<p>A critical assumption made by <code>git2rdata</code> is that the
+dataframe itself contains all information. Each row is an observation,
+each column is a variable. The dataframe has <code>colnames</code> but
+no <code>rownames</code>. This implies that two observations switching
+place does not alter the information content. Nor does switching two
+variables.</p>
+<p>Version control systems like <a href="https://git-scm.com/">git</a>,
+<a href="https://subversion.apache.org/">subversion</a> or <a href="https://www.mercurial-scm.org/">mercurial</a> focus on accurately
+keeping track of <em>any</em> change in the files. Two observations
+switching place in a plain text file <em>is</em> a change, although the
+information content<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> doesn’t change. <code>git2rdata</code>
+helps the user to prepare the plain text files in such a way that any
+change in the version history is an actual change in the information
+content.</p>
 </div>
 <div id="sorting-observations" class="section level2">
 <h2>Sorting Observations</h2>
-<p>Version control systems often track changes in plain text files based on row based differences. In layman’s terms they record lines removed from and inserted in the file at what location. Changing an existing line implies removing the old version and inserting the new one. The minimal example below illustrates this.</p>
+<p>Version control systems often track changes in plain text files based
+on row based differences. In layman’s terms they record lines removed
+from and inserted in the file at what location. Changing an existing
+line implies removing the old version and inserting the new one. The
+minimal example below illustrates this.</p>
 <p>Original version</p>
 <pre><code>A,B
 1,10
 2,11
 3,12</code></pre>
-<p>Altered version. The row containing <code>1, 10</code> moves to the last line. The row containing <code>3,12</code> changed to <code>3,0</code>.</p>
+<p>Altered version. The row containing <code>1, 10</code> moves to the
+last line. The row containing <code>3,12</code> changed to
+<code>3,0</code>.</p>
 <pre><code>A,B
 2,11
 3,0
 1,10</code></pre>
-<p>Diff between original and altered version. Notice than we have a deletion of two lines and two insertions.</p>
+<p>Diff between original and altered version. Notice than we have a
+deletion of two lines and two insertions.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>A,B</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">-1,10</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">2,11</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">-3,12</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="va">+3,0</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="va">+1,10</span></span></code></pre></div>
-<p>Ensuring that the observations are always sorted in the same way thus helps minimizing the diff. The sorted version of the same altered version looks like the example below.</p>
+<p>Ensuring that the observations are always sorted in the same way thus
+helps minimizing the diff. The sorted version of the same altered
+version looks like the example below.</p>
 <pre><code>A,B
 1,10
 2,11
 3,0</code></pre>
-<p>Diff between original and the sorted alternate version. Notice that all changes revert to actual changes in the information content. Another benefit is that changes are easily spotted in the diff. A deletion without insertion on the next line is a removed observation. An insertion without preceding deletion is a new observation. A deletion followed by an insertion is an updated observation.</p>
+<p>Diff between original and the sorted alternate version. Notice that
+all changes revert to actual changes in the information content. Another
+benefit is that changes are easily spotted in the diff. A deletion
+without insertion on the next line is a removed observation. An
+insertion without preceding deletion is a new observation. A deletion
+followed by an insertion is an updated observation.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>A,B</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dt">1,10</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="dt">2,11</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">-3,12</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="va">+3,0</span></span></code></pre></div>
-<p>This is where the <code>sorting</code> argument comes into play. If this argument is not provided when writing a file for the first time, it will yield a warning about the lack of sorting. <code>write_vc()</code> then writes the observations in their current order. New versions of the file will not apply any sorting either, leaving this burden to the user. The changed hash for the data file illustrates this in the example below. The metadata hash remains the same.</p>
+<p>This is where the <code>sorting</code> argument comes into play. If
+this argument is not provided when writing a file for the first time, it
+will yield a warning about the lack of sorting. <code>write_vc()</code>
+then writes the observations in their current order. New versions of the
+file will not apply any sorting either, leaving this burden to the user.
+The changed hash for the data file illustrates this in the example
+below. The metadata hash remains the same.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(git2rdata)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="at">file =</span> <span class="st">&quot;row_order&quot;</span>, <span class="at">root =</span> root)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: No sorting applied.</span></span>
@@ -220,8 +461,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sorting is strongly recommended in combination with version control.</span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; fd02aacfd55ca94591108359e2e398d77daec849 f8350dc218051af4bafcd8872d92b1a29cbb4f31 </span></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                          &quot;row_order.tsv&quot;                          &quot;row_order.yml&quot;</span></span></code></pre></div>
-<p><code>sorting</code> should contain a vector of variable names. The observations are automatically sorted along these variables. Now we get an error because the set of sorting variables has changed. The metadata stores the set of sorting variables. Changing the sorting can potentially lead to large diffs, which <code>git2rdata</code> tries to avoid as much as possible.</p>
-<p>From this moment on we will store the output of <code>write_vc()</code> in an object reduce output.</p>
+<p><code>sorting</code> should contain a vector of variable names. The
+observations are automatically sorted along these variables. Now we get
+an error because the set of sorting variables has changed. The metadata
+stores the set of sorting variables. Changing the sorting can
+potentially lead to large diffs, which <code>git2rdata</code> tries to
+avoid as much as possible.</p>
+<p>From this moment on we will store the output of
+<code>write_vc()</code> in an object reduce output.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(x, <span class="st">&quot;row_order&quot;</span>, root, <span class="at">sorting =</span> <span class="st">&quot;y&quot;</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Sorting on &#39;y&#39; results in ties.</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Add extra sorting variables to ensure small diffs.</span></span>
@@ -231,7 +478,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; - The sorting variables changed.</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     - Sorting for the new data: &#39;y&#39;.</span></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     - Sorting for the old data: .</span></span></code></pre></div>
-<p>Using <code>strict = FALSE</code> turns such errors into warnings and allows to update the file. Notice that we get a new warning: the variable we used for sorting resulted in ties, thus the order of the observations is not guaranteed to be stable. The solution is to use more or different variables. We’ll need <code>strict = FALSE</code> again to override the change in sorting variables.</p>
+<p>Using <code>strict = FALSE</code> turns such errors into warnings and
+allows to update the file. Notice that we get a new warning: the
+variable we used for sorting resulted in ties, thus the order of the
+observations is not guaranteed to be stable. The solution is to use more
+or different variables. We’ll need <code>strict = FALSE</code> again to
+override the change in sorting variables.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(x, <span class="st">&quot;row_order&quot;</span>, root, <span class="at">sorting =</span> <span class="st">&quot;y&quot;</span>, <span class="at">strict =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Sorting on &#39;y&#39; results in ties.</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Add extra sorting variables to ensure small diffs.</span></span>
@@ -248,7 +500,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; - The sorting variables changed.</span></span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     - Sorting for the new data: &#39;y&#39;, &#39;x&#39;.</span></span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     - Sorting for the old data: &#39;y&#39;.</span></span></code></pre></div>
-<p>Once we have defined the sorting, we may omit the <code>sorting</code> argument when writing new versions. <code>write_vc</code> uses the sorting as defined in the existing metadata. It checks for potential ties. Ties results in a warning.</p>
+<p>Once we have defined the sorting, we may omit the
+<code>sorting</code> argument when writing new versions.
+<code>write_vc</code> uses the sorting as defined in the existing
+metadata. It checks for potential ties. Ties results in a warning.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>print_file <span class="ot">&lt;-</span> <span class="cf">function</span>(file, root, <span class="at">n =</span> <span class="sc">-</span><span class="dv">1</span>) {</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  fn <span class="ot">&lt;-</span> <span class="fu">file.path</span>(root, file)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">readLines</span>(fn, <span class="at">n =</span> n)</span>
@@ -256,7 +511,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;row_order.yml&quot;</span>, root, <span class="dv">7</span>)</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.3.1</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.0</span></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   sorting:</span></span>
@@ -270,12 +525,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="sorting-variables" class="section level2">
 <h2>Sorting Variables</h2>
-<p>The order of the variables (columns) has an even bigger impact on a row based diff. Let’s revisit our minimal example. Suppose that we swap <code>A</code> and <code>B</code> from our <a href="#sorting-observations">original example</a>. The new data looks as below.</p>
+<p>The order of the variables (columns) has an even bigger impact on a
+row based diff. Let’s revisit our minimal example. Suppose that we swap
+<code>A</code> and <code>B</code> from our <a href="#sorting-observations">original example</a>. The new data looks as
+below.</p>
 <pre><code>B,A
 10,1
 11,2
 13,3</code></pre>
-<p>The resulting diff is maximal because every single row changed. Yet none of the information changed. Hence, maintaining column order is crucial when storing dataframes as plain text files under version control. The <code>vignette(&quot;efficiency&quot;, package = &quot;git2rdata&quot;)</code> vignette illustrates this on a more realistic data set.</p>
+<p>The resulting diff is maximal because every single row changed. Yet
+none of the information changed. Hence, maintaining column order is
+crucial when storing dataframes as plain text files under version
+control. The <code>vignette(&quot;efficiency&quot;, package = &quot;git2rdata&quot;)</code>
+vignette illustrates this on a more realistic data set.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="st">-A,B</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="va">+B,A</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="st">-1,10</span></span>
@@ -284,7 +546,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="va">+11,2</span></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="st">-3,13</span></span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="va">+13,3</span></span></code></pre></div>
-<p>When <code>write_vc()</code> writes a dataframe for the first time, it stores the original order of the columns in the metadata. From that moment on, <code>write_vc()</code> uses the order stored in the metadata. The example below writes the same data set twice. The second version contains identical information but randomizes the order of the observations and the columns. The sorting by the internals of <code>write_vc()</code> will undo this randomization, resulting in an unchanged file.</p>
+<p>When <code>write_vc()</code> writes a dataframe for the first time,
+it stores the original order of the columns in the metadata. From that
+moment on, <code>write_vc()</code> uses the order stored in the
+metadata. The example below writes the same data set twice. The second
+version contains identical information but randomizes the order of the
+observations and the columns. The sorting by the internals of
+<code>write_vc()</code> will undo this randomization, resulting in an
+unchanged file.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="st">&quot;column_order&quot;</span>, root, <span class="at">sorting =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;abc&quot;</span>))</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; c784705d62e7ab6910df02e02c426d2e1f16cd1f cc8225b107710e24414dedee6fc04636ee0d82c6 </span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                       &quot;column_order.tsv&quot;                       &quot;column_order.yml&quot;</span></span>
@@ -306,14 +575,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="handling-factors-optimized" class="section level2">
 <h2>Handling Factors Optimized</h2>
-<p><code>vignette(&quot;plain_text&quot;, package = &quot;git2rdata&quot;)</code> and <code>vignette(&quot;efficiency&quot;, package = &quot;git2rdata&quot;)</code> illustrate how we can store a factor more efficiently when storing their index in the data file and the indices and labels in the metadata. We take this even a bit further: what happens if new data arrives and we need an extra factor level?</p>
+<p><code>vignette(&quot;plain_text&quot;, package = &quot;git2rdata&quot;)</code> and
+<code>vignette(&quot;efficiency&quot;, package = &quot;git2rdata&quot;)</code> illustrate
+how we can store a factor more efficiently when storing their index in
+the data file and the indices and labels in the metadata. We take this
+even a bit further: what happens if new data arrives and we need an
+extra factor level?</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>old <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">color =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>), <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_vc</span>(old, <span class="st">&quot;factor&quot;</span>, root, <span class="at">sorting =</span> <span class="st">&quot;color&quot;</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ade0e1d70155140e5115f71efae4b15b27287b37 03c3898451e17cf436da59dd0e712606ea63a838 </span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                             &quot;factor.tsv&quot;                             &quot;factor.yml&quot;</span></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.3.1</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.0</span></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -328,9 +602,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 1</span></span>
 <span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 2</span></span>
 <span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ordered: no</span></span></code></pre></div>
-<p>Let’s add an observation with a new factor level. If we store the updated dataframe in a new file, we see that the indices are different. The factor level <code>&quot;blue&quot;</code> remains unchanged, but <code>&quot;red&quot;</code> becomes the third level and get index <code>3</code> instead of index <code>2</code>. This could lead to a large diff whereas the potential semantics (and thus the information content) are not changed.</p>
+<p>Let’s add an observation with a new factor level. If we store the
+updated dataframe in a new file, we see that the indices are different.
+The factor level <code>&quot;blue&quot;</code> remains unchanged, but
+<code>&quot;red&quot;</code> becomes the third level and get index <code>3</code>
+instead of index <code>2</code>. This could lead to a large diff whereas
+the potential semantics (and thus the information content) are not
+changed.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>updated <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;blue&quot;</span>), </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;blue&quot;</span>),</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_vc</span>(updated, <span class="st">&quot;factor2&quot;</span>, root, <span class="at">sorting =</span> <span class="st">&quot;color&quot;</span>)</span>
@@ -338,7 +618,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                            &quot;factor2.tsv&quot;                            &quot;factor2.yml&quot;</span></span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor2.yml&quot;</span>, root)</span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.3.1</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.0</span></span>
 <span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -355,7 +635,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 2</span></span>
 <span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 3</span></span>
 <span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ordered: no</span></span></code></pre></div>
-<p>When we try to overwrite the original data with the updated version, we get an error because there is a change in factor levels and / or indices. In this specific case, we decided that the change is OK and force the writing by setting <code>strict = FALSE</code>. Notice that the original labels (<code>&quot;blue&quot;</code> and <code>&quot;red&quot;</code>) keep their index, the new level (<code>&quot;green&quot;</code>) gets the first available index number.</p>
+<p>When we try to overwrite the original data with the updated version,
+we get an error because there is a change in factor levels and / or
+indices. In this specific case, we decided that the change is OK and
+force the writing by setting <code>strict = FALSE</code>. Notice that
+the original labels (<code>&quot;blue&quot;</code> and <code>&quot;red&quot;</code>) keep
+their index, the new level (<code>&quot;green&quot;</code>) gets the first
+available index number.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_vc</span>(updated, <span class="st">&quot;factor&quot;</span>, root)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: The data was not overwritten because of the issues below.</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; See vignette(&#39;version_control&#39;, package = &#39;git2rdata&#39;) for more information.</span></span>
@@ -370,7 +656,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; - New indices for &#39;color&#39;.</span></span>
 <span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
 <span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.3.1</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.0</span></span>
 <span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -387,7 +673,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 3</span></span>
 <span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 2</span></span>
 <span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ordered: no</span></span></code></pre></div>
-<p>The next example removes the <code>&quot;blue&quot;</code> level and switches the order of the remaining levels. Notice that the meta data retains the existing indices. The order of the labels and indices reflects their new ordering.</p>
+<p>The next example removes the <code>&quot;blue&quot;</code> level and switches
+the order of the remaining levels. Notice that the meta data retains the
+existing indices. The order of the labels and indices reflects their new
+ordering.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>deleted <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>))</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -401,7 +690,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                             &quot;factor.tsv&quot;                             &quot;factor.yml&quot;</span></span>
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.3.1</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.0</span></span>
 <span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -416,7 +705,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 2</span></span>
 <span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 3</span></span>
 <span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ordered: no</span></span></code></pre></div>
-<p>Changing a factor to an ordered factor or <em>vice versa</em> will also keep existing level indices.</p>
+<p>Changing a factor to an ordered factor or <em>vice versa</em> will
+also keep existing level indices.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ordered <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>), <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -429,7 +719,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                             &quot;factor.tsv&quot;                             &quot;factor.yml&quot;</span></span>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.3.1</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.0</span></span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -447,13 +737,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="relabelling-a-factor" class="section level2">
 <h2>Relabelling a Factor</h2>
-<p>The example below will store a dataframe, relabel the factor levels and store it again using <code>write_vc()</code>. Notice the update of both the labels and the indices. Hence creating a large diff, where updating the labels would do.</p>
+<p>The example below will store a dataframe, relabel the factor levels
+and store it again using <code>write_vc()</code>. Notice the update of
+both the labels and the indices. Hence creating a large diff, where
+updating the labels would do.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_vc</span>(old, <span class="st">&quot;write_vc&quot;</span>, root, <span class="at">sorting =</span> <span class="st">&quot;color&quot;</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ade0e1d70155140e5115f71efae4b15b27287b37 03c3898451e17cf436da59dd0e712606ea63a838 </span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                           &quot;write_vc.tsv&quot;                           &quot;write_vc.yml&quot;</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;write_vc.yml&quot;</span>, root)</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.3.1</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.0</span></span>
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -481,7 +774,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                           &quot;write_vc.tsv&quot;                           &quot;write_vc.yml&quot;</span></span>
 <span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;write_vc.yml&quot;</span>, root)</span>
 <span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.3.1</span></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.0</span></span>
 <span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -496,14 +789,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 3</span></span>
 <span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 4</span></span>
 <span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ordered: no</span></span></code></pre></div>
-<p>We created <code>relabel()</code>, which changes the labels in the meta data while maintaining their indices. It takes three arguments: the name of the data file, the root and the change. <code>change</code> accepts two formats, a list or a dataframe. The name of the list must match with the variable name of a factor in the data. Each element of the list must be a named vector, the name being the existing label and the value the new label. The dataframe format requires a <code>factor</code>, <code>old</code> and <code>new</code> variable with one row for each change in label.</p>
+<p>We created <code>relabel()</code>, which changes the labels in the
+meta data while maintaining their indices. It takes three arguments: the
+name of the data file, the root and the change. <code>change</code>
+accepts two formats, a list or a dataframe. The name of the list must
+match with the variable name of a factor in the data. Each element of
+the list must be a named vector, the name being the existing label and
+the value the new label. The dataframe format requires a
+<code>factor</code>, <code>old</code> and <code>new</code> variable with
+one row for each change in label.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_vc</span>(old, <span class="st">&quot;relabel&quot;</span>, root, <span class="at">sorting =</span> <span class="st">&quot;color&quot;</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ade0e1d70155140e5115f71efae4b15b27287b37 03c3898451e17cf436da59dd0e712606ea63a838 </span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                            &quot;relabel.tsv&quot;                            &quot;relabel.yml&quot;</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">relabel</span>(<span class="st">&quot;relabel&quot;</span>, root, <span class="at">change =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="fu">c</span>(<span class="at">red =</span> <span class="st">&quot;rood&quot;</span>, <span class="at">blue =</span> <span class="st">&quot;blauw&quot;</span>)))</span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;relabel.yml&quot;</span>, root)</span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.3.1</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.0</span></span>
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -519,14 +820,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 2</span></span>
 <span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ordered: no</span></span>
 <span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="fu">relabel</span>(</span>
-<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;relabel&quot;</span>, root, </span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;relabel&quot;</span>, root,</span>
 <span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">change =</span> <span class="fu">data.frame</span>(</span>
 <span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">factor =</span> <span class="st">&quot;color&quot;</span>, <span class="at">old =</span> <span class="st">&quot;blauw&quot;</span>, <span class="at">new =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span></span>
 <span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;relabel.yml&quot;</span>, root)</span>
 <span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.3.1</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.0</span></span>
 <span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -541,9 +842,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 1</span></span>
 <span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - 2</span></span>
 <span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ordered: no</span></span></code></pre></div>
-<p>A <em>caveat</em>: <code>relabel()</code> does not make sense when the data file uses verbose storage. The verbose mode stores the factor labels and not their indices, in which case relabelling a label will always yield a large diff. Hence, <code>relabel()</code> requires the optimized storage.</p>
+<p>A <em>caveat</em>: <code>relabel()</code> does not make sense when
+the data file uses verbose storage. The verbose mode stores the factor
+labels and not their indices, in which case relabelling a label will
+always yield a large diff. Hence, <code>relabel()</code> requires the
+optimized storage.</p>
 </div>
-<div class="footnotes">
+<div class="footnotes footnotes-end-of-document">
 <hr />
 <ol>
 <li id="fn1"><p><em>sensu</em> <code>git2rdata</code><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
