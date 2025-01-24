@@ -458,15 +458,17 @@ The changed hash for the data file illustrates this in the example
 below. The metadata hash remains the same.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">library</span>(git2rdata)</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="at">file =</span> <span class="st">&quot;row_order&quot;</span>, <span class="at">root =</span> root)</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; Warning: No sorting applied.</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; Sorting is strongly recommended in combination with version control.</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; ad3f06d9d795493d89dc9dd2c804d7a99af3e10e f8350dc218051af4bafcd8872d92b1a29cbb4f31 </span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;                          &quot;row_order.tsv&quot;                          &quot;row_order.yml&quot;</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="fu">write_vc</span>(x[<span class="fu">sample</span>(<span class="fu">nrow</span>(x)), ], <span class="at">file =</span> <span class="st">&quot;row_order&quot;</span>, <span class="at">root =</span> root)</span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; Warning: No sorting applied.</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; Sorting is strongly recommended in combination with version control.</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; fd02aacfd55ca94591108359e2e398d77daec849 f8350dc218051af4bafcd8872d92b1a29cbb4f31 </span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt;                          &quot;row_order.tsv&quot;                          &quot;row_order.yml&quot;</span></span></code></pre></div>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; Warning in meta.data.frame(x, optimize = optimize, na = na, sorting = sorting, :</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; `digits` was not set. Setting is automatically to 6. See ?meta</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; Warning: No sorting applied.</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Sorting is strongly recommended in combination with version control.</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; 2b0ac8243ca27ed3d983ba8fc27a3bca7ca8f39d 79e04b2ecff2c1eac8ededc69ba09311f38f74da </span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt;                          &quot;row_order.tsv&quot;                          &quot;row_order.yml&quot;</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="fu">write_vc</span>(x[<span class="fu">sample</span>(<span class="fu">nrow</span>(x)), ], <span class="at">file =</span> <span class="st">&quot;row_order&quot;</span>, <span class="at">root =</span> root)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; Warning: No sorting applied.</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; Sorting is strongly recommended in combination with version control.</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; 8b6ba8f35315ad27871c5e4725d2430089ba0942 79e04b2ecff2c1eac8ededc69ba09311f38f74da </span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;                          &quot;row_order.tsv&quot;                          &quot;row_order.yml&quot;</span></span></code></pre></div>
 <p><code>sorting</code> should contain a vector of variable names. The
 observations are automatically sorted along these variables. Now we get
 an error because the set of sorting variables has changed. The metadata
@@ -517,7 +519,7 @@ metadata. It checks for potential ties. Ties results in a warning.</p>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>}</span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;row_order.yml&quot;</span>, root, <span class="dv">7</span>)</span>
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt;   sorting:</span></span>
@@ -561,23 +563,25 @@ observations and the columns. The sorting by the internals of
 <code>write_vc()</code> will undo this randomization, resulting in an
 unchanged file.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="st">&quot;column_order&quot;</span>, root, <span class="at">sorting =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;abc&quot;</span>))</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&gt; c784705d62e7ab6910df02e02c426d2e1f16cd1f cc8225b107710e24414dedee6fc04636ee0d82c6 </span></span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt;                       &quot;column_order.tsv&quot;                       &quot;column_order.yml&quot;</span></span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;column_order.tsv&quot;</span>, root, <span class="at">n =</span> <span class="dv">5</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; x    y   z   abc def timestamp</span></span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; A    1   18  0.572192852110693   0   1537467120</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; B    2   14  -1.64221062655002   0   1532421360</span></span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; C    NA  5   0.0228713954429028  NA  1521068400</span></span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; D    2   20  -0.683183900695259  NA  1539990000</span></span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="fu">write_vc</span>(x[<span class="fu">sample</span>(<span class="fu">nrow</span>(x)), <span class="fu">sample</span>(<span class="fu">ncol</span>(x))], <span class="st">&quot;column_order&quot;</span>, root)</span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; c784705d62e7ab6910df02e02c426d2e1f16cd1f cc8225b107710e24414dedee6fc04636ee0d82c6 </span></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt;                       &quot;column_order.tsv&quot;                       &quot;column_order.yml&quot;</span></span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;column_order.tsv&quot;</span>, root, <span class="at">n =</span> <span class="dv">5</span>)</span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; x    y   z   abc def timestamp</span></span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; A    1   18  0.572192852110693   0   1537467120</span></span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; B    2   14  -1.64221062655002   0   1532421360</span></span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; C    NA  5   0.0228713954429028  NA  1521068400</span></span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; D    2   20  -0.683183900695259  NA  1539990000</span></span></code></pre></div>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&gt; Warning in meta.data.frame(x, optimize = optimize, na = na, sorting = sorting, :</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt; `digits` was not set. Setting is automatically to 6. See ?meta</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; a9dcf3e5c2c2b820683c66de8e97c70826218670 0d8985d9b4bb134b5381581f854c51447f8c9300 </span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt;                       &quot;column_order.tsv&quot;                       &quot;column_order.yml&quot;</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;column_order.tsv&quot;</span>, root, <span class="at">n =</span> <span class="dv">5</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; x    y   z   abc def timestamp</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; A    1   18  0.572193    0   1537470720</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; B    2   14  -1.64221    0   1532424960</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co">#&gt; C    NA  5   0.0228714   NA  1521072000</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="co">#&gt; D    2   20  -0.683184   NA  1539993600</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="fu">write_vc</span>(x[<span class="fu">sample</span>(<span class="fu">nrow</span>(x)), <span class="fu">sample</span>(<span class="fu">ncol</span>(x))], <span class="st">&quot;column_order&quot;</span>, root)</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt; a9dcf3e5c2c2b820683c66de8e97c70826218670 0d8985d9b4bb134b5381581f854c51447f8c9300 </span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt;                       &quot;column_order.tsv&quot;                       &quot;column_order.yml&quot;</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;column_order.tsv&quot;</span>, root, <span class="at">n =</span> <span class="dv">5</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; x    y   z   abc def timestamp</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; A    1   18  0.572193    0   1537470720</span></span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; B    2   14  -1.64221    0   1532424960</span></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; C    NA  5   0.0228714   NA  1521072000</span></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; D    2   20  -0.683184   NA  1539993600</span></span></code></pre></div>
 </div>
 <div id="handling-factors-optimized" class="section level2">
 <h2>Handling Factors Optimized</h2>
@@ -593,7 +597,7 @@ extra factor level?</p>
 <span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt;                             &quot;factor.tsv&quot;                             &quot;factor.yml&quot;</span></span>
 <span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
 <span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -624,7 +628,7 @@ changed.</p>
 <span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt;                            &quot;factor2.tsv&quot;                            &quot;factor2.yml&quot;</span></span>
 <span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor2.yml&quot;</span>, root)</span>
 <span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -662,7 +666,7 @@ available index number.</p>
 <span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co">#&gt; - New indices for &#39;color&#39;.</span></span>
 <span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
 <span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -696,7 +700,7 @@ ordering.</p>
 <span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="co">#&gt;                             &quot;factor.tsv&quot;                             &quot;factor.yml&quot;</span></span>
 <span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
 <span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -725,7 +729,7 @@ also keep existing level indices.</p>
 <span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="co">#&gt;                             &quot;factor.tsv&quot;                             &quot;factor.yml&quot;</span></span>
 <span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
 <span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -752,7 +756,7 @@ updating the labels would do.</p>
 <span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&gt;                           &quot;write_vc.tsv&quot;                           &quot;write_vc.yml&quot;</span></span>
 <span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;write_vc.yml&quot;</span>, root)</span>
 <span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -780,7 +784,7 @@ updating the labels would do.</p>
 <span id="cb19-31"><a href="#cb19-31" tabindex="-1"></a><span class="co">#&gt;                           &quot;write_vc.tsv&quot;                           &quot;write_vc.yml&quot;</span></span>
 <span id="cb19-32"><a href="#cb19-32" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;write_vc.yml&quot;</span>, root)</span>
 <span id="cb19-33"><a href="#cb19-33" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb19-34"><a href="#cb19-34" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb19-34"><a href="#cb19-34" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb19-35"><a href="#cb19-35" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb19-36"><a href="#cb19-36" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb19-37"><a href="#cb19-37" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -810,7 +814,7 @@ one row for each change in label.</p>
 <span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="fu">relabel</span>(<span class="st">&quot;relabel&quot;</span>, root, <span class="at">change =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="fu">c</span>(<span class="at">red =</span> <span class="st">&quot;rood&quot;</span>, <span class="at">blue =</span> <span class="st">&quot;blauw&quot;</span>)))</span>
 <span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;relabel.yml&quot;</span>, root)</span>
 <span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -833,7 +837,7 @@ one row for each change in label.</p>
 <span id="cb20-27"><a href="#cb20-27" tabindex="-1"></a>)</span>
 <span id="cb20-28"><a href="#cb20-28" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;relabel.yml&quot;</span>, root)</span>
 <span id="cb20-29"><a href="#cb20-29" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb20-30"><a href="#cb20-30" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb20-30"><a href="#cb20-30" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb20-31"><a href="#cb20-31" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb20-32"><a href="#cb20-32" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb20-33"><a href="#cb20-33" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>

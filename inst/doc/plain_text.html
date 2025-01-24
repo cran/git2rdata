@@ -473,7 +473,7 @@ file a <code>.yml</code> extension. <code>file</code> can include a
 relative path starting from <code>root</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(git2rdata)</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">write_vc</span>(<span class="at">x =</span> x, <span class="at">file =</span> <span class="st">&quot;first_test&quot;</span>, <span class="at">root =</span> path, <span class="at">strict =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; ad3f06d9d795493d89dc9dd2c804d7a99af3e10e f8350dc218051af4bafcd8872d92b1a29cbb4f31 </span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; 2b0ac8243ca27ed3d983ba8fc27a3bca7ca8f39d 79e04b2ecff2c1eac8ededc69ba09311f38f74da </span></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;                         &quot;first_test.tsv&quot;                         &quot;first_test.yml&quot;</span></span></code></pre></div>
 <p><code>write_vc()</code> returns a vector of relative paths to the raw
 data and metadata files. The names of this vector contains the hashes of
@@ -487,22 +487,22 @@ the benefit of being both human and machine readable.</p>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>}</span>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;first_test.tsv&quot;</span>, path, <span class="dv">10</span>)</span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; x    y   z   abc def timestamp</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; V    1   NA  -0.382010380419258  1   1514761200</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; U    2   1   -0.420347607856041  0   1516022640</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; Z    NA  2   -0.916731402237418  NA  1517284080</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; W    NA  3   0.387455128525654   0   1518545520</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; L    1   4   -0.992354993526956  NA  1519806960</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; C    NA  5   0.0228713954429028  NA  1521068400</span></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; R    2   6   -0.947557467717088  1   1522329840</span></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; S    1   7   -0.16302914628615   NA  1523591280</span></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; O    NA  8   0.523643352634392   1   1524852720</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; V    1   NA  -0.38201    1   1514764800</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; U    2   1   -0.420348   0   1516026240</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; Z    NA  2   -0.916731   NA  1517287680</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; W    NA  3   0.387455    0   1518549120</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; L    1   4   -0.992355   NA  1519810560</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; C    NA  5   0.0228714   NA  1521072000</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; R    2   6   -0.947557   1   1522333440</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; S    1   7   -0.163029   NA  1523594880</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; O    NA  8   0.523643    1   1524856320</span></span>
 <span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;first_test.yml&quot;</span>, path)</span>
 <span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
-<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt;   hash: f8350dc218051af4bafcd8872d92b1a29cbb4f31</span></span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt;   data_hash: ad3f06d9d795493d89dc9dd2c804d7a99af3e10e</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt;   hash: 79e04b2ecff2c1eac8ededc69ba09311f38f74da</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt;   data_hash: 2b0ac8243ca27ed3d983ba8fc27a3bca7ca8f39d</span></span>
 <span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt; x:</span></span>
 <span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt;   class: character</span></span>
 <span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; &#39;y&#39;:</span></span>
@@ -520,12 +520,13 @@ the benefit of being both human and machine readable.</p>
 <span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co">#&gt;   class: integer</span></span>
 <span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt; abc:</span></span>
 <span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt;   class: numeric</span></span>
-<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt; def:</span></span>
-<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt;   class: logical</span></span>
-<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt; timestamp:</span></span>
-<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt;   class: POSIXct</span></span>
-<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt;   origin: 1970-01-01 00:00:00</span></span>
-<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt;   timezone: UTC</span></span></code></pre></div>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt;   digits: 6</span></span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt; def:</span></span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt;   class: logical</span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt; timestamp:</span></span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt;   class: POSIXct</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt;   origin: 1970-01-01 00:00:00</span></span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="co">#&gt;   timezone: UTC</span></span></code></pre></div>
 </div>
 <div id="storing-verbose" class="section level2">
 <h2>Storing Verbose</h2>
@@ -540,26 +541,26 @@ separated values instead of tab separated values. We noticed that the
 <code>csv</code> file format is more easily recognised by a larger
 audience as a data file.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">write_vc</span>(<span class="at">x =</span> x, <span class="at">file =</span> <span class="st">&quot;verbose&quot;</span>, <span class="at">root =</span> path, <span class="at">optimize =</span> <span class="cn">FALSE</span>, <span class="at">strict =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; e25c647736f439507dc40036f1637b0f84287828 9fc40476f0ba0c4cb4225d5313d56760a6d3b065 </span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; a8979a8d3737e28729523ce04932453f1efbe04a 14cb4010f7f9f65eac46751c055904fc1e7d74e4 </span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;                            &quot;verbose.csv&quot;                            &quot;verbose.yml&quot;</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;verbose.csv&quot;</span>, path, <span class="dv">10</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; x,y,z,abc,def,timestamp</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; V,a,NA,-0.382010380419258,TRUE,2017-12-31T23:00:00Z</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; U,b,1,-0.420347607856041,FALSE,2018-01-15T13:24:00Z</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Z,NA,2,-0.916731402237418,NA,2018-01-30T03:48:00Z</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; W,NA,3,0.387455128525654,FALSE,2018-02-13T18:12:00Z</span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; L,a,4,-0.992354993526956,NA,2018-02-28T08:36:00Z</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; C,NA,5,0.0228713954429028,NA,2018-03-14T23:00:00Z</span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; R,b,6,-0.947557467717088,TRUE,2018-03-29T13:24:00Z</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; S,a,7,-0.16302914628615,NA,2018-04-13T03:48:00Z</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; O,NA,8,0.523643352634392,TRUE,2018-04-27T18:12:00Z</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; V,a,NA,-0.38201,TRUE,2018-01-01T00:00:00Z</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; U,b,1,-0.420348,FALSE,2018-01-15T14:24:00Z</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Z,NA,2,-0.916731,NA,2018-01-30T04:48:00Z</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; W,NA,3,0.387455,FALSE,2018-02-13T19:12:00Z</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; L,a,4,-0.992355,NA,2018-02-28T09:36:00Z</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; C,NA,5,0.0228714,NA,2018-03-15T00:00:00Z</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; R,b,6,-0.947557,TRUE,2018-03-29T14:24:00Z</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; S,a,7,-0.163029,NA,2018-04-13T04:48:00Z</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; O,NA,8,0.523643,TRUE,2018-04-27T19:12:00Z</span></span>
 <span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;verbose.yml&quot;</span>, path)</span>
 <span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt;   optimize: no</span></span>
 <span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;   hash: 9fc40476f0ba0c4cb4225d5313d56760a6d3b065</span></span>
-<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;   data_hash: e25c647736f439507dc40036f1637b0f84287828</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;   hash: 14cb4010f7f9f65eac46751c055904fc1e7d74e4</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;   data_hash: a8979a8d3737e28729523ce04932453f1efbe04a</span></span>
 <span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt; x:</span></span>
 <span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt;   class: character</span></span>
 <span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt; &#39;y&#39;:</span></span>
@@ -577,12 +578,13 @@ audience as a data file.</p>
 <span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a><span class="co">#&gt;   class: integer</span></span>
 <span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a><span class="co">#&gt; abc:</span></span>
 <span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a><span class="co">#&gt;   class: numeric</span></span>
-<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a><span class="co">#&gt; def:</span></span>
-<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a><span class="co">#&gt;   class: logical</span></span>
-<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a><span class="co">#&gt; timestamp:</span></span>
-<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a><span class="co">#&gt;   class: POSIXct</span></span>
-<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a><span class="co">#&gt;   format: &#39;%Y-%m-%dT%H:%M:%SZ&#39;</span></span>
-<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a><span class="co">#&gt;   timezone: UTC</span></span></code></pre></div>
+<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a><span class="co">#&gt;   digits: 6</span></span>
+<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a><span class="co">#&gt; def:</span></span>
+<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a><span class="co">#&gt;   class: logical</span></span>
+<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a><span class="co">#&gt; timestamp:</span></span>
+<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a><span class="co">#&gt;   class: POSIXct</span></span>
+<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a><span class="co">#&gt;   format: &#39;%Y-%m-%dT%H:%M:%SZ&#39;</span></span>
+<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a><span class="co">#&gt;   timezone: UTC</span></span></code></pre></div>
 </div>
 <div id="efficiency-relative-to-file-storage" class="section level2">
 <h2>Efficiency Relative to File Storage</h2>
@@ -596,10 +598,12 @@ vignette give a comparison.</p>
 reinstate the variables to their original state.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">read_vc</span>(<span class="at">file =</span> <span class="st">&quot;first_test&quot;</span>, <span class="at">root =</span> path)</span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">all.equal</span>(x, y, <span class="at">check.attributes =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Component \&quot;timestamp\&quot;: &#39;tzone&#39; attributes are inconsistent (&#39;&#39; and &#39;UTC&#39;)&quot;</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> <span class="fu">read_vc</span>(<span class="at">file =</span> <span class="st">&quot;verbose&quot;</span>, <span class="at">root =</span> path)</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">all.equal</span>(x, y2, <span class="at">check.attributes =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Component \&quot;timestamp\&quot;: &#39;tzone&#39; attributes are inconsistent (&#39;&#39; and &#39;UTC&#39;)&quot;</span></span></code></pre></div>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Component \&quot;abc\&quot;: Mean relative difference: 5.679135e-07&quot;                  </span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; [2] &quot;Component \&quot;timestamp\&quot;: &#39;tzone&#39; attributes are inconsistent (&#39;&#39; and &#39;UTC&#39;)&quot;</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> <span class="fu">read_vc</span>(<span class="at">file =</span> <span class="st">&quot;verbose&quot;</span>, <span class="at">root =</span> path)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="fu">all.equal</span>(x, y2, <span class="at">check.attributes =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Component \&quot;abc\&quot;: Mean relative difference: 5.679135e-07&quot;                  </span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; [2] &quot;Component \&quot;timestamp\&quot;: &#39;tzone&#39; attributes are inconsistent (&#39;&#39; and &#39;UTC&#39;)&quot;</span></span></code></pre></div>
 <p><code>read_vc()</code> requires the meta data. It cannot handle
 dataframe not stored by <code>write_vc()</code>.</p>
 </div>
@@ -621,24 +625,24 @@ even with <code>strict = FALSE</code>.</p>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; Error: one of the strings matches the NA string (&#39;X&#39;)</span></span>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; Please use a different NA string or consider using a factor.</span></span>
 <span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="at">strict =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">&quot;b&quot;</span>)</span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; 5d5ffeef75834a9765c325edbb5b699f904ba857 3c028ddbb9efabc8c85a396b2db1f4f1c8d9461d </span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; 9af818152e63482469c89ea7432fda1216f5eaf1 42235e10f9b5734d8718d02799d3ca6760c6a640 </span></span>
 <span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;                          &quot;custom_na.tsv&quot;                          &quot;custom_na.yml&quot;</span></span></code></pre></div>
 <p>Please note that <code>write_vc()</code> uses the same NA string for
 the entire dataset, thus for every variable.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;custom_na.tsv&quot;</span>, path, <span class="dv">10</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; x    y   z   abc def timestamp</span></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; V    1   b   -0.382010380419258  1   1514761200</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; U    2   1   -0.420347607856041  0   1516022640</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; Z    b   2   -0.916731402237418  b   1517284080</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; W    b   3   0.387455128525654   0   1518545520</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; L    1   4   -0.992354993526956  b   1519806960</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; C    b   5   0.0228713954429028  b   1521068400</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; R    2   6   -0.947557467717088  1   1522329840</span></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; S    1   7   -0.16302914628615   b   1523591280</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; O    b   8   0.523643352634392   1   1524852720</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; V    1   b   -0.38201    1   1514764800</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; U    2   1   -0.420348   0   1516026240</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; Z    b   2   -0.916731   b   1517287680</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; W    b   3   0.387455    0   1518549120</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; L    1   4   -0.992355   b   1519810560</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; C    b   5   0.0228714   b   1521072000</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; R    2   6   -0.947557   1   1522333440</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; S    1   7   -0.163029   b   1523594880</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; O    b   8   0.523643    1   1524856320</span></span>
 <span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;custom_na.yml&quot;</span>, path, <span class="dv">4</span>)</span>
 <span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.4.1</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.0</span></span>
 <span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt;   NA string: b</span></span></code></pre></div>
 <p>The default string for missing values is <code>&quot;NA&quot;</code>. We
@@ -647,7 +651,7 @@ first good alternative is an empty string (<code>&quot;&quot;</code>). If that
 won’t work either, you’ll have to use your imagination. Try to keep it
 short, clear and robust<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="at">strict =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; 5a64a85e2a137d0558da164131b5586f4523f6bd d2b145b74dbe6bd1d7883a62f2549c124988ec63 </span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; af77e2ece69634db88061c747cc833d868640218 e58a31060d6f1e2f42e3541bf26276fa1f8102f4 </span></span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt;                          &quot;custom_na.tsv&quot;                          &quot;custom_na.yml&quot;</span></span></code></pre></div>
 </div>
 <div class="footnotes footnotes-end-of-document">

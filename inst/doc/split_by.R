@@ -167,29 +167,29 @@ root <- tempfile("git2rdata-split-by")
 dir.create(root)
 
 ## ----get_write_timings, eval = system.file("split_by", "write_timings.rds", package = "git2rdata") == ""----
-#  library(microbenchmark)
-#  mb <- microbenchmark(
-#    part_1 = write_vc(airbag, "part_1", root, sorting = "X"),
-#    part_2 = write_vc(airbag, "part_2", root, sorting = "X", split_by = "airbag"),
-#    part_3 = write_vc(airbag, "part_3", root, sorting = "X", split_by = "abcat"),
-#    part_4 = write_vc(
-#      airbag, "part_4", root, sorting = "X", split_by = c("airbag", "sex")
-#    ),
-#    part_5 = write_vc(airbag, "part_5", root, sorting = "X", split_by = "dvcat"),
-#    part_6 = write_vc(
-#      airbag, "part_6", root, sorting = "X", split_by = "yearacc"
-#    ),
-#    part_15 = write_vc(
-#      airbag, "part_15", root, sorting = "X", split_by = c("dvcat", "abcat")
-#    ),
-#    part_45 = write_vc(
-#      airbag, "part_45", root, sorting = "X", split_by = "yearVeh"
-#    ),
-#    part_270 = write_vc(
-#      airbag, "part_270", root, sorting = "X", split_by = c("yearacc", "yearVeh")
-#    )
-#  )
-#  mb$time <- mb$time / 1e6
+# library(microbenchmark)
+# mb <- microbenchmark(
+#   part_1 = write_vc(airbag, "part_1", root, sorting = "X"),
+#   part_2 = write_vc(airbag, "part_2", root, sorting = "X", split_by = "airbag"),
+#   part_3 = write_vc(airbag, "part_3", root, sorting = "X", split_by = "abcat"),
+#   part_4 = write_vc(
+#     airbag, "part_4", root, sorting = "X", split_by = c("airbag", "sex")
+#   ),
+#   part_5 = write_vc(airbag, "part_5", root, sorting = "X", split_by = "dvcat"),
+#   part_6 = write_vc(
+#     airbag, "part_6", root, sorting = "X", split_by = "yearacc"
+#   ),
+#   part_15 = write_vc(
+#     airbag, "part_15", root, sorting = "X", split_by = c("dvcat", "abcat")
+#   ),
+#   part_45 = write_vc(
+#     airbag, "part_45", root, sorting = "X", split_by = "yearVeh"
+#   ),
+#   part_270 = write_vc(
+#     airbag, "part_270", root, sorting = "X", split_by = c("yearacc", "yearVeh")
+#   )
+# )
+# mb$time <- mb$time / 1e6
 
 ## ----store_write_timings, echo = FALSE-------------------------------------------
 if (system.file("split_by", "write_timings.rds", package = "git2rdata") == "") {
@@ -209,18 +209,18 @@ ggplot(mb, aes(x = combinations, y = time)) +
   scale_y_log10("Time (in milliseconds)")
 
 ## ----get_read_timings, eval = system.file("split_by", "read_timings.rds", package = "git2rdata") == ""----
-#  mb_r <- microbenchmark(
-#    part_1 = read_vc("part_1", root),
-#    part_2 = read_vc("part_2", root),
-#    part_3 = read_vc("part_3", root),
-#    part_4 = read_vc("part_4", root),
-#    part_5 = read_vc("part_5", root),
-#    part_6 = read_vc("part_6", root),
-#    part_15 = read_vc("part_15", root),
-#    part_45 = read_vc("part_45", root),
-#    part_270 = read_vc("part_270", root)
-#  )
-#  mb_r$time <- mb_r$time / 1e6
+# mb_r <- microbenchmark(
+#   part_1 = read_vc("part_1", root),
+#   part_2 = read_vc("part_2", root),
+#   part_3 = read_vc("part_3", root),
+#   part_4 = read_vc("part_4", root),
+#   part_5 = read_vc("part_5", root),
+#   part_6 = read_vc("part_6", root),
+#   part_15 = read_vc("part_15", root),
+#   part_45 = read_vc("part_45", root),
+#   part_270 = read_vc("part_270", root)
+# )
+# mb_r$time <- mb_r$time / 1e6
 
 ## ----store_read_timings, echo = FALSE--------------------------------------------
 if (system.file("split_by", "read_timings.rds", package = "git2rdata") == "") {

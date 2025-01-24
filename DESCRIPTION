@@ -1,6 +1,6 @@
 Package: git2rdata
 Title: Store and Retrieve Data.frames in a Git Repository
-Version: 0.4.1
+Version: 0.5.0
 Authors@R: c(
     person("Thierry", "Onkelinx", , "thierry.onkelinx@inbo.be", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8804-4216", affiliation = "Research Institute for Nature and Forest (INBO)")),
@@ -37,23 +37,23 @@ URL: https://ropensci.github.io/git2rdata/,
         https://github.com/ropensci/git2rdata/,
         https://doi.org/10.5281/zenodo.1485309
 BugReports: https://github.com/ropensci/git2rdata/issues
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.1.0)
 Imports: assertthat, git2r (>= 0.23.0), methods, yaml
-Suggests: ggplot2, knitr, microbenchmark, rmarkdown, testthat
+Suggests: ggplot2, jsonlite, knitr, microbenchmark, rmarkdown, testthat
 VignetteBuilder: knitr
 Config/checklist/communities: inbo
 Config/checklist/keywords: git; version control; plain text data
 Encoding: UTF-8
 Language: en-GB
 RoxygenNote: 7.3.2
-Collate: 'clean_data_path.R' 'datahash.R' 'display_metadata.R'
-        'git2rdata_package.R' 'write_vc.R' 'is_git2rdata.R'
-        'is_git2rmeta.R' 'list_data.R' 'meta.R' 'print.R' 'prune.R'
-        'read_vc.R' 'recent_commit.R' 'reexport.R' 'relabel.R'
-        'rename_variable.R' 'update_metadata.R' 'upgrade_data.R'
-        'utils.R' 'verify_vc.R'
+Collate: 'clean_data_path.R' 'data_package.R' 'datahash.R'
+        'display_metadata.R' 'git2rdata_package.R' 'write_vc.R'
+        'is_git2rdata.R' 'is_git2rmeta.R' 'list_data.R' 'meta.R'
+        'print.R' 'prune.R' 'read_vc.R' 'recent_commit.R' 'reexport.R'
+        'relabel.R' 'rename_variable.R' 'update_metadata.R'
+        'upgrade_data.R' 'utils.R' 'verify_vc.R'
 NeedsCompilation: no
-Packaged: 2024-09-06 10:15:24 UTC; thierry
+Packaged: 2025-01-24 16:18:33 UTC; root
 Author: Thierry Onkelinx [aut, cre] (<https://orcid.org/0000-0001-8804-4216>,
     Research Institute for Nature and Forest (INBO)),
   Floris Vanderhaeghe [ctb] (<https://orcid.org/0000-0002-6378-6229>,
@@ -65,4 +65,4 @@ Author: Thierry Onkelinx [aut, cre] (<https://orcid.org/0000-0001-8804-4216>,
   Research Institute for Nature and Forest (INBO) [cph, fnd]
 Maintainer: Thierry Onkelinx <thierry.onkelinx@inbo.be>
 Repository: CRAN
-Date/Publication: 2024-09-06 11:20:02 UTC
+Date/Publication: 2025-01-24 16:30:02 UTC

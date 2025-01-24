@@ -36,7 +36,9 @@ write_vc(x, file = "row_order", root = root)
 write_vc(x[sample(nrow(x)), ], file = "row_order", root = root)
 
 ## ----apply_sorting, error = TRUE-------------------------------------------------
+try({
 fn <- write_vc(x, "row_order", root, sorting = "y")
+})
 
 ## ----update_sorting--------------------------------------------------------------
 fn <- write_vc(x, "row_order", root, sorting = "y", strict = FALSE)
@@ -73,9 +75,11 @@ write_vc(updated, "factor2", root, sorting = "color")
 print_file("factor2.yml", root)
 
 ## ----factor_update, error = TRUE-------------------------------------------------
+try({
 write_vc(updated, "factor", root)
 fn <- write_vc(updated, "factor", root, strict = FALSE)
 print_file("factor.yml", root)
+})
 
 ## ----factor_deleted--------------------------------------------------------------
 deleted <- data.frame(

@@ -121,13 +121,13 @@ update_geom_defaults("hline", list(colour = "#356196"))
 update_geom_defaults("boxplot", list(colour = "#356196"))
 
 ## ----download_data, eval = system.file("efficiency", "airbag.rds", package = "git2rdata") == ""----
-#  airbag <- read.csv(
-#    "https://vincentarelbundock.github.io/Rdatasets/csv/DAAG/nassCDS.csv"
-#  )
-#  airbag$dead <- airbag$dead == "dead"
-#  airbag$airbag <- airbag$airbag == "airbag"
-#  airbag$seatbelt <- airbag$seatbelt == "belted"
-#  airbag$dvcat <- as.ordered(airbag$dvcat)
+# airbag <- read.csv(
+#   "https://vincentarelbundock.github.io/Rdatasets/csv/DAAG/nassCDS.csv"
+# )
+# airbag$dead <- airbag$dead == "dead"
+# airbag$airbag <- airbag$airbag == "airbag"
+# airbag$seatbelt <- airbag$seatbelt == "belted"
+# airbag$dvcat <- as.ordered(airbag$dvcat)
 
 ## ----load_data, echo = FALSE--------------------------------------------------
 if (system.file("efficiency", "airbag.rds", package = "git2rdata") == "") {
@@ -249,57 +249,57 @@ ggplot(f_ratio, aes(x = observations, y = ratio, colour = levels)) +
   scale_colour_manual("number of \nlevels", values = inbo_colours)
 
 ## ----git_size, eval = system.file("efficiency", "git_size.rds", package = "git2rdata") == ""----
-#  library(git2r)
-#  tmp_repo <- function() {
-#    root <- tempfile("git2rdata-efficient-git")
-#    dir.create(root)
-#    repo <- git2r::init(root)
-#    git2r::config(repo, user.name = "me", user.email = "me@me.com")
-#    return(repo)
-#  }
-#  commit_and_size <- function(repo, filename) {
-#    add(repo, filename)
-#    commit(repo, "test", session = TRUE)
-#    git_size <- system(
-#      sprintf("cd %s\ngit gc\ngit count-objects -v", dirname(repo$path)),
-#      intern = TRUE
-#    )
-#    git_size <- git_size[grep("size-pack", git_size)]
-#    as.integer(gsub(".*: (.*)", "\\1", git_size))
-#  }
-#  
-#  repo_wt <- tmp_repo()
-#  repo_wts <- tmp_repo()
-#  repo_rds <- tmp_repo()
-#  repo_wvco <- tmp_repo()
-#  repo_wvcv <- tmp_repo()
-#  
-#  repo_size <- replicate(
-#    100, {
-#      observed_subset <- rbinom(nrow(airbag), size = 1, prob = 0.9) == 1
-#      this <- airbag[
-#        sample(which(observed_subset)),
-#        sample(ncol(airbag))
-#      ]
-#      this_sorted <- airbag[observed_subset, ]
-#      fn_wt <- file.path(workdir(repo_wt), "base_R.tsv")
-#      write.table(this, fn_wt, sep = "\t")
-#      fn_wts <- file.path(workdir(repo_wts), "base_R.tsv")
-#      write.table(this_sorted, fn_wts, sep = "\t")
-#      fn_rds <- file.path(workdir(repo_rds), "base_R.rds")
-#      saveRDS(this, fn_rds)
-#      fn_wvco <- write_vc(this, "airbag_optimize", repo_wvco, sorting = "X")
-#      fn_wvcv <- write_vc(
-#        this, "airbag_verbose", repo_wvcv, sorting = "X", optimize = FALSE
-#      )
-#      c(
-#        write.table = commit_and_size(repo_wt, fn_wt),
-#        write.table.sorted = commit_and_size(repo_wts, fn_wts),
-#        saveRDS = commit_and_size(repo_rds, fn_rds),
-#        write_vc.optimized = commit_and_size(repo_wvco, fn_wvco),
-#        write_vc.verbose = commit_and_size(repo_wvcv, fn_wvcv)
-#      )
-#  })
+# library(git2r)
+# tmp_repo <- function() {
+#   root <- tempfile("git2rdata-efficient-git")
+#   dir.create(root)
+#   repo <- git2r::init(root)
+#   git2r::config(repo, user.name = "me", user.email = "me@me.com")
+#   return(repo)
+# }
+# commit_and_size <- function(repo, filename) {
+#   add(repo, filename)
+#   commit(repo, "test", session = TRUE)
+#   git_size <- system(
+#     sprintf("cd %s\ngit gc\ngit count-objects -v", dirname(repo$path)),
+#     intern = TRUE
+#   )
+#   git_size <- git_size[grep("size-pack", git_size)]
+#   as.integer(gsub(".*: (.*)", "\\1", git_size))
+# }
+# 
+# repo_wt <- tmp_repo()
+# repo_wts <- tmp_repo()
+# repo_rds <- tmp_repo()
+# repo_wvco <- tmp_repo()
+# repo_wvcv <- tmp_repo()
+# 
+# repo_size <- replicate(
+#   100, {
+#     observed_subset <- rbinom(nrow(airbag), size = 1, prob = 0.9) == 1
+#     this <- airbag[
+#       sample(which(observed_subset)),
+#       sample(ncol(airbag))
+#     ]
+#     this_sorted <- airbag[observed_subset, ]
+#     fn_wt <- file.path(workdir(repo_wt), "base_R.tsv")
+#     write.table(this, fn_wt, sep = "\t")
+#     fn_wts <- file.path(workdir(repo_wts), "base_R.tsv")
+#     write.table(this_sorted, fn_wts, sep = "\t")
+#     fn_rds <- file.path(workdir(repo_rds), "base_R.rds")
+#     saveRDS(this, fn_rds)
+#     fn_wvco <- write_vc(this, "airbag_optimize", repo_wvco, sorting = "X")
+#     fn_wvcv <- write_vc(
+#       this, "airbag_verbose", repo_wvcv, sorting = "X", optimize = FALSE
+#     )
+#     c(
+#       write.table = commit_and_size(repo_wt, fn_wt),
+#       write.table.sorted = commit_and_size(repo_wts, fn_wts),
+#       saveRDS = commit_and_size(repo_rds, fn_rds),
+#       write_vc.optimized = commit_and_size(repo_wvco, fn_wvco),
+#       write_vc.verbose = commit_and_size(repo_wvcv, fn_wvcv)
+#     )
+# })
 
 ## ----store_git_size, echo = FALSE---------------------------------------------
 if (system.file("efficiency", "git_size.rds", package = "git2rdata") == "") {
@@ -351,15 +351,15 @@ ggplot(rs, aes(x = commit, y = rel_size, colour = fun, linetype = optimized)) +
   scale_colour_manual("function", values = inbo_colours)
 
 ## ----get_file_timings, eval = system.file("efficiency", "file_timings.rds", package = "git2rdata") == ""----
-#  library(microbenchmark)
-#  mb <- microbenchmark(
-#    write.table = write.table(airbag, file.path(root, "base_R.tsv"), sep = "\t"),
-#    saveRDS = saveRDS(airbag, file.path(root, "base_R.rds")),
-#    write_vc.optim = write_vc(airbag, "airbag_optimize", root, sorting = "X"),
-#    write_vc.verbose = write_vc(airbag, "airbag_verbose", root, sorting = "X",
-#                                optimize = FALSE)
-#  )
-#  mb$time <- mb$time / 1e6
+# library(microbenchmark)
+# mb <- microbenchmark(
+#   write.table = write.table(airbag, file.path(root, "base_R.tsv"), sep = "\t"),
+#   saveRDS = saveRDS(airbag, file.path(root, "base_R.rds")),
+#   write_vc.optim = write_vc(airbag, "airbag_optimize", root, sorting = "X"),
+#   write_vc.verbose = write_vc(airbag, "airbag_verbose", root, sorting = "X",
+#                               optimize = FALSE)
+# )
+# mb$time <- mb$time / 1e6
 
 ## ----store_file_timings, echo = FALSE-----------------------------------------
 if (
@@ -387,14 +387,14 @@ ggplot(mb, aes(x = expr, y = time)) +
   theme(axis.title.x = ggplot2::element_blank())
 
 ## ----get_read_timings, eval = system.file("efficiency", "read_timings.rds", package = "git2rdata") == ""----
-#  mb <- microbenchmark(
-#    read.table = read.table(file.path(root, "base_R.tsv"), header = TRUE,
-#                            sep = "\t"),
-#    readRDS = readRDS(file.path(root, "base_R.rds")),
-#    read_vc.optim = read_vc("airbag_optimize", root),
-#    read_vc.verbose = read_vc("airbag_verbose", root)
-#  )
-#  mb$time <- mb$time / 1e6
+# mb <- microbenchmark(
+#   read.table = read.table(file.path(root, "base_R.tsv"), header = TRUE,
+#                           sep = "\t"),
+#   readRDS = readRDS(file.path(root, "base_R.rds")),
+#   read_vc.optim = read_vc("airbag_optimize", root),
+#   read_vc.verbose = read_vc("airbag_verbose", root)
+# )
+# mb$time <- mb$time / 1e6
 
 ## ----store_read_timings, echo = FALSE-----------------------------------------
 if (

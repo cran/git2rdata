@@ -61,10 +61,12 @@ all.equal(x, y2, check.attributes = FALSE)
 stopifnot("X" %in% x$x, "b" %in% x$y)
 
 ## ----na_string, error = TRUE-----------------------------------------------------
+try({
 write_vc(x, "custom_na", path, strict = FALSE, na = "X", optimize = FALSE)
 write_vc(x, "custom_na", path, strict = FALSE, na = "b", optimize = FALSE)
 write_vc(x, "custom_na", path, strict = FALSE, na = "X")
 write_vc(x, "custom_na", path, strict = FALSE, na = "b")
+})
 
 ## ----manual_na_data--------------------------------------------------------------
 print_file("custom_na.tsv", path, 10)

@@ -72,60 +72,60 @@ cm3 <- commit(repo, message = "Third commit", all = TRUE)
 status(repo)
 
 ## ----eval = FALSE----------------------------------------------------------------
-#  # load package
-#  library(git2rdata)
-#  # step 1: setup the repository and data path
-#  repo <- repository(".")
-#  data_path <- file.path("data", "beaver")
-#  # step 1b: sync the repository with the remote
-#  pull(repo = repo)
-#  # step 2: remove all existing data files
-#  rm_data(root = repo, path = data_path, stage = TRUE)
-#  
-#  # step 3: write all relevant git2rdata objects to the data path
-#  beaver1$beaver <- 1
-#  beaver2$beaver <- 2
-#  body_temp <- rbind(beaver1, beaver2)
-#  fn <- write_vc(x = body_temp, file = file.path(data_path, "body_temperature"),
-#                 root = repo, sorting = c("beaver", "time"), stage = TRUE)
-#  
-#  # step 4: remove any dangling metadata files
-#  prune_meta(root = repo, path = data_path, stage = TRUE)
-#  
-#  # step 5: commit the changes
-#  cm <- commit(repo = repo, message = "import")
-#  # step 5b: sync the repository with the remote
-#  push(repo = repo)
+# # load package
+# library(git2rdata)
+# # step 1: setup the repository and data path
+# repo <- repository(".")
+# data_path <- file.path("data", "beaver")
+# # step 1b: sync the repository with the remote
+# pull(repo = repo)
+# # step 2: remove all existing data files
+# rm_data(root = repo, path = data_path, stage = TRUE)
+# 
+# # step 3: write all relevant git2rdata objects to the data path
+# beaver1$beaver <- 1
+# beaver2$beaver <- 2
+# body_temp <- rbind(beaver1, beaver2)
+# fn <- write_vc(x = body_temp, file = file.path(data_path, "body_temperature"),
+#                root = repo, sorting = c("beaver", "time"), stage = TRUE)
+# 
+# # step 4: remove any dangling metadata files
+# prune_meta(root = repo, path = data_path, stage = TRUE)
+# 
+# # step 5: commit the changes
+# cm <- commit(repo = repo, message = "import")
+# # step 5b: sync the repository with the remote
+# push(repo = repo)
 
 ## ----eval = FALSE----------------------------------------------------------------
-#  #' Import the beaver body temperature data
-#  #' @param path the root of the git repository
-#  #' @importFrom git2rdata repository pull rm_data write_vc prune_meta commit push
-#  #' @export
-#  import_body_temp <- function(path) {
-#    # step 1: setup the repository and data path
-#    repo <- repository(path)
-#    data_path <- file.path("data", "beaver")
-#    # step 1b: sync the repository with the remote
-#    pull(repo = repo)
-#    # step 2: remove all existing data files
-#    rm_data(root = repo, path = data_path, stage = TRUE)
-#  
-#    # step 3: write all relevant git2rdata objects to the data path
-#    beaver1$beaver <- 1
-#    beaver2$beaver <- 2
-#    body_temp <- rbind(beaver1, beaver2)
-#    write_vc(x = body_temp, file = file.path(data_path, "body_temperature"),
-#                   root = repo, sorting = c("beaver", "time"), stage = TRUE)
-#  
-#    # step 4: remove any dangling metadata files
-#    prune_meta(root = repo, path = data_path, stage = TRUE)
-#  
-#    # step 5: commit the changes
-#    commit(repo = repo, message = "import", session = TRUE)
-#    # step 5b: sync the repository with the remote
-#    push(object = repo)
-#  }
+# #' Import the beaver body temperature data
+# #' @param path the root of the git repository
+# #' @importFrom git2rdata repository pull rm_data write_vc prune_meta commit push
+# #' @export
+# import_body_temp <- function(path) {
+#   # step 1: setup the repository and data path
+#   repo <- repository(path)
+#   data_path <- file.path("data", "beaver")
+#   # step 1b: sync the repository with the remote
+#   pull(repo = repo)
+#   # step 2: remove all existing data files
+#   rm_data(root = repo, path = data_path, stage = TRUE)
+# 
+#   # step 3: write all relevant git2rdata objects to the data path
+#   beaver1$beaver <- 1
+#   beaver2$beaver <- 2
+#   body_temp <- rbind(beaver1, beaver2)
+#   write_vc(x = body_temp, file = file.path(data_path, "body_temperature"),
+#                  root = repo, sorting = c("beaver", "time"), stage = TRUE)
+# 
+#   # step 4: remove any dangling metadata files
+#   prune_meta(root = repo, path = data_path, stage = TRUE)
+# 
+#   # step 5: commit the changes
+#   commit(repo = repo, message = "import", session = TRUE)
+#   # step 5b: sync the repository with the remote
+#   push(object = repo)
+# }
 
 ## ----standardized_analysis-------------------------------------------------------
 analysis <- function(ds_name, repo) {
