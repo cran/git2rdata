@@ -49,8 +49,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -386,7 +387,7 @@ fine.</p>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>remote <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="st">&quot;git2rdata-workflow-remote&quot;</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>remote <span class="ot">&lt;-</span> <span class="fu">normalizePath</span>(remote, <span class="at">winslash =</span> <span class="st">&quot;/&quot;</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; Warning in normalizePath(remote, winslash = &quot;/&quot;):</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; path[1]=&quot;/tmp/RtmpmMRv2k/git2rdata-workflow-remote803ad4e61a&quot;: No such file or</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; path[1]=&quot;/tmp/RtmpthNCZH/git2rdata-workflow-remoteadc822b70a3f&quot;: No such file or</span></span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; directory</span></span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">dir.create</span>(remote)</span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">init</span>(remote, <span class="at">bare =</span> <span class="cn">TRUE</span>)</span>
@@ -396,7 +397,7 @@ fine.</p>
 <span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="st">&quot;git2rdata-workflow&quot;</span>)</span>
 <span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">normalizePath</span>(path, <span class="at">winslash =</span> <span class="st">&quot;/&quot;</span>)</span>
 <span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co">#&gt; Warning in normalizePath(path, winslash = &quot;/&quot;):</span></span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt; path[1]=&quot;/tmp/RtmpmMRv2k/git2rdata-workflow80517691cf&quot;: No such file or directory</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt; path[1]=&quot;/tmp/RtmpthNCZH/git2rdata-workflowadc88a04ab2&quot;: No such file or directory</span></span>
 <span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="fu">dir.create</span>(path)</span>
 <span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>init_repo <span class="ot">&lt;-</span> git2r<span class="sc">::</span><span class="fu">clone</span>(remote, path, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">config</span>(init_repo, <span class="at">user.name =</span> <span class="st">&quot;me&quot;</span>, <span class="at">user.email =</span> <span class="st">&quot;me@me.com&quot;</span>)</span>
@@ -404,7 +405,7 @@ fine.</p>
 <span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="fu">writeLines</span>(<span class="st">&quot;*extra*&quot;</span>, <span class="fu">file.path</span>(path, <span class="st">&quot;.gitignore&quot;</span>))</span>
 <span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">add</span>(init_repo, <span class="st">&quot;.gitignore&quot;</span>, <span class="at">force =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">commit</span>(init_repo, <span class="at">message =</span> <span class="st">&quot;Initial commit&quot;</span>)</span>
-<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co">#&gt; [2d39b0f] 2025-01-24: Initial commit</span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co">#&gt; [1a4b15a] 2025-12-10: Initial commit</span></span>
 <span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co"># push initial commit to remote</span></span>
 <span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>branch_name <span class="ot">&lt;-</span> git2r<span class="sc">::</span><span class="fu">branches</span>(init_repo)[[<span class="dv">1</span>]]<span class="sc">$</span>name</span>
 <span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">push</span>(</span>
@@ -441,9 +442,9 @@ write the dataset as a git2rdata object in the repository. If the
 <code>write_vc()</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(git2rdata)</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>repo <span class="ot">&lt;-</span> <span class="fu">repository</span>(path)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(beaver1, <span class="st">&quot;beaver&quot;</span>, repo, <span class="at">sorting =</span> <span class="st">&quot;time&quot;</span>, <span class="at">stage =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; Warning in meta.data.frame(x, optimize = optimize, na = na, sorting = sorting, :</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; `digits` was not set. Setting is automatically to 6. See ?meta</span></span></code></pre></div>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  beaver1, <span class="st">&quot;beaver&quot;</span>, repo, <span class="at">sorting =</span> <span class="st">&quot;time&quot;</span>, <span class="at">stage =</span> <span class="cn">TRUE</span>, <span class="at">digits =</span> <span class="dv">2</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>)</span></code></pre></div>
 <p>We can use <code>status()</code> to check that
 <code>write_vc()</code> wrote and staged the required files. Then we
 <code>commit()</code> the changes.</p>
@@ -458,9 +459,9 @@ write the dataset as a git2rdata object in the repository. If the
 <div id="second-commit" class="section level3">
 <h3>Second Commit</h3>
 <p>The second commit adds <code>beaver2</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(beaver2, <span class="st">&quot;extra_beaver&quot;</span>, repo, <span class="at">sorting =</span> <span class="st">&quot;time&quot;</span>, <span class="at">stage =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; Warning in meta.data.frame(x, optimize = optimize, na = na, sorting = sorting, :</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; `digits` was not set. Setting is automatically to 6. See ?meta</span></span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  beaver2, <span class="st">&quot;extra_beaver&quot;</span>, repo, <span class="at">sorting =</span> <span class="st">&quot;time&quot;</span>, <span class="at">stage =</span> <span class="cn">TRUE</span>, <span class="at">digits =</span> <span class="dv">2</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>)</span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">status</span>(repo)</span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; working directory clean</span></span></code></pre></div>
 <p>Notice that <code>extra_beaver</code> is not listed in the
@@ -473,13 +474,14 @@ a name containing “extra”. We force git to stage it by setting
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; Ignored files:</span></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt;  Ignored:    extra_beaver.tsv</span></span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;  Ignored:    extra_beaver.yml</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(beaver2, <span class="st">&quot;extra_beaver&quot;</span>, repo, <span class="at">sorting =</span> <span class="st">&quot;time&quot;</span>, <span class="at">stage =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>               <span class="at">force =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">status</span>(repo)</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; Staged changes:</span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt;  New:        extra_beaver.tsv</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;  New:        extra_beaver.yml</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>cm2 <span class="ot">&lt;-</span> <span class="fu">commit</span>(repo, <span class="at">message =</span> <span class="st">&quot;Second commit&quot;</span>)</span></code></pre></div>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  beaver2, <span class="st">&quot;extra_beaver&quot;</span>, repo, <span class="at">sorting =</span> <span class="st">&quot;time&quot;</span>, <span class="at">stage =</span> <span class="cn">TRUE</span>, <span class="at">force =</span> <span class="cn">TRUE</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="fu">status</span>(repo)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Staged changes:</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;  New:        extra_beaver.tsv</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt;  New:        extra_beaver.yml</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>cm2 <span class="ot">&lt;-</span> <span class="fu">commit</span>(repo, <span class="at">message =</span> <span class="st">&quot;Second commit&quot;</span>)</span></code></pre></div>
 </div>
 <div id="third-commit" class="section level3">
 <h3>Third Commit</h3>
@@ -493,29 +495,31 @@ committing the changes.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>beaver1<span class="sc">$</span>beaver <span class="ot">&lt;-</span> <span class="dv">1</span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>beaver2<span class="sc">$</span>beaver <span class="ot">&lt;-</span> <span class="dv">2</span></span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>beaver <span class="ot">&lt;-</span> <span class="fu">rbind</span>(beaver1, beaver2)</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(beaver, <span class="st">&quot;beaver&quot;</span>, repo, <span class="at">sorting =</span> <span class="fu">c</span>(<span class="st">&quot;beaver&quot;</span>, <span class="st">&quot;time&quot;</span>),</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>               <span class="at">strict =</span> <span class="cn">FALSE</span>, <span class="at">stage =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; Warning: Changes in the metadata may lead to unnecessarily large diffs.</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; See vignette(&#39;version_control&#39;, package = &#39;git2rdata&#39;) for more information.</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; - The sorting variables changed.</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;     - Sorting for the new data: &#39;beaver&#39;, &#39;time&#39;.</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt;     - Sorting for the old data: &#39;time&#39;.</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; - New data has a different number of variables.</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; - New variables: beaver.</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="fu">file.remove</span>(<span class="fu">list.files</span>(path, <span class="st">&quot;extra&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; [1] TRUE TRUE</span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="fu">status</span>(repo)</span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; Unstaged changes:</span></span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt;  Deleted:    extra_beaver.tsv</span></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;  Deleted:    extra_beaver.yml</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; Staged changes:</span></span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt;  Modified:   beaver.tsv</span></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt;  Modified:   beaver.yml</span></span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>cm3 <span class="ot">&lt;-</span> <span class="fu">commit</span>(repo, <span class="at">message =</span> <span class="st">&quot;Third commit&quot;</span>, <span class="at">all =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="fu">status</span>(repo)</span>
-<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co">#&gt; working directory clean</span></span></code></pre></div>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  beaver, <span class="st">&quot;beaver&quot;</span>, repo, <span class="at">sorting =</span> <span class="fu">c</span>(<span class="st">&quot;beaver&quot;</span>, <span class="st">&quot;time&quot;</span>), <span class="at">strict =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="at">stage =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; Warning: Changes in the metadata may lead to unnecessarily large diffs.</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; See vignette(&#39;version_control&#39;, package = &#39;git2rdata&#39;) for more information.</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; - The sorting variables changed.</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;     - Sorting for the new data: &#39;beaver&#39;, &#39;time&#39;.</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;     - Sorting for the old data: &#39;time&#39;.</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; - New data has a different number of variables.</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; - New variables: beaver.</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="fu">file.remove</span>(<span class="fu">list.files</span>(path, <span class="st">&quot;extra&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; [1] TRUE TRUE</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="fu">status</span>(repo)</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; Unstaged changes:</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt;  Deleted:    extra_beaver.tsv</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;  Deleted:    extra_beaver.yml</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; Staged changes:</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt;  Modified:   beaver.tsv</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt;  Modified:   beaver.yml</span></span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>cm3 <span class="ot">&lt;-</span> <span class="fu">commit</span>(repo, <span class="at">message =</span> <span class="st">&quot;Third commit&quot;</span>, <span class="at">all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="fu">status</span>(repo)</span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co">#&gt; working directory clean</span></span></code></pre></div>
 </div>
 </div>
 <div id="scripted-workflow-for-storing-dataframes" class="section level2">
@@ -583,8 +587,8 @@ These are relative stable analyses which have to run with some frequency
 on updated data (e.g. once a month). That makes it worthwhile to convert
 the analyses into an R package. Split long scripts into a set of shorter
 functions which are much easier to document and maintain. An R package
-offers lots of <a href="http://r-pkgs.had.co.nz/check.html">functionality</a> out of the
-box to check the quality of your code.</p>
+offers lots of <a href="https://r-pkgs.org/check.html">functionality</a>
+out of the box to check the quality of your code.</p>
 <p>The example below converts the import script above into a function.
 We illustrate how you can use Roxygen2 (see
 <code>vignette(&quot;roxygen2&quot;, package = &quot;roxygen2&quot;)</code>) tags to
@@ -616,17 +620,19 @@ e.g. <code>Rscript -e &#39;mypackage::import_body_temp(&quot;path/to/root&quot;
 <span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>  beaver1<span class="sc">$</span>beaver <span class="ot">&lt;-</span> <span class="dv">1</span></span>
 <span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>  beaver2<span class="sc">$</span>beaver <span class="ot">&lt;-</span> <span class="dv">2</span></span>
 <span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>  body_temp <span class="ot">&lt;-</span> <span class="fu">rbind</span>(beaver1, beaver2)</span>
-<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>  <span class="fu">write_vc</span>(<span class="at">x =</span> body_temp, <span class="at">file =</span> <span class="fu">file.path</span>(data_path, <span class="st">&quot;body_temperature&quot;</span>),</span>
-<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>                 <span class="at">root =</span> repo, <span class="at">sorting =</span> <span class="fu">c</span>(<span class="st">&quot;beaver&quot;</span>, <span class="st">&quot;time&quot;</span>), <span class="at">stage =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a></span>
-<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>  <span class="co"># step 4: remove any dangling metadata files</span></span>
-<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>  <span class="fu">prune_meta</span>(<span class="at">root =</span> repo, <span class="at">path =</span> data_path, <span class="at">stage =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a></span>
-<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>  <span class="co"># step 5: commit the changes</span></span>
-<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a>  <span class="fu">commit</span>(<span class="at">repo =</span> repo, <span class="at">message =</span> <span class="st">&quot;import&quot;</span>, <span class="at">session =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a>  <span class="co"># step 5b: sync the repository with the remote</span></span>
-<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a>  <span class="fu">push</span>(<span class="at">object =</span> repo)</span>
-<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>  <span class="fu">write_vc</span>(</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>    <span class="at">x =</span> body_temp, <span class="at">file =</span> <span class="fu">file.path</span>(data_path, <span class="st">&quot;body_temperature&quot;</span>),</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>    <span class="at">root =</span> repo, <span class="at">sorting =</span> <span class="fu">c</span>(<span class="st">&quot;beaver&quot;</span>, <span class="st">&quot;time&quot;</span>), <span class="at">stage =</span> <span class="cn">TRUE</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>  )</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>  <span class="co"># step 4: remove any dangling metadata files</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>  <span class="fu">prune_meta</span>(<span class="at">root =</span> repo, <span class="at">path =</span> data_path, <span class="at">stage =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a>  <span class="co"># step 5: commit the changes</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a>  <span class="fu">commit</span>(<span class="at">repo =</span> repo, <span class="at">message =</span> <span class="st">&quot;import&quot;</span>, <span class="at">session =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>  <span class="co"># step 5b: sync the repository with the remote</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>  <span class="fu">push</span>(<span class="at">object =</span> repo)</span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="analysis-workflow-with-reproducible-data" class="section level2">
 <h2>Analysis Workflow with Reproducible Data</h2>
@@ -640,7 +646,7 @@ the results traceable.</p>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">list</span>(</span>
 <span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>    <span class="at">dataset =</span> ds_name,</span>
 <span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    <span class="at">repository =</span> git2r<span class="sc">::</span><span class="fu">remote_url</span>(repo),</span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>    <span class="at">commit =</span> <span class="fu">recent_commit</span>(ds_name, repo, <span class="at">data =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>    <span class="at">commit =</span> <span class="fu">recent_commit</span>(ds_name, repo),</span>
 <span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>    <span class="at">model =</span> <span class="fu">lm</span>(temp <span class="sc">~</span> activ, <span class="at">data =</span> ds)</span>
 <span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  )</span>
 <span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>}</span>
@@ -660,9 +666,9 @@ datasets in the repository.</p>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>junk <span class="ot">&lt;-</span> <span class="fu">lapply</span>(result, print)</span></code></pre></div>
 <table>
 <caption><strong>dataset:</strong> beaver.tsv<br />
-<strong>commit:</strong> e418a29feef0f76e1df09c545dcecebf71640b88<br />
+<strong>commit:</strong> a43ae802387cc4804d001e6c7399802887f8ff3d<br />
 <strong>repository:</strong>
-/tmp/RtmpmMRv2k/git2rdata-workflow-remote803ad4e61a</caption>
+/tmp/RtmpthNCZH/git2rdata-workflow-remoteadc822b70a3f</caption>
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -675,16 +681,16 @@ datasets in the repository.</p>
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">36.9084247</td>
-<td align="right">0.0198546</td>
-<td align="right">1858.93938</td>
+<td align="right">36.9863014</td>
+<td align="right">0.0220372</td>
+<td align="right">1678.36018</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">activ</td>
-<td align="right">0.9346636</td>
-<td align="right">0.0352219</td>
-<td align="right">26.53644</td>
+<td align="right">0.8960516</td>
+<td align="right">0.0390938</td>
+<td align="right">22.92054</td>
 <td align="right">0</td>
 </tr>
 </tbody>
@@ -700,9 +706,9 @@ commit.</p>
 <span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>junk <span class="ot">&lt;-</span> <span class="fu">lapply</span>(result, print)</span></code></pre></div>
 <table>
 <caption><strong>dataset:</strong> beaver.tsv<br />
-<strong>commit:</strong> ef13564a36e4c361772da810475894606a2d5ca6<br />
+<strong>commit:</strong> 61d1fc942ffe76b79343e0251715b23d8622a97b<br />
 <strong>repository:</strong>
-/tmp/RtmpmMRv2k/git2rdata-workflow-remote803ad4e61a</caption>
+/tmp/RtmpthNCZH/git2rdata-workflow-remoteadc822b70a3f</caption>
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -715,17 +721,17 @@ commit.</p>
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">36.8421296</td>
-<td align="right">0.0167694</td>
-<td align="right">2196.987569</td>
-<td align="right">0e+00</td>
+<td align="right">36.953704</td>
+<td align="right">0.0215201</td>
+<td align="right">1717.169048</td>
+<td align="right">0.0000000</td>
 </tr>
 <tr class="even">
 <td align="left">activ</td>
-<td align="right">0.3812037</td>
-<td align="right">0.0730961</td>
-<td align="right">5.215107</td>
-<td align="right">8e-07</td>
+<td align="right">0.212963</td>
+<td align="right">0.0938041</td>
+<td align="right">2.270295</td>
+<td align="right">0.0251025</td>
 </tr>
 </tbody>
 </table>
@@ -738,9 +744,9 @@ commit.</p>
 <span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>junk <span class="ot">&lt;-</span> <span class="fu">lapply</span>(result, print)</span></code></pre></div>
 <table>
 <caption><strong>dataset:</strong> beaver.tsv<br />
-<strong>commit:</strong> ef13564a36e4c361772da810475894606a2d5ca6<br />
+<strong>commit:</strong> 61d1fc942ffe76b79343e0251715b23d8622a97b<br />
 <strong>repository:</strong>
-/tmp/RtmpmMRv2k/git2rdata-workflow-remote803ad4e61a</caption>
+/tmp/RtmpthNCZH/git2rdata-workflow-remoteadc822b70a3f</caption>
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -753,25 +759,25 @@ commit.</p>
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">36.8421296</td>
-<td align="right">0.0167694</td>
-<td align="right">2196.987569</td>
-<td align="right">0e+00</td>
+<td align="right">36.953704</td>
+<td align="right">0.0215201</td>
+<td align="right">1717.169048</td>
+<td align="right">0.0000000</td>
 </tr>
 <tr class="even">
 <td align="left">activ</td>
-<td align="right">0.3812037</td>
-<td align="right">0.0730961</td>
-<td align="right">5.215107</td>
-<td align="right">8e-07</td>
+<td align="right">0.212963</td>
+<td align="right">0.0938041</td>
+<td align="right">2.270295</td>
+<td align="right">0.0251025</td>
 </tr>
 </tbody>
 </table>
 <table>
 <caption><strong>dataset:</strong> extra_beaver.tsv<br />
-<strong>commit:</strong> cb9d6f0b18bb22903cda5173820884a69d56ef80<br />
+<strong>commit:</strong> 42c1e0cd788eb9fba7e1cee3e2f8e965a97b54fc<br />
 <strong>repository:</strong>
-/tmp/RtmpmMRv2k/git2rdata-workflow-remote803ad4e61a</caption>
+/tmp/RtmpthNCZH/git2rdata-workflow-remoteadc822b70a3f</caption>
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -784,16 +790,16 @@ commit.</p>
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">37.0968421</td>
-<td align="right">0.0345624</td>
-<td align="right">1073.32955</td>
+<td align="right">37.0789474</td>
+<td align="right">0.0388406</td>
+<td align="right">954.64411</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">activ</td>
-<td align="right">0.8062224</td>
-<td align="right">0.0438943</td>
-<td align="right">18.36736</td>
+<td align="right">0.8726655</td>
+<td align="right">0.0493276</td>
+<td align="right">17.69122</td>
 <td align="right">0</td>
 </tr>
 </tbody>

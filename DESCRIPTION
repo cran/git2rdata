@@ -1,6 +1,6 @@
 Package: git2rdata
 Title: Store and Retrieve Data.frames in a Git Repository
-Version: 0.5.0
+Version: 0.5.1
 Authors@R: c(
     person("Thierry", "Onkelinx", , "thierry.onkelinx@inbo.be", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8804-4216", affiliation = "Research Institute for Nature and Forest (INBO)")),
@@ -10,7 +10,8 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)")),
     person("Els", "Lommelen", , "els.lommelen@inbo.be", role = "ctb",
            comment = c(ORCID = "0000-0002-3481-5684", affiliation = "Research Institute for Nature and Forest (INBO)")),
-    person("Research Institute for Nature and Forest (INBO)", , , "info@inbo.be", role = c("cph", "fnd"))
+    person("Research Institute for Nature and Forest (INBO)", , , "info@inbo.be", role = c("cph", "fnd"),
+           comment = c(ROR = "https://ror.org/00j54wy13"))
   )
 Description: The git2rdata package is an R package for writing and reading
     dataframes as plain text files.  A metadata file stores important
@@ -45,24 +46,27 @@ Config/checklist/communities: inbo
 Config/checklist/keywords: git; version control; plain text data
 Encoding: UTF-8
 Language: en-GB
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Collate: 'clean_data_path.R' 'data_package.R' 'datahash.R'
         'display_metadata.R' 'git2rdata_package.R' 'write_vc.R'
         'is_git2rdata.R' 'is_git2rmeta.R' 'list_data.R' 'meta.R'
         'print.R' 'prune.R' 'read_vc.R' 'recent_commit.R' 'reexport.R'
-        'relabel.R' 'rename_variable.R' 'update_metadata.R'
-        'upgrade_data.R' 'utils.R' 'verify_vc.R'
+        'reinstate.R' 'relabel.R' 'rename_variable.R'
+        'update_metadata.R' 'upgrade_data.R' 'utils.R' 'verify_vc.R'
 NeedsCompilation: no
-Packaged: 2025-01-24 16:18:33 UTC; root
-Author: Thierry Onkelinx [aut, cre] (<https://orcid.org/0000-0001-8804-4216>,
-    Research Institute for Nature and Forest (INBO)),
-  Floris Vanderhaeghe [ctb] (<https://orcid.org/0000-0002-6378-6229>,
-    Research Institute for Nature and Forest (INBO)),
-  Peter Desmet [ctb] (<https://orcid.org/0000-0002-8442-8025>, Research
+Packaged: 2025-12-10 12:28:33 UTC; thierry
+Author: Thierry Onkelinx [aut, cre] (ORCID:
+    <https://orcid.org/0000-0001-8804-4216>, affiliation: Research
     Institute for Nature and Forest (INBO)),
-  Els Lommelen [ctb] (<https://orcid.org/0000-0002-3481-5684>, Research
+  Floris Vanderhaeghe [ctb] (ORCID:
+    <https://orcid.org/0000-0002-6378-6229>, affiliation: Research
     Institute for Nature and Forest (INBO)),
-  Research Institute for Nature and Forest (INBO) [cph, fnd]
+  Peter Desmet [ctb] (ORCID: <https://orcid.org/0000-0002-8442-8025>,
+    affiliation: Research Institute for Nature and Forest (INBO)),
+  Els Lommelen [ctb] (ORCID: <https://orcid.org/0000-0002-3481-5684>,
+    affiliation: Research Institute for Nature and Forest (INBO)),
+  Research Institute for Nature and Forest (INBO) [cph, fnd] (ROR:
+    <https://ror.org/00j54wy13>)
 Maintainer: Thierry Onkelinx <thierry.onkelinx@inbo.be>
 Repository: CRAN
-Date/Publication: 2025-01-24 16:30:02 UTC
+Date/Publication: 2025-12-10 13:30:02 UTC

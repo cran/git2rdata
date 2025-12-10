@@ -16,14 +16,17 @@ theme_inbo <- function(base_size = 12, base_family = "") {
   plot_bg <- "white"
   half_line <- base_size / 2
   ggplot2::theme(
-    line = ggplot2::element_line(colour = "black", size = 0.5, linetype = 1,
-                        lineend = "butt"),
-    rect = ggplot2::element_rect(fill = rect_bg, colour = "black", size = 0.5,
-                        linetype = 1),
-    text = ggplot2::element_text(family = base_family, face = "plain",
-                        colour = "#843860", size = base_size, hjust = 0.5,
-                        vjust = 0.5, angle = 0, lineheight = 0.9,
-                        margin = ggplot2::margin(), debug = FALSE),
+    line = ggplot2::element_line(
+      colour = "black", size = 0.5, linetype = 1, lineend = "butt"
+    ),
+    rect = ggplot2::element_rect(
+      fill = rect_bg, colour = "black", size = 0.5, linetype = 1
+    ),
+    text = ggplot2::element_text(
+      family = base_family, face = "plain", colour = "#843860",
+      size = base_size, hjust = 0.5, vjust = 0.5, angle = 0, lineheight = 0.9,
+      margin = ggplot2::margin(), debug = FALSE
+    ),
     axis.line = ggplot2::element_blank(),
     axis.line.x = ggplot2::element_blank(),
     axis.line.y = ggplot2::element_blank(),
@@ -275,7 +278,8 @@ ggplot(f_ratio, aes(x = observations, y = ratio, colour = levels)) +
 # repo_wvcv <- tmp_repo()
 # 
 # repo_size <- replicate(
-#   100, {
+#   100,
+#   {
 #     observed_subset <- rbinom(nrow(airbag), size = 1, prob = 0.9) == 1
 #     this <- airbag[
 #       sample(which(observed_subset)),
@@ -299,7 +303,8 @@ ggplot(f_ratio, aes(x = observations, y = ratio, colour = levels)) +
 #       write_vc.optimized = commit_and_size(repo_wvco, fn_wvco),
 #       write_vc.verbose = commit_and_size(repo_wvcv, fn_wvcv)
 #     )
-# })
+#   }
+# )
 
 ## ----store_git_size, echo = FALSE---------------------------------------------
 if (system.file("efficiency", "git_size.rds", package = "git2rdata") == "") {

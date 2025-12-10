@@ -1,0 +1,14 @@
+options(
+  papersize = "a4",
+  tab.width = 2,
+  width = 80,
+  help_type = "html",
+  xpinch = 300,
+  ypinch = 300,
+  yaml.eval.expr = TRUE,
+  repos = c(
+    CRAN = "https://cloud.r-project.org/",
+    INLA = "https://inla.r-inla-download.org/R/stable",
+    inbo = "https://inbo.r-universe.dev"
+  )
+)

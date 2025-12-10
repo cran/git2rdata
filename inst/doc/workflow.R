@@ -33,10 +33,9 @@ rm(init_repo)
 ## ----store_data_1----------------------------------------------------------------
 library(git2rdata)
 repo <- repository(path)
-fn <- write_vc(beaver1, "beaver", repo, sorting = "time", stage = TRUE)
-
-## ----avoid_subsecond_commit, echo = FALSE----------------------------------------
-Sys.sleep(1.2)
+fn <- write_vc(
+  beaver1, "beaver", repo, sorting = "time", stage = TRUE, digits = 2
+)
 
 ## ----commit_data_1---------------------------------------------------------------
 status(repo)
@@ -44,28 +43,27 @@ cm1 <- commit(repo, message = "First commit")
 cat(cm1$message)
 
 ## ----store_data_2----------------------------------------------------------------
-fn <- write_vc(beaver2, "extra_beaver", repo, sorting = "time", stage = TRUE)
+fn <- write_vc(
+  beaver2, "extra_beaver", repo, sorting = "time", stage = TRUE, digits = 2
+)
 status(repo)
-
-## ----avoid_subsecond_commit2, echo = FALSE---------------------------------------
-Sys.sleep(1.2)
 
 ## --------------------------------------------------------------------------------
 status(repo, ignored = TRUE)
-fn <- write_vc(beaver2, "extra_beaver", repo, sorting = "time", stage = TRUE,
-               force = TRUE)
+fn <- write_vc(
+  beaver2, "extra_beaver", repo, sorting = "time", stage = TRUE, force = TRUE
+)
 status(repo)
 cm2 <- commit(repo, message = "Second commit")
-
-## ----avoid_subsecond_commit3, echo = FALSE---------------------------------------
-Sys.sleep(1.2)
 
 ## ----store_data_3----------------------------------------------------------------
 beaver1$beaver <- 1
 beaver2$beaver <- 2
 beaver <- rbind(beaver1, beaver2)
-fn <- write_vc(beaver, "beaver", repo, sorting = c("beaver", "time"),
-               strict = FALSE, stage = TRUE)
+fn <- write_vc(
+  beaver, "beaver", repo, sorting = c("beaver", "time"), strict = FALSE,
+  stage = TRUE
+)
 file.remove(list.files(path, "extra", full.names = TRUE))
 status(repo)
 cm3 <- commit(repo, message = "Third commit", all = TRUE)
@@ -115,8 +113,10 @@ status(repo)
 #   beaver1$beaver <- 1
 #   beaver2$beaver <- 2
 #   body_temp <- rbind(beaver1, beaver2)
-#   write_vc(x = body_temp, file = file.path(data_path, "body_temperature"),
-#                  root = repo, sorting = c("beaver", "time"), stage = TRUE)
+#   write_vc(
+#     x = body_temp, file = file.path(data_path, "body_temperature"),
+#     root = repo, sorting = c("beaver", "time"), stage = TRUE
+#   )
 # 
 #   # step 4: remove any dangling metadata files
 #   prune_meta(root = repo, path = data_path, stage = TRUE)
@@ -133,7 +133,7 @@ analysis <- function(ds_name, repo) {
   list(
     dataset = ds_name,
     repository = git2r::remote_url(repo),
-    commit = recent_commit(ds_name, repo, data = TRUE),
+    commit = recent_commit(ds_name, repo),
     model = lm(temp ~ activ, data = ds)
   )
 }
