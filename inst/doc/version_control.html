@@ -480,12 +480,13 @@ avoid as much as possible.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(x, <span class="st">&quot;row_order&quot;</span>, root, <span class="at">sorting =</span> <span class="st">&quot;y&quot;</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; Warning: Sorting on &#39;y&#39; results in ties.</span></span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; Add extra sorting variables to ensure small diffs.</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; Error: The data was not overwritten because of the issues below.</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; See vignette(&#39;version_control&#39;, package = &#39;git2rdata&#39;) for more information.</span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; - The sorting variables changed.</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt;     - Sorting for the new data: &#39;y&#39;.</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt;     - Sorting for the old data: .</span></span></code></pre></div>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; Error:</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; ! The data was not overwritten because of the issues below.</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; See vignette(&#39;version_control&#39;, package = &#39;git2rdata&#39;) for more information.</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; - The sorting variables changed.</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt;     - Sorting for the new data: &#39;y&#39;.</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt;     - Sorting for the old data: .</span></span></code></pre></div>
 <p>Using <code>strict = FALSE</code> turns such errors into warnings and
 allows to update the file. Notice that we get a new warning: the
 variable we used for sorting resulted in ties, thus the order of the
@@ -519,7 +520,7 @@ metadata. It checks for potential ties. Ties results in a warning.</p>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>}</span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;row_order.yml&quot;</span>, root, <span class="dv">7</span>)</span>
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
 <span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt;   sorting:</span></span>
@@ -594,7 +595,7 @@ extra factor level?</p>
 <span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt;                             &quot;factor.tsv&quot;                             &quot;factor.yml&quot;</span></span>
 <span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
 <span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
 <span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -625,7 +626,7 @@ changed.</p>
 <span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt;                            &quot;factor2.tsv&quot;                            &quot;factor2.yml&quot;</span></span>
 <span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor2.yml&quot;</span>, root)</span>
 <span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
 <span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -650,36 +651,37 @@ the original labels (<code>&quot;blue&quot;</code> and <code>&quot;red&quot;</co
 their index, the new level (<code>&quot;green&quot;</code>) gets the first
 available index number.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">write_vc</span>(updated, <span class="st">&quot;factor&quot;</span>, root)</span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&gt; Error: The data was not overwritten because of the issues below.</span></span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&gt; See vignette(&#39;version_control&#39;, package = &#39;git2rdata&#39;) for more information.</span></span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&gt; - New factor labels for &#39;color&#39;.</span></span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#&gt; - New indices for &#39;color&#39;.</span></span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(updated, <span class="st">&quot;factor&quot;</span>, root, <span class="at">strict =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="co">#&gt; Warning: Changes in the metadata may lead to unnecessarily large diffs.</span></span>
-<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="co">#&gt; See vignette(&#39;version_control&#39;, package = &#39;git2rdata&#39;) for more information.</span></span>
-<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co">#&gt; - New factor labels for &#39;color&#39;.</span></span>
-<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co">#&gt; - New indices for &#39;color&#39;.</span></span>
-<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
-<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
-<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
-<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
-<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
-<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="co">#&gt;   hash: e0ed4c773b2179346042fef6f8c22c42c22a7c00</span></span>
-<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="co">#&gt;   data_hash: bf0c9f17b88b2e8768abc914349bb32e86503654</span></span>
-<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="co">#&gt; color:</span></span>
-<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a><span class="co">#&gt;   class: factor</span></span>
-<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="co">#&gt;   labels:</span></span>
-<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="co">#&gt;   - blue</span></span>
-<span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a><span class="co">#&gt;   - green</span></span>
-<span id="cb16-26"><a href="#cb16-26" tabindex="-1"></a><span class="co">#&gt;   - red</span></span>
-<span id="cb16-27"><a href="#cb16-27" tabindex="-1"></a><span class="co">#&gt;   index:</span></span>
-<span id="cb16-28"><a href="#cb16-28" tabindex="-1"></a><span class="co">#&gt;   - 1</span></span>
-<span id="cb16-29"><a href="#cb16-29" tabindex="-1"></a><span class="co">#&gt;   - 3</span></span>
-<span id="cb16-30"><a href="#cb16-30" tabindex="-1"></a><span class="co">#&gt;   - 2</span></span>
-<span id="cb16-31"><a href="#cb16-31" tabindex="-1"></a><span class="co">#&gt;   ordered: no</span></span></code></pre></div>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&gt; Error:</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&gt; ! The data was not overwritten because of the issues below.</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt; See vignette(&#39;version_control&#39;, package = &#39;git2rdata&#39;) for more information.</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#&gt; - New factor labels for &#39;color&#39;.</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#&gt; - New indices for &#39;color&#39;.</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="fu">write_vc</span>(updated, <span class="st">&quot;factor&quot;</span>, root, <span class="at">strict =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="co">#&gt; Warning: Changes in the metadata may lead to unnecessarily large diffs.</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="co">#&gt; See vignette(&#39;version_control&#39;, package = &#39;git2rdata&#39;) for more information.</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a><span class="co">#&gt; - New factor labels for &#39;color&#39;.</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a><span class="co">#&gt; - New indices for &#39;color&#39;.</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="co">#&gt;   hash: e0ed4c773b2179346042fef6f8c22c42c22a7c00</span></span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="co">#&gt;   data_hash: bf0c9f17b88b2e8768abc914349bb32e86503654</span></span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a><span class="co">#&gt; color:</span></span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="co">#&gt;   class: factor</span></span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="co">#&gt;   labels:</span></span>
+<span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a><span class="co">#&gt;   - blue</span></span>
+<span id="cb16-26"><a href="#cb16-26" tabindex="-1"></a><span class="co">#&gt;   - green</span></span>
+<span id="cb16-27"><a href="#cb16-27" tabindex="-1"></a><span class="co">#&gt;   - red</span></span>
+<span id="cb16-28"><a href="#cb16-28" tabindex="-1"></a><span class="co">#&gt;   index:</span></span>
+<span id="cb16-29"><a href="#cb16-29" tabindex="-1"></a><span class="co">#&gt;   - 1</span></span>
+<span id="cb16-30"><a href="#cb16-30" tabindex="-1"></a><span class="co">#&gt;   - 3</span></span>
+<span id="cb16-31"><a href="#cb16-31" tabindex="-1"></a><span class="co">#&gt;   - 2</span></span>
+<span id="cb16-32"><a href="#cb16-32" tabindex="-1"></a><span class="co">#&gt;   ordered: no</span></span></code></pre></div>
 <p>The next example removes the <code>&quot;blue&quot;</code> level and switches
 the order of the remaining levels. Notice that the meta data retains the
 existing indices. The order of the labels and indices reflects their new
@@ -697,7 +699,7 @@ ordering.</p>
 <span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="co">#&gt;                             &quot;factor.tsv&quot;                             &quot;factor.yml&quot;</span></span>
 <span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
 <span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
 <span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -726,7 +728,7 @@ also keep existing level indices.</p>
 <span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="co">#&gt;                             &quot;factor.tsv&quot;                             &quot;factor.yml&quot;</span></span>
 <span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;factor.yml&quot;</span>, root)</span>
 <span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
 <span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -753,7 +755,7 @@ updating the labels would do.</p>
 <span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&gt;                           &quot;write_vc.tsv&quot;                           &quot;write_vc.yml&quot;</span></span>
 <span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;write_vc.yml&quot;</span>, root)</span>
 <span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
 <span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -781,7 +783,7 @@ updating the labels would do.</p>
 <span id="cb19-31"><a href="#cb19-31" tabindex="-1"></a><span class="co">#&gt;                           &quot;write_vc.tsv&quot;                           &quot;write_vc.yml&quot;</span></span>
 <span id="cb19-32"><a href="#cb19-32" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;write_vc.yml&quot;</span>, root)</span>
 <span id="cb19-33"><a href="#cb19-33" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb19-34"><a href="#cb19-34" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
+<span id="cb19-34"><a href="#cb19-34" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
 <span id="cb19-35"><a href="#cb19-35" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb19-36"><a href="#cb19-36" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb19-37"><a href="#cb19-37" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -811,7 +813,7 @@ one row for each change in label.</p>
 <span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="fu">relabel</span>(<span class="st">&quot;relabel&quot;</span>, root, <span class="at">change =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="fu">c</span>(<span class="at">red =</span> <span class="st">&quot;rood&quot;</span>, <span class="at">blue =</span> <span class="st">&quot;blauw&quot;</span>)))</span>
 <span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;relabel.yml&quot;</span>, root)</span>
 <span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
 <span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>
@@ -834,7 +836,7 @@ one row for each change in label.</p>
 <span id="cb20-27"><a href="#cb20-27" tabindex="-1"></a>)</span>
 <span id="cb20-28"><a href="#cb20-28" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;relabel.yml&quot;</span>, root)</span>
 <span id="cb20-29"><a href="#cb20-29" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb20-30"><a href="#cb20-30" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
+<span id="cb20-30"><a href="#cb20-30" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
 <span id="cb20-31"><a href="#cb20-31" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb20-32"><a href="#cb20-32" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb20-33"><a href="#cb20-33" tabindex="-1"></a><span class="co">#&gt;   sorting: color</span></span>

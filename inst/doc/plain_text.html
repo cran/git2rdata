@@ -499,7 +499,7 @@ the benefit of being both human and machine readable.</p>
 <span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; O    NA  8   0.523643    1   1524852720</span></span>
 <span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;first_test.yml&quot;</span>, path)</span>
 <span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
 <span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt;   hash: 79e04b2ecff2c1eac8ededc69ba09311f38f74da</span></span>
@@ -557,7 +557,7 @@ audience as a data file.</p>
 <span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; O,NA,8,0.523643,TRUE,2018-04-27T18:12:00Z</span></span>
 <span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;verbose.yml&quot;</span>, path)</span>
 <span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
 <span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt;   optimize: no</span></span>
 <span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt;   NA string: NA</span></span>
 <span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt;   hash: 14cb4010f7f9f65eac46751c055904fc1e7d74e4</span></span>
@@ -617,17 +617,20 @@ the data. This includes factor labels with verbose data storage.
 <code>write_vc()</code> checks this and will always return an error,
 even with <code>strict = FALSE</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="at">strict =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">&quot;X&quot;</span>, <span class="at">optimize =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; Error: one of the strings matches the NA string (&#39;X&#39;)</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; Please use a different NA string or consider using a factor.</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="at">strict =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">&quot;b&quot;</span>, <span class="at">optimize =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; Error: one of the levels matches the NA string (&#39;b&#39;).</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Please use a different NA string or use optimize = TRUE</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="at">strict =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">&quot;X&quot;</span>)</span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; Error: one of the strings matches the NA string (&#39;X&#39;)</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; Please use a different NA string or consider using a factor.</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="at">strict =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">&quot;b&quot;</span>)</span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; ebfaf6b0aee9ae1252e176c173b20cdcf009d9b0 42235e10f9b5734d8718d02799d3ca6760c6a640 </span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;                          &quot;custom_na.tsv&quot;                          &quot;custom_na.yml&quot;</span></span></code></pre></div>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; Error:</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; ! one of the strings matches the NA string (&#39;X&#39;)</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; Please use a different NA string or consider using a factor.</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="at">strict =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">&quot;b&quot;</span>, <span class="at">optimize =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Error:</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; ! one of the levels matches the NA string (&#39;b&#39;).</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; Please use a different NA string or use optimize = TRUE</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="at">strict =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">&quot;X&quot;</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; Error:</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; ! one of the strings matches the NA string (&#39;X&#39;)</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; Please use a different NA string or consider using a factor.</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="fu">write_vc</span>(x, <span class="st">&quot;custom_na&quot;</span>, path, <span class="at">strict =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">&quot;b&quot;</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; ebfaf6b0aee9ae1252e176c173b20cdcf009d9b0 42235e10f9b5734d8718d02799d3ca6760c6a640 </span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt;                          &quot;custom_na.tsv&quot;                          &quot;custom_na.yml&quot;</span></span></code></pre></div>
 <p>Please note that <code>write_vc()</code> uses the same NA string for
 the entire dataset, thus for every variable.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;custom_na.tsv&quot;</span>, path, <span class="dv">10</span>)</span>
@@ -643,7 +646,7 @@ the entire dataset, thus for every variable.</p>
 <span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; O    b   8   0.523643    1   1524852720</span></span>
 <span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="fu">print_file</span>(<span class="st">&quot;custom_na.yml&quot;</span>, path, <span class="dv">4</span>)</span>
 <span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; ..generic:</span></span>
-<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.1</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt;   git2rdata: 0.5.2</span></span>
 <span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt;   optimize: yes</span></span>
 <span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt;   NA string: b</span></span></code></pre></div>
 <p>The default string for missing values is <code>&quot;NA&quot;</code>. We

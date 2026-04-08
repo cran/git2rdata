@@ -387,7 +387,7 @@ fine.</p>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>remote <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="st">&quot;git2rdata-workflow-remote&quot;</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>remote <span class="ot">&lt;-</span> <span class="fu">normalizePath</span>(remote, <span class="at">winslash =</span> <span class="st">&quot;/&quot;</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; Warning in normalizePath(remote, winslash = &quot;/&quot;):</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; path[1]=&quot;/tmp/RtmpthNCZH/git2rdata-workflow-remoteadc822b70a3f&quot;: No such file or</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; path[1]=&quot;/tmp/Rtmpez4buA/git2rdata-workflow-remote1ca9721ed86be&quot;: No such file or</span></span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; directory</span></span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">dir.create</span>(remote)</span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">init</span>(remote, <span class="at">bare =</span> <span class="cn">TRUE</span>)</span>
@@ -397,21 +397,22 @@ fine.</p>
 <span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="st">&quot;git2rdata-workflow&quot;</span>)</span>
 <span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">normalizePath</span>(path, <span class="at">winslash =</span> <span class="st">&quot;/&quot;</span>)</span>
 <span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co">#&gt; Warning in normalizePath(path, winslash = &quot;/&quot;):</span></span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt; path[1]=&quot;/tmp/RtmpthNCZH/git2rdata-workflowadc88a04ab2&quot;: No such file or directory</span></span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="fu">dir.create</span>(path)</span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>init_repo <span class="ot">&lt;-</span> git2r<span class="sc">::</span><span class="fu">clone</span>(remote, path, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">config</span>(init_repo, <span class="at">user.name =</span> <span class="st">&quot;me&quot;</span>, <span class="at">user.email =</span> <span class="st">&quot;me@me.com&quot;</span>)</span>
-<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co"># add an initial commit with .gitignore file</span></span>
-<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="fu">writeLines</span>(<span class="st">&quot;*extra*&quot;</span>, <span class="fu">file.path</span>(path, <span class="st">&quot;.gitignore&quot;</span>))</span>
-<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">add</span>(init_repo, <span class="st">&quot;.gitignore&quot;</span>, <span class="at">force =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">commit</span>(init_repo, <span class="at">message =</span> <span class="st">&quot;Initial commit&quot;</span>)</span>
-<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co">#&gt; [1a4b15a] 2025-12-10: Initial commit</span></span>
-<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co"># push initial commit to remote</span></span>
-<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>branch_name <span class="ot">&lt;-</span> git2r<span class="sc">::</span><span class="fu">branches</span>(init_repo)[[<span class="dv">1</span>]]<span class="sc">$</span>name</span>
-<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">push</span>(</span>
-<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>  init_repo, <span class="st">&quot;origin&quot;</span>, <span class="fu">file.path</span>(<span class="st">&quot;refs&quot;</span>, <span class="st">&quot;heads&quot;</span>, branch_name, <span class="at">fsep =</span> <span class="st">&quot;/&quot;</span>)</span>
-<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>)</span>
-<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="fu">rm</span>(init_repo)</span></code></pre></div>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt; path[1]=&quot;/tmp/Rtmpez4buA/git2rdata-workflow1ca972e654361&quot;: No such file or</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co">#&gt; directory</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="fu">dir.create</span>(path)</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>init_repo <span class="ot">&lt;-</span> git2r<span class="sc">::</span><span class="fu">clone</span>(remote, path, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">config</span>(init_repo, <span class="at">user.name =</span> <span class="st">&quot;me&quot;</span>, <span class="at">user.email =</span> <span class="st">&quot;me@me.com&quot;</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co"># add an initial commit with .gitignore file</span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="fu">writeLines</span>(<span class="st">&quot;*extra*&quot;</span>, <span class="fu">file.path</span>(path, <span class="st">&quot;.gitignore&quot;</span>))</span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">add</span>(init_repo, <span class="st">&quot;.gitignore&quot;</span>, <span class="at">force =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">commit</span>(init_repo, <span class="at">message =</span> <span class="st">&quot;Initial commit&quot;</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co">#&gt; [584cbbd] 2026-04-08: Initial commit</span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="co"># push initial commit to remote</span></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>branch_name <span class="ot">&lt;-</span> git2r<span class="sc">::</span><span class="fu">branches</span>(init_repo)[[<span class="dv">1</span>]]<span class="sc">$</span>name</span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">push</span>(</span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>  init_repo, <span class="st">&quot;origin&quot;</span>, <span class="fu">file.path</span>(<span class="st">&quot;refs&quot;</span>, <span class="st">&quot;heads&quot;</span>, branch_name, <span class="at">fsep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>)</span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a><span class="fu">rm</span>(init_repo)</span></code></pre></div>
 </div>
 <div id="structuring-git2rdata-objects-within-a-project" class="section level2">
 <h2>Structuring Git2rdata Objects Within a Project</h2>
@@ -666,9 +667,9 @@ datasets in the repository.</p>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>junk <span class="ot">&lt;-</span> <span class="fu">lapply</span>(result, print)</span></code></pre></div>
 <table>
 <caption><strong>dataset:</strong> beaver.tsv<br />
-<strong>commit:</strong> a43ae802387cc4804d001e6c7399802887f8ff3d<br />
+<strong>commit:</strong> b25f67125b275ddbd9bda10138cb1ea827c2b970<br />
 <strong>repository:</strong>
-/tmp/RtmpthNCZH/git2rdata-workflow-remoteadc822b70a3f</caption>
+/tmp/Rtmpez4buA/git2rdata-workflow-remote1ca9721ed86be</caption>
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -706,9 +707,9 @@ commit.</p>
 <span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>junk <span class="ot">&lt;-</span> <span class="fu">lapply</span>(result, print)</span></code></pre></div>
 <table>
 <caption><strong>dataset:</strong> beaver.tsv<br />
-<strong>commit:</strong> 61d1fc942ffe76b79343e0251715b23d8622a97b<br />
+<strong>commit:</strong> cf844e897bb696ae30651c25b03c9e52e3653e3e<br />
 <strong>repository:</strong>
-/tmp/RtmpthNCZH/git2rdata-workflow-remoteadc822b70a3f</caption>
+/tmp/Rtmpez4buA/git2rdata-workflow-remote1ca9721ed86be</caption>
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -744,9 +745,9 @@ commit.</p>
 <span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>junk <span class="ot">&lt;-</span> <span class="fu">lapply</span>(result, print)</span></code></pre></div>
 <table>
 <caption><strong>dataset:</strong> beaver.tsv<br />
-<strong>commit:</strong> 61d1fc942ffe76b79343e0251715b23d8622a97b<br />
+<strong>commit:</strong> cf844e897bb696ae30651c25b03c9e52e3653e3e<br />
 <strong>repository:</strong>
-/tmp/RtmpthNCZH/git2rdata-workflow-remoteadc822b70a3f</caption>
+/tmp/Rtmpez4buA/git2rdata-workflow-remote1ca9721ed86be</caption>
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -775,9 +776,9 @@ commit.</p>
 </table>
 <table>
 <caption><strong>dataset:</strong> extra_beaver.tsv<br />
-<strong>commit:</strong> 42c1e0cd788eb9fba7e1cee3e2f8e965a97b54fc<br />
+<strong>commit:</strong> 4c2a98a5c5a9eb2bbc163cc1f8e84aacbdb70307<br />
 <strong>repository:</strong>
-/tmp/RtmpthNCZH/git2rdata-workflow-remoteadc822b70a3f</caption>
+/tmp/Rtmpez4buA/git2rdata-workflow-remote1ca9721ed86be</caption>
 <thead>
 <tr class="header">
 <th align="left"></th>

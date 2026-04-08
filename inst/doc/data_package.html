@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Thierry Onkelinx" />
+
+
+<title>Creating data packages</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Creating data packages</h1>
+<h4 class="author">Thierry Onkelinx</h4>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The <code>data_package()</code> function creates a
+<code>datapackage.json</code> file for a directory containing CSV files
+that were created by <code>git2rdata</code>. This makes your data
+compatible with the <a href="https://frictionlessdata.io/">Frictionless
+Data</a> specification, allowing other tools and platforms to discover
+and use your data.</p>
+<p>A data package is a simple container format for describing a
+collection of data files. The <code>datapackage.json</code> file
+provides metadata about the package and its resources (data files).</p>
+</div>
+<div id="basic-usage" class="section level2">
+<h2>Basic usage</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(git2rdata)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>root <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="st">&quot;git2rdata-package&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">dir.create</span>(root)</span></code></pre></div>
+<p>First, create some data files in non-optimized format (CSV):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Write several datasets in non-optimized (CSV) format</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">write_vc</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  iris,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;iris&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">root =</span> root,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="at">sorting =</span> <span class="fu">c</span>(<span class="st">&quot;Species&quot;</span>, <span class="st">&quot;Sepal.Length&quot;</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">optimize =</span> <span class="cn">FALSE</span> <span class="co"># Use CSV format instead of optimized TSV</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Warning: `digits` was not set. Setting is automatically to 6. See ?meta</code></pre>
+<pre><code>## Warning: Sorting on &#39;Species&#39;, &#39;Sepal.Length&#39; results in ties.
+## Add extra sorting variables to ensure small diffs.</code></pre>
+<pre><code>## 2dbb3bc1688b7302a8a676761e5ada82f0a39656 
+##                               &quot;iris.csv&quot; 
+## 441db0f89c1c2d72ab3ff613dbdfcdc8d73e1804 
+##                               &quot;iris.yml&quot;</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">write_vc</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  mtcars,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;mtcars&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">root =</span> root,</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">sorting =</span> <span class="st">&quot;mpg&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="at">optimize =</span> <span class="cn">FALSE</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Warning: `digits` was not set. Setting is automatically to 6. See ?meta</code></pre>
+<pre><code>## Warning: Sorting on &#39;mpg&#39; results in ties.
+## Add extra sorting variables to ensure small diffs.</code></pre>
+<pre><code>## 73b6f3fcee60fe52281dba4b3ab0125294373a84 
+##                             &quot;mtcars.csv&quot; 
+## b887465e051c1d5229adff3f783e56f54c2b5369 
+##                             &quot;mtcars.yml&quot;</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Check what files were created</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">list.files</span>(root, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;iris.csv&quot;   &quot;iris.yml&quot;   &quot;mtcars.csv&quot; &quot;mtcars.yml&quot;</code></pre>
+<p>Now create the data package:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Create the datapackage.json file</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>package_file <span class="ot">&lt;-</span> <span class="fu">data_package</span>(root)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Created:&quot;</span>, package_file, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## Created: /tmp/Rtmpez4buA/git2rdata-package1ca972cade39d/datapackage.json</code></pre>
+</div>
+<div id="package-contents" class="section level2">
+<h2>Package contents</h2>
+<p>The <code>datapackage.json</code> file contains metadata for each CSV
+file:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Read and display the package file</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>package_data <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">read_json</span>(package_file)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co"># Show the structure</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">str</span>(package_data, <span class="at">max.level =</span> <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## List of 1
+##  $ resources:List of 2
+##   ..$ :List of 7
+##   ..$ :List of 7</code></pre>
+<p>Each resource in the package includes:</p>
+<ul>
+<li><strong>name</strong>: The name of the dataset</li>
+<li><strong>path</strong>: The relative path to the CSV file</li>
+<li><strong>profile</strong>: The profile type
+(tabular-data-resource)</li>
+<li><strong>schema</strong>: The schema describing the data
+structure</li>
+</ul>
+</div>
+<div id="schema-information" class="section level2">
+<h2>Schema information</h2>
+<p>The schema for each resource describes the fields (columns) in the
+data:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Show the schema for the iris dataset</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>iris_resource <span class="ot">&lt;-</span> package_data<span class="sc">$</span>resources[[<span class="dv">1</span>]]</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Resource name:&quot;</span>, iris_resource<span class="sc">$</span>name, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## Resource name: iris.csv</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Number of fields:&quot;</span>, <span class="fu">length</span>(iris_resource<span class="sc">$</span>schema<span class="sc">$</span>fields), <span class="st">&quot;</span><span class="sc">\n\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## Number of fields: 5</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># Show first few fields</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">min</span>(<span class="dv">3</span>, <span class="fu">length</span>(iris_resource<span class="sc">$</span>schema<span class="sc">$</span>fields)))) {</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  field <span class="ot">&lt;-</span> iris_resource<span class="sc">$</span>schema<span class="sc">$</span>fields[[i]]</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>    <span class="st">&quot;Field %d: %s (type: %s)</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>    i,</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>    field<span class="sc">$</span>name,</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>    field<span class="sc">$</span>type</span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>  ))</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## Field 1: Sepal.Length (type: number)
+## Field 2: Sepal.Width (type: number)
+## Field 3: Petal.Length (type: number)</code></pre>
+</div>
+<div id="important-notes" class="section level2">
+<h2>Important notes</h2>
+<div id="csv-format-required" class="section level3">
+<h3>CSV format required</h3>
+<p><code>data_package()</code> only works with non-optimized git2rdata
+objects (CSV files). This is because the Frictionless Data specification
+expects CSV format.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># This will fail because optimized files use TSV format</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>optimized_root <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="st">&quot;git2rdata-optimized&quot;</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">dir.create</span>(optimized_root)</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="fu">write_vc</span>(</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>  iris,</span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>  <span class="at">file =</span> <span class="st">&quot;iris&quot;</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>  <span class="at">root =</span> optimized_root,</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>  <span class="at">sorting =</span> <span class="st">&quot;Species&quot;</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a>  <span class="at">optimize =</span> <span class="cn">TRUE</span> <span class="co"># This creates TSV files</span></span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Warning: `digits` was not set. Setting is automatically to 6. See ?meta</code></pre>
+<pre><code>## Warning: Sorting on &#39;Species&#39; results in ties.
+## Add extra sorting variables to ensure small diffs.</code></pre>
+<pre><code>## 21e3457b30b4165a413377d29f4844a95ed24634 
+##                               &quot;iris.tsv&quot; 
+## ee01b10edc7294f2c1420811e93f9849db63013d 
+##                               &quot;iris.yml&quot;</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># This will fail with an error</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">try</span>(<span class="fu">data_package</span>(optimized_root))</span></code></pre></div>
+<pre><code>## Error in data_package(optimized_root) : 
+##   no non-optimized git2rdata objects found at `path`</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">unlink</span>(optimized_root, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="metadata-integration" class="section level3">
+<h3>Metadata integration</h3>
+<p>The function reads the git2rdata metadata (<code>.yml</code> files)
+to extract field information, including:</p>
+<ul>
+<li>Field names</li>
+<li>Field types (mapped to Frictionless Data types)</li>
+<li>Factor levels (for categorical data)</li>
+<li>Description (if available through
+<code>update_metadata()</code>)</li>
+</ul>
+</div>
+<div id="recursive-search" class="section level3">
+<h3>Recursive search</h3>
+<p>The function searches recursively in the specified directory, so you
+can organize your data files in subdirectories:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># Create a subdirectory</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>subdir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(root, <span class="st">&quot;subset&quot;</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="fu">dir.create</span>(subdir)</span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a><span class="co"># Write data in subdirectory</span></span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a><span class="fu">write_vc</span>(</span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a>  <span class="fu">head</span>(iris, <span class="dv">50</span>),</span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a>  <span class="at">file =</span> <span class="fu">file.path</span>(<span class="st">&quot;subset&quot;</span>, <span class="st">&quot;iris_subset&quot;</span>),</span>
+<span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a>  <span class="at">root =</span> root,</span>
+<span id="cb29-10"><a href="#cb29-10" tabindex="-1"></a>  <span class="at">sorting =</span> <span class="st">&quot;Species&quot;</span>,</span>
+<span id="cb29-11"><a href="#cb29-11" tabindex="-1"></a>  <span class="at">optimize =</span> <span class="cn">FALSE</span></span>
+<span id="cb29-12"><a href="#cb29-12" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Warning: `digits` was not set. Setting is automatically to 6. See ?meta</code></pre>
+<pre><code>## Warning: Sorting on &#39;Species&#39; results in ties.
+## Add extra sorting variables to ensure small diffs.</code></pre>
+<pre><code>## 85c3f140752ebb46c472d74cb5ee5fd632fc1bcb 
+##                 &quot;subset/iris_subset.csv&quot; 
+## fe35efaf05acf4614ff9551ef60441db70fd82db 
+##                 &quot;subset/iris_subset.yml&quot;</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># Recreate the package - it will include the subdirectory file</span></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">data_package</span>(root)</span></code></pre></div>
+<pre><code>## [1] &quot;/tmp/Rtmpez4buA/git2rdata-package1ca972cade39d/datapackage.json&quot;</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="co"># Check the package contents</span></span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>package_data <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">read_json</span>(package_file)</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Number of resources:&quot;</span>, <span class="fu">length</span>(package_data<span class="sc">$</span>resources), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## Number of resources: 3</code></pre>
+</div>
+</div>
+<div id="use-cases" class="section level2">
+<h2>Use cases</h2>
+<div id="data-sharing" class="section level3">
+<h3>Data sharing</h3>
+<p>Create a data package to share your datasets with others:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># After creating your data files</span></span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a><span class="fu">write_vc</span>(my_data, <span class="st">&quot;my_data&quot;</span>, <span class="at">root =</span> <span class="st">&quot;data&quot;</span>, <span class="at">optimize =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a><span class="co"># Create the package</span></span>
+<span id="cb37-5"><a href="#cb37-5" tabindex="-1"></a><span class="fu">data_package</span>(<span class="st">&quot;data&quot;</span>)</span>
+<span id="cb37-6"><a href="#cb37-6" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" tabindex="-1"></a><span class="co"># Share the entire &#39;data&#39; directory</span></span>
+<span id="cb37-8"><a href="#cb37-8" tabindex="-1"></a><span class="co"># Others can now use Frictionless Data tools to read your data</span></span></code></pre></div>
+</div>
+<div id="data-validation" class="section level3">
+<h3>Data validation</h3>
+<p>The Frictionless Data ecosystem provides tools to validate data
+packages:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co"># After creating the package, use frictionless-py or other tools</span></span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="co"># to validate your data package</span></span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="fu">system</span>(<span class="st">&quot;frictionless validate datapackage.json&quot;</span>)</span></code></pre></div>
+</div>
+<div id="data-catalogs" class="section level3">
+<h3>Data catalogs</h3>
+<p>Data packages can be published to data catalogs and portals that
+support the Frictionless Data specification, making your data
+discoverable.</p>
+</div>
+</div>
+<div id="see-also" class="section level2">
+<h2>See also</h2>
+<ul>
+<li><a href="https://frictionlessdata.io/">Frictionless Data
+documentation</a></li>
+<li><a href="https://specs.frictionlessdata.io/data-package/">Data
+Package specification</a></li>
+<li>The <code>metadata</code> vignette for adding descriptions to your
+data</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
